@@ -13,7 +13,7 @@ internal enum SetItems : byte
     Item8
 }
 
-internal static class ValueVariant
+public static class ValueVariant
 {
     internal static bool TestItem<TItem, TValue>(TItem item, bool isCorrectItem, out TValue? value)
     {
@@ -26,4 +26,22 @@ internal static class ValueVariant
         value = default;
         return false;
     }
+    
+    public static T Get<T>(ValueVariant<T> variant)
+    {
+        return variant.Get<T>();
+    }
+
+    /// <summary>
+    ///     Get a value of the given type. Returns false if type isn't set.
+    /// </summary>
+    /// <param name="variant">Tested variant.</param>
+    /// <param name="value">Extracted value, default if method returns false.</param>
+    /// <typeparam name="T">Requested type.</typeparam>
+    /// <returns></returns>
+    public static bool TryGet<T>(ValueVariant<T> variant, out T? value)
+    {
+        return variant.TryGet(out value);
+    }
+
 }
