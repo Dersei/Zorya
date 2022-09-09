@@ -1,15 +1,15 @@
 ﻿using System;
 using NUnit.Framework;
-using Zorya.StructVariants;
+using Zorya.ValueVariants;
 
-namespace Zorya.Tests.StructVariants;
+namespace Zorya.Tests.ValueVariants;
 
-public class StructVariantGeneralTest
+public class ValueVariantGeneralTest
 {
     [Test]
     public void ReferenceTypes()
     {
-        StructVariant<object, string, TestExampleRef> v;
+        ValueVariant<object, string, TestExampleRef> v;
         var refT = new TestExampleRef();
         v = refT;
         Assert.AreEqual(refT, v.Get<TestExampleRef>());
@@ -18,7 +18,7 @@ public class StructVariantGeneralTest
     [Test]
     public void ReferenceTypesEquality()
     {
-        StructVariant<object, string, TestExampleEqual> v;
+        ValueVariant<object, string, TestExampleEqual> v;
         v = new TestExampleEqual(10);
         Assert.AreEqual(new TestExampleEqual(10), v.Get<TestExampleEqual>());
     }
@@ -26,8 +26,8 @@ public class StructVariantGeneralTest
     [Test]
     public void ValueNotSet()
     {
-        StructVariant<object, string, TestExampleEqual> v = new StructVariant<object, string, TestExampleEqual>();
-        Assert.Throws<BadStructVariantAccessException>(() =>v.Get<TestExampleEqual>());
+        ValueVariant<object, string, TestExampleEqual> v = new ValueVariant<object, string, TestExampleEqual>();
+        Assert.Throws<BadValueVariantAccessException>(() =>v.Get<TestExampleEqual>());
     }
 
     private class TestExampleRef
