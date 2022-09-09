@@ -1,4 +1,4 @@
-﻿namespace Zorya.StructVariants;
+﻿namespace Zorya.ValueVariants;
 
 internal enum SetItems : byte
 {
@@ -13,7 +13,7 @@ internal enum SetItems : byte
     Item8
 }
 
-internal static class StructVariant
+internal static class ValueVariant
 {
     internal static bool TestItem<TItem, TValue>(TItem item, bool isCorrectItem, out TValue? value)
     {

@@ -1,15 +1,15 @@
 ﻿using System.Drawing;
 using NUnit.Framework;
-using Zorya.StructVariants;
+using Zorya.ValueVariants;
 
-namespace Zorya.Tests.StructVariants;
+namespace Zorya.Tests.ValueVariants;
 
-public class StructVariant7Test
+public class ValueVariant7Test
 {
     [Test]
     public void GetValue()
     {
-        StructVariant<int, string, double, long, float, Point, byte> v;
+        ValueVariant<int, string, double, long, float, Point, byte> v;
         v = (byte) 10;
         Assert.AreEqual((byte) 10, v.Get<byte>());
     }
@@ -17,7 +17,7 @@ public class StructVariant7Test
     [Test]
     public void GetSetType()
     {
-        StructVariant<int, string, double, long, float, Point, byte> v;
+        ValueVariant<int, string, double, long, float, Point, byte> v;
         v = (byte) 10;
         Assert.AreEqual(typeof(byte), v.GetSetType());
     }
@@ -25,7 +25,7 @@ public class StructVariant7Test
     [Test]
     public void TryGetValue()
     {
-        StructVariant<int, string, double, long, float, Point, byte> v;
+        ValueVariant<int, string, double, long, float, Point, byte> v;
         v = (byte) 10;
         Assert.AreEqual(true, v.TryGet(out byte _));
         Assert.AreEqual(false, v.TryGet(out string? _));
@@ -34,8 +34,8 @@ public class StructVariant7Test
     [Test]
     public void ThrowException()
     {
-        StructVariant<int, string, double, long, float, Point, byte> v;
+        ValueVariant<int, string, double, long, float, Point, byte> v;
         v = 10;
-        Assert.Throws(typeof(BadStructVariantAccessException), () => v.Get<string>());
+        Assert.Throws(typeof(BadValueVariantAccessException), () => v.Get<string>());
     }
 }

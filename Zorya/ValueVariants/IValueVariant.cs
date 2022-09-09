@@ -1,6 +1,6 @@
-﻿namespace Zorya.StructVariants;
+﻿namespace Zorya.ValueVariants;
 
-public interface IStructVariant
+public interface IValueVariant
 {
     /// <summary>
     ///     Returns type set in variant.
@@ -9,7 +9,7 @@ public interface IStructVariant
     Type? GetSetType();
 
     /// <summary>
-    ///     Get a value of the given type. Throws <see cref="BadStructVariantAccessException" /> if type isn't set.
+    ///     Get a value of the given type. Throws <see cref="BadValueVariantAccessException" /> if type isn't set.
     /// </summary>
     /// <typeparam name="T">Requested type.</typeparam>
     /// <returns></returns>

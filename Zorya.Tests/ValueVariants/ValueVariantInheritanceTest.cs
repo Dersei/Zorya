@@ -1,14 +1,14 @@
 ﻿using NUnit.Framework;
-using Zorya.StructVariants;
+using Zorya.ValueVariants;
 
-namespace Zorya.Tests.StructVariants;
+namespace Zorya.Tests.ValueVariants;
 
-public class StructVariantInheritanceTest
+public class ValueVariantInheritanceTest
 {
     [Test]
     public void ParentEquality()
     {
-        StructVariant<object, string, TestExampleParent> v;
+        ValueVariant<object, string, TestExampleParent> v;
         var refT = new TestExampleParent();
         v = refT;
         Assert.AreEqual(refT, v.Get<TestExampleParent>());
@@ -17,7 +17,7 @@ public class StructVariantInheritanceTest
     [Test]
     public void ParentInChildGet()
     {
-        StructVariant<int, string, TestExampleParent> v;
+        ValueVariant<int, string, TestExampleParent> v;
         var refT = new TestExampleChild();
         v = refT;
         Assert.AreEqual(refT, v.Get<TestExampleParent>());
@@ -26,7 +26,7 @@ public class StructVariantInheritanceTest
     [Test]
     public void ChildInParentGet()
     {
-        StructVariant<int, string, TestExampleChild> v;
+        ValueVariant<int, string, TestExampleChild> v;
         var refT = new TestExampleChild();
         v = refT;
         Assert.AreEqual(refT, v.Get<TestExampleParent>());
@@ -35,7 +35,7 @@ public class StructVariantInheritanceTest
     [Test]
     public void ChildInParentInChildGet()
     {
-        StructVariant<int, TestExampleParent, TestExampleChild> v;
+        ValueVariant<int, TestExampleParent, TestExampleChild> v;
         var refT = new TestExampleChild {Id = 10};
         v = refT;
         Assert.AreEqual(10, v.Get<TestExampleChild>().Id);
@@ -44,7 +44,7 @@ public class StructVariantInheritanceTest
     [Test]
     public void ParentInChildInChildGet()
     {
-        StructVariant<int, TestExampleChild, TestExampleParent> v;
+        ValueVariant<int, TestExampleChild, TestExampleParent> v;
         var refT = new TestExampleChild {Id = 10};
         v = refT;
         Assert.AreEqual(10, v.Get<TestExampleChild>().Id);
