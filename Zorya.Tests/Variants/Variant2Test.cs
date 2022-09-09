@@ -46,7 +46,7 @@ public class Variant2Test
     {
         Variant<int, string> v;
         v = "10";
-        Assert.AreEqual(true, v.TryGet(out string _));
+        Assert.AreEqual(true, v.TryGet(out string? _));
         Assert.AreEqual(false, v.TryGet(out int _));
     }
 

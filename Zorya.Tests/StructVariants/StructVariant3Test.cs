@@ -27,7 +27,7 @@ public class StructVariant3Test
         StructVariant<int, string, double> v;
         v = 10.0;
         Assert.AreEqual(true, v.TryGet(out double _));
-        Assert.AreEqual(false, v.TryGet(out string _));
+        Assert.AreEqual(false, v.TryGet(out string? _));
     }
 
     [Test]

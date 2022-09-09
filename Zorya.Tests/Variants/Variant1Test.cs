@@ -37,7 +37,7 @@ public class Tests
         Variant<int> v;
         v = 10;
         Assert.AreEqual(true, v.TryGet(out int _));
-        Assert.AreEqual(false, v.TryGet(out string _));
+        Assert.AreEqual(false, v.TryGet(out string? _));
     }
 
     [Test]

@@ -28,7 +28,7 @@ public class StructVariant6Test
         StructVariant<int, string, double, long, float, Point> v;
         v = new Point(1, 1);
         Assert.AreEqual(true, v.TryGet(out Point _));
-        Assert.AreEqual(false, v.TryGet(out string _));
+        Assert.AreEqual(false, v.TryGet(out string? _));
     }
 
     [Test]

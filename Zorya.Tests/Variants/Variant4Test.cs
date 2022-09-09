@@ -27,7 +27,7 @@ public class Variant4Test
         Variant<int, string, double, long> v;
         v = 10L;
         Assert.AreEqual(true, v.TryGet(out long _));
-        Assert.AreEqual(false, v.TryGet(out string _));
+        Assert.AreEqual(false, v.TryGet(out string? _));
     }
 
     [Test]
