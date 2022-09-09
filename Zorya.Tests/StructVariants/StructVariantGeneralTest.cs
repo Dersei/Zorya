@@ -22,6 +22,13 @@ public class StructVariantGeneralTest
         v = new TestExampleEqual(10);
         Assert.AreEqual(new TestExampleEqual(10), v.Get<TestExampleEqual>());
     }
+    
+    [Test]
+    public void ValueNotSet()
+    {
+        StructVariant<object, string, TestExampleEqual> v = new StructVariant<object, string, TestExampleEqual>();
+        Assert.Throws<BadStructVariantAccessException>(() =>v.Get<TestExampleEqual>());
+    }
 
     private class TestExampleRef
     {

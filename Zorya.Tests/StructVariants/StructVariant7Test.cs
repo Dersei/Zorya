@@ -28,7 +28,7 @@ public class StructVariant7Test
         StructVariant<int, string, double, long, float, Point, byte> v;
         v = (byte) 10;
         Assert.AreEqual(true, v.TryGet(out byte _));
-        Assert.AreEqual(false, v.TryGet(out string _));
+        Assert.AreEqual(false, v.TryGet(out string? _));
     }
 
     [Test]

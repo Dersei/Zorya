@@ -27,7 +27,7 @@ public class StructVariant5Test
         StructVariant<int, string, double, long, float> v;
         v = 10f;
         Assert.AreEqual(true, v.TryGet(out float _));
-        Assert.AreEqual(false, v.TryGet(out string _));
+        Assert.AreEqual(false, v.TryGet(out string? _));
     }
 
     [Test]

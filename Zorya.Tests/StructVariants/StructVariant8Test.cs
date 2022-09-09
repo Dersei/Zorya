@@ -28,7 +28,7 @@ public class StructVariant8Test
         StructVariant<int, string, double, long, float, Point, byte, char> v;
         v = 'c';
         Assert.AreEqual(true, v.TryGet(out char _));
-        Assert.AreEqual(false, v.TryGet(out string _));
+        Assert.AreEqual(false, v.TryGet(out string? _));
     }
 
     [Test]

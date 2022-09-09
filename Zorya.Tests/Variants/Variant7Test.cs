@@ -28,7 +28,7 @@ public class Variant7Test
         Variant<int, string, double, long, float, Point, byte> v;
         v = (byte) 10;
         Assert.AreEqual(true, v.TryGet(out byte _));
-        Assert.AreEqual(false, v.TryGet(out string _));
+        Assert.AreEqual(false, v.TryGet(out string? _));
     }
 
     [Test]
