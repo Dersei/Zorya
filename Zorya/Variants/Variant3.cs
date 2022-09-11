@@ -26,29 +26,23 @@ public class Variant<T1, T2, T3> : Variant, IVariant
         SetItem = SetItems.Item3;
     }
 
-    private T1? Item1 => _item1;
-
-    private T2? Item2 => _item2;
-
-    private T3? Item3 => _item3;
-
     public override T Get<T>()
     {
         return SetItem switch
         {
             SetItems.None => throw new BadVariantAccessException(typeof(T), this),
-            SetItems.Item1 when Item1 is T t1 => t1,
-            SetItems.Item2 when Item2 is T t2 => t2,
-            SetItems.Item3 when Item3 is T t3 => t3,
+            SetItems.Item1 when _item1 is T t1 => t1,
+            SetItems.Item2 when _item2 is T t2 => t2,
+            SetItems.Item3 when _item3 is T t3 => t3,
             _ => throw new BadVariantAccessException(typeof(T), this)
         };
     }
 
     public override bool TryGet<T>([MaybeNull] out T value)
     {
-        if (TestItem(Item1, SetItems.Item1, out value)) return true;
-        if (TestItem(Item2, SetItems.Item2, out value)) return true;
-        return TestItem(Item3, SetItems.Item3, out value);
+        if (TestItem(_item1, SetItems.Item1, out value)) return true;
+        if (TestItem(_item2, SetItems.Item2, out value)) return true;
+        return TestItem(_item3, SetItems.Item3, out value);
     }
     
     public override bool Set<T>(T value)
@@ -65,9 +59,9 @@ public class Variant<T1, T2, T3> : Variant, IVariant
         return SetItem switch
         {
             SetItems.None => null,
-            SetItems.Item1 when Item1 is not null => Item1.GetType(),
-            SetItems.Item2 when Item2 is not null => Item2.GetType(),
-            SetItems.Item3 when Item3 is not null => Item3.GetType(),
+            SetItems.Item1 when _item1 is not null => _item1.GetType(),
+            SetItems.Item2 when _item2 is not null => _item2.GetType(),
+            SetItems.Item3 when _item3 is not null => _item3.GetType(),
             _ => throw new ArgumentOutOfRangeException()
         };
     }
@@ -108,5 +102,29 @@ public class Variant<T1, T2, T3> : Variant, IVariant
     public static bool TryGet<T>(Variant<T1, T2, T3> variant, out T? value)
     {
         return variant.TryGet(out value);
+    }
+    /// <summary>
+    /// Allows to use a delegate on set item.
+    /// </summary>
+    public void Visit(Action<T1> action1, Action<T2> action2, Action<T3> action3)
+    {
+        if (SetItem == SetItems.Item1) action1(_item1!);
+        if (SetItem == SetItems.Item2) action2(_item2!);
+        if (SetItem == SetItems.Item3) action3(_item3!);
+    }
+    /// <summary>
+    /// Allows to use a delegate returning value on a set item.
+    /// </summary>
+    /// <typeparam name="TResult">Type of the returned value.</typeparam>
+    /// <returns>Value returned from the delegate, default if there was no correct set item.</returns>
+    public TResult? Visit<TResult>(Func<T1, TResult> func1, Func<T2, TResult> func2, Func<T3, TResult> func3)
+    {
+        return SetItem switch
+        {
+            SetItems.Item1 => func1(_item1!),
+            SetItems.Item2 => func2(_item2!),
+            SetItems.Item3 => func3(_item3!),
+            _ => default
+        };
     }
 }

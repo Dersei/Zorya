@@ -8,16 +8,10 @@ public class Variant<T1> : Variant, IVariant
 
     public Variant(T1 item)
     {
-        Item = item;
+        _item = item;
         SetItem = SetItems.Item1;
     }
-
-    private T1? Item
-    {
-        get => _item;
-        init => _item = value;
-    }
-
+    
     public override bool Set<T>(T value)
     {
         return SetItemInternal(ref _item, SetItems.Item1, value);
@@ -28,7 +22,7 @@ public class Variant<T1> : Variant, IVariant
         return SetItem switch
         {
             SetItems.None => throw new BadVariantAccessException(typeof(T1), this),
-            SetItems.Item1 when Item is T t => t,
+            SetItems.Item1 when _item is T t => t,
             _ => throw new BadVariantAccessException(typeof(T1), this)
         };
     }
@@ -36,7 +30,7 @@ public class Variant<T1> : Variant, IVariant
 
     public override bool TryGet<T>([MaybeNull] out T value)
     {
-        return TestItem(Item, SetItems.Item1, out value);
+        return TestItem(_item, SetItems.Item1, out value);
     }
 
     public override Type? GetSetType()
@@ -44,7 +38,7 @@ public class Variant<T1> : Variant, IVariant
         return SetItem switch
         {
             SetItems.None => null,
-            SetItems.Item1 when Item is not null => Item.GetType(),
+            SetItems.Item1 when _item is not null => _item.GetType(),
             _ => throw new ArgumentOutOfRangeException()
         };
     }
@@ -75,5 +69,22 @@ public class Variant<T1> : Variant, IVariant
     public static bool TryGet<T>(Variant<T> variant, out T? value)
     {
         return variant.TryGet(out value);
+    }
+    /// <summary>
+    /// Allows to use a delegate on set item.
+    /// </summary>
+    public void Visit(Action<T1> action)
+    {
+        if (SetItem == SetItems.Item1) action(_item!);
+    }
+    /// <summary>
+    /// Allows to use a delegate returning value on a set item.
+    /// </summary>
+    /// <typeparam name="TResult">Type of the returned value.</typeparam>
+    /// <returns>Value returned from the delegate, default if there was no correct set item.</returns>
+    public TResult? Visit<TResult>(Func<T1, TResult> func)
+    {
+        if (SetItem == SetItems.Item1) return func(_item!);
+        return default;
     }
 }

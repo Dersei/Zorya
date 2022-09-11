@@ -47,4 +47,12 @@ public class Tests
         v = 10;
         Assert.Throws(typeof(BadVariantAccessException), () => v.Get<string>());
     }
+    
+    [Test]
+    public void Visit()
+    {
+        Variant<int> v;
+        v = 10;
+        Assert.AreEqual(1, v.Visit(_ => 1));
+    }
 }

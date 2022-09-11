@@ -38,4 +38,12 @@ public class ValueVariant7Test
         v = 10;
         Assert.Throws(typeof(BadValueVariantAccessException), () => v.Get<string>());
     }
+    
+    [Test]
+    public void Visit()
+    {
+        ValueVariant<int, string, double, long, float, Point, byte> v;
+        v = (byte) 10;
+        Assert.AreEqual(7, v.Visit(_ => 1, _ => 2, _ => 3, _ => 4, _ => 5, _ => 6, _ => 7));
+    }
 }

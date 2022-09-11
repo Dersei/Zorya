@@ -36,4 +36,11 @@ public class ValueVariant2Test
         v = 10;
         Assert.Throws(typeof(BadValueVariantAccessException), () => v.Get<string>());
     }
+    
+    [Test]
+    public void Visit()
+    {
+        ValueVariant<int, string> v = "10";
+        Assert.AreEqual(2, v.Visit(_ => 1, _ => 2));
+    }
 }

@@ -15,4 +15,4 @@ Variant<int, double, string> ParseInput(string input)
 
 Console.WriteLine("Input value:");
 var parsed = ParseInput(Console.ReadLine() ?? string.Empty);
-Console.WriteLine($"Your input is of type {parsed.GetSetType()}");
+Console.WriteLine($"Your input is of type {parsed.Visit( _ => "int", _ => "double", _ => "string")}");

@@ -105,4 +105,29 @@ public readonly struct ValueVariant<T1, T2, T3> : IValueVariant
             _ => throw new ArgumentOutOfRangeException()
         };
     }
+    
+    /// <summary>
+    /// Allows to use a delegate on set item.
+    /// </summary>
+    public void Visit(Action<T1> action1, Action<T2> action2, Action<T3> action3)
+    {
+        if (_setItem == SetItems.Item1) action1(_item1!);
+        if (_setItem == SetItems.Item2) action2(_item2!);
+        if (_setItem == SetItems.Item3) action3(_item3!);
+    }
+    /// <summary>
+    /// Allows to use a delegate returning value on a set item.
+    /// </summary>
+    /// <typeparam name="TResult">Type of the returned value.</typeparam>
+    /// <returns>Value returned from the delegate, default if there was no correct set item.</returns>
+    public TResult? Visit<TResult>(Func<T1, TResult> func1, Func<T2, TResult> func2, Func<T3, TResult> func3)
+    {
+        return _setItem switch
+        {
+            SetItems.Item1 => func1(_item1!),
+            SetItems.Item2 => func2(_item2!),
+            SetItems.Item3 => func3(_item3!),
+            _ => default
+        };
+    }
 }
