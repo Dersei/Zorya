@@ -35,6 +35,25 @@ if (v.TryGet(out long value))
     return value * 2;
 }
 ```
+Additionally there are also `Match`, `TryMatch` and `MatchOrDefault` methods receiving `Action` or `Func`.
+They apply given function on the element of requested type. `Match` throws `BadVariantAccessException` or `BadValueVariantAccessException`, `TryMatch` returns `true` if the element exists or `false` if it doesn't.
+`MatchOrDefault` executes given fallback action in case of `MatchOrDefault(Action)` or returns given default value in case of `MatchOrDefault(Func)`.
+```csharp
+Variant<int, string, double> v = 42.0;
+v.Match((int i) => Console.WriteLine($"int {i}"));
+Variant<int, string> v2 = "42";
+v2.MatchOrDefault((int i) => Console.WriteLine($"int {i}"), () => Console.WriteLine("Incorrect type"));
+Variant<int, double> v3 = 42.0;
+if(v3.TryMatch((int i) => i * 10, out var result))
+{
+    Console.WriteLine(result);
+}
+```
+`Visit` method accepts one function for all types the variant may contain and then executes the one corresponding to the set type.
+```csharp
+Variant<int, double, string> v = 42.0;
+v.Visit((int i) => Console.WriteLine($"int {i}"), (double d) => Console.WriteLine($"double {d}", (string s) => Console.WriteLine($"string {s}");
+```
 It's also possible to request the set type using `GetSetType`:
 ```csharp
 Variant<int, string, double, Point> v = new Point(0, 1);
@@ -49,7 +68,7 @@ var wasSetSuccess = v.Set("20");
 Debug.Assert(v.Get<string>() == "20"); //true
 Debug.Assert(wasSetSuccess); //true
 ```
-`Get` and `TryGet` methods are also define as static on individual types and `Variant`, and `ValueVariant` classes:
+`Get`, `TryGet`, `Match`, `TryMarch`, `MatchOrDefault` methods are also define as static on individual types and `Variant`, and `ValueVariant` classes:
 ```csharp
 Variant<int, string, double, long> v = 42L;
 var l = Variant.Get<long>(v);
