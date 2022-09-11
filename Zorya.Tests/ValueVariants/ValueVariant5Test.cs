@@ -37,7 +37,7 @@ public class ValueVariant5Test
         v = 10;
         Assert.Throws(typeof(BadValueVariantAccessException), () => v.Get<string>());
     }
-    
+
     [Test]
     public void Visit()
     {

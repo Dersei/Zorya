@@ -44,13 +44,13 @@ public class Variant<T1, T2, T3> : Variant, IVariant
         if (TestItem(_item2, SetItems.Item2, out value)) return true;
         return TestItem(_item3, SetItems.Item3, out value);
     }
-    
+
     public override bool Set<T>(T value)
     {
-        return SetItemInternal(ref _item1, SetItems.Item1, value) 
+        return SetItemInternal(ref _item1, SetItems.Item1, value)
                || SetItemInternal(ref _item2, SetItems.Item2, value)
                || SetItemInternal(ref _item3, SetItems.Item3, value)
-               ;
+            ;
     }
 
 
@@ -103,8 +103,9 @@ public class Variant<T1, T2, T3> : Variant, IVariant
     {
         return variant.TryGet(out value);
     }
+
     /// <summary>
-    /// Allows to use a delegate on set item.
+    ///     Allows to use a delegate on set item.
     /// </summary>
     public void Visit(Action<T1> action1, Action<T2> action2, Action<T3> action3)
     {
@@ -112,8 +113,9 @@ public class Variant<T1, T2, T3> : Variant, IVariant
         if (SetItem == SetItems.Item2) action2(_item2!);
         if (SetItem == SetItems.Item3) action3(_item3!);
     }
+
     /// <summary>
-    /// Allows to use a delegate returning value on a set item.
+    ///     Allows to use a delegate returning value on a set item.
     /// </summary>
     /// <typeparam name="TResult">Type of the returned value.</typeparam>
     /// <returns>Value returned from the delegate, default if there was no correct set item.</returns>

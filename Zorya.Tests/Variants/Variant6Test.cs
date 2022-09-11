@@ -38,7 +38,7 @@ public class Variant6Test
         v = 10;
         Assert.Throws(typeof(BadVariantAccessException), () => v.Get<string>());
     }
-    
+
     [Test]
     public void Visit()
     {

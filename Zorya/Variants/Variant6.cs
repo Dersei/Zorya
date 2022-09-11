@@ -46,7 +46,7 @@ public class Variant<T1, T2, T3, T4, T5, T6> : Variant, IVariant
         _item6 = item6;
         SetItem = SetItems.Item6;
     }
-    
+
     public override T Get<T>()
     {
         return SetItem switch
@@ -87,6 +87,16 @@ public class Variant<T1, T2, T3, T4, T5, T6> : Variant, IVariant
         };
     }
 
+    public override bool Set<T>(T value)
+    {
+        return SetItemInternal(ref _item1, SetItems.Item1, value)
+               || SetItemInternal(ref _item2, SetItems.Item2, value)
+               || SetItemInternal(ref _item3, SetItems.Item3, value)
+               || SetItemInternal(ref _item4, SetItems.Item4, value)
+               || SetItemInternal(ref _item5, SetItems.Item5, value)
+               || SetItemInternal(ref _item6, SetItems.Item6, value);
+    }
+
 
     public static implicit operator Variant<T1, T2, T3, T4, T5, T6>(T1 value)
     {
@@ -117,16 +127,6 @@ public class Variant<T1, T2, T3, T4, T5, T6> : Variant, IVariant
     {
         return new Variant<T1, T2, T3, T4, T5, T6>(value);
     }
-    
-    public override bool Set<T>(T value)
-    {
-        return SetItemInternal(ref _item1, SetItems.Item1, value) 
-               || SetItemInternal(ref _item2, SetItems.Item2, value)
-               || SetItemInternal(ref _item3, SetItems.Item3, value)
-               || SetItemInternal(ref _item4, SetItems.Item4, value)
-               || SetItemInternal(ref _item5, SetItems.Item5, value)
-               || SetItemInternal(ref _item6, SetItems.Item6, value);
-    }
 
     /// <summary>
     ///     Gets a value of the given type. Throws <see cref="BadVariantAccessException" /> if type isn't set.
@@ -150,10 +150,12 @@ public class Variant<T1, T2, T3, T4, T5, T6> : Variant, IVariant
     {
         return variant.TryGet(out value);
     }
+
     /// <summary>
-    /// Allows to use a delegate on set item.
+    ///     Allows to use a delegate on set item.
     /// </summary>
-    public void Visit(Action<T1> action1, Action<T2> action2, Action<T3> action3, Action<T4> action4, Action<T5> action5, Action<T6> action6)
+    public void Visit(Action<T1> action1, Action<T2> action2, Action<T3> action3, Action<T4> action4,
+        Action<T5> action5, Action<T6> action6)
     {
         if (SetItem == SetItems.Item1) action1(_item1!);
         if (SetItem == SetItems.Item2) action2(_item2!);
@@ -162,12 +164,14 @@ public class Variant<T1, T2, T3, T4, T5, T6> : Variant, IVariant
         if (SetItem == SetItems.Item5) action5(_item5!);
         if (SetItem == SetItems.Item6) action6(_item6!);
     }
+
     /// <summary>
-    /// Allows to use a delegate returning value on a set item.
+    ///     Allows to use a delegate returning value on a set item.
     /// </summary>
     /// <typeparam name="TResult">Type of the returned value.</typeparam>
     /// <returns>Value returned from the delegate, default if there was no correct set item.</returns>
-    public TResult? Visit<TResult>(Func<T1, TResult> func1, Func<T2, TResult> func2, Func<T3, TResult> func3, Func<T4, TResult> func4, Func<T5, TResult> func5, Func<T6, TResult> func6)
+    public TResult? Visit<TResult>(Func<T1, TResult> func1, Func<T2, TResult> func2, Func<T3, TResult> func3,
+        Func<T4, TResult> func4, Func<T5, TResult> func5, Func<T6, TResult> func6)
     {
         return SetItem switch
         {

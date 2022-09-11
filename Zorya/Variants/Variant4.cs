@@ -67,6 +67,14 @@ public class Variant<T1, T2, T3, T4> : Variant, IVariant
         };
     }
 
+    public override bool Set<T>(T value)
+    {
+        return SetItemInternal(ref _item1, SetItems.Item1, value)
+               || SetItemInternal(ref _item2, SetItems.Item2, value)
+               || SetItemInternal(ref _item3, SetItems.Item3, value)
+               || SetItemInternal(ref _item4, SetItems.Item4, value);
+    }
+
     public static implicit operator Variant<T1, T2, T3, T4>(T1 value)
     {
         return new Variant<T1, T2, T3, T4>(value);
@@ -97,14 +105,6 @@ public class Variant<T1, T2, T3, T4> : Variant, IVariant
     {
         return variant.Get<T>();
     }
-    
-    public override bool Set<T>(T value)
-    {
-        return SetItemInternal(ref _item1, SetItems.Item1, value) 
-               || SetItemInternal(ref _item2, SetItems.Item2, value)
-               || SetItemInternal(ref _item3, SetItems.Item3, value)
-               || SetItemInternal(ref _item4, SetItems.Item4, value);
-    }
 
     /// <summary>
     ///     Gets a value of the given type. Returns false if type isn't set.
@@ -117,8 +117,9 @@ public class Variant<T1, T2, T3, T4> : Variant, IVariant
     {
         return variant.TryGet(out value);
     }
+
     /// <summary>
-    /// Allows to use a delegate on set item.
+    ///     Allows to use a delegate on set item.
     /// </summary>
     public void Visit(Action<T1> action1, Action<T2> action2, Action<T3> action3, Action<T4> action4)
     {
@@ -127,12 +128,14 @@ public class Variant<T1, T2, T3, T4> : Variant, IVariant
         if (SetItem == SetItems.Item3) action3(_item3!);
         if (SetItem == SetItems.Item4) action4(_item4!);
     }
+
     /// <summary>
-    /// Allows to use a delegate returning value on a set item.
+    ///     Allows to use a delegate returning value on a set item.
     /// </summary>
     /// <typeparam name="TResult">Type of the returned value.</typeparam>
     /// <returns>Value returned from the delegate, default if there was no correct set item.</returns>
-    public TResult? Visit<TResult>(Func<T1, TResult> func1, Func<T2, TResult> func2, Func<T3, TResult> func3, Func<T4, TResult> func4)
+    public TResult? Visit<TResult>(Func<T1, TResult> func1, Func<T2, TResult> func2, Func<T3, TResult> func3,
+        Func<T4, TResult> func4)
     {
         return SetItem switch
         {

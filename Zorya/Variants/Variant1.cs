@@ -11,7 +11,7 @@ public class Variant<T1> : Variant, IVariant
         _item = item;
         SetItem = SetItems.Item1;
     }
-    
+
     public override bool Set<T>(T value)
     {
         return SetItemInternal(ref _item, SetItems.Item1, value);
@@ -70,15 +70,17 @@ public class Variant<T1> : Variant, IVariant
     {
         return variant.TryGet(out value);
     }
+
     /// <summary>
-    /// Allows to use a delegate on set item.
+    ///     Allows to use a delegate on set item.
     /// </summary>
     public void Visit(Action<T1> action)
     {
         if (SetItem == SetItems.Item1) action(_item!);
     }
+
     /// <summary>
-    /// Allows to use a delegate returning value on a set item.
+    ///     Allows to use a delegate returning value on a set item.
     /// </summary>
     /// <typeparam name="TResult">Type of the returned value.</typeparam>
     /// <returns>Value returned from the delegate, default if there was no correct set item.</returns>

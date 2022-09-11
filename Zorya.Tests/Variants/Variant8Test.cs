@@ -13,21 +13,21 @@ public class Variant8Test
         v = 'c';
         Assert.AreEqual('c', v.Get<char>());
     }
-    
+
     [Test]
     public void SetValue()
     {
-        Variant<int, string, double, long, float, Point, byte, char> v = new (10);
+        Variant<int, string, double, long, float, Point, byte, char> v = new(10);
         var test = v.Set('c');
         Assert.Throws<BadVariantAccessException>(() => v.Get<int>());
         Assert.AreEqual('c', v.Get<char>());
         Assert.IsTrue(test);
     }
-    
+
     [Test]
     public void SetValueFailure()
     {
-        Variant<int, string, double, long, float, Point, byte, char> v = new ((byte)'c');
+        Variant<int, string, double, long, float, Point, byte, char> v = new((byte)'c');
         var test = v.Set(20u);
         Assert.AreEqual((byte)'c', v.Get<byte>());
         Assert.Throws<BadVariantAccessException>(() => v.Get<double>());
@@ -60,7 +60,7 @@ public class Variant8Test
         v = 10;
         Assert.Throws(typeof(BadVariantAccessException), () => v.Get<string>());
     }
-    
+
     [Test]
     public void Visit()
     {

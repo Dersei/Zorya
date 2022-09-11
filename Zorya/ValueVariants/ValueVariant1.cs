@@ -65,18 +65,18 @@ public readonly struct ValueVariant<T1> : IValueVariant
             _ => throw new ArgumentOutOfRangeException()
         };
     }
-    
+
     /// <summary>
-    /// Allows to use a delegate on set item.
+    ///     Allows to use a delegate on set item.
     /// </summary>
     /// <param name="action"></param>
     public void Visit(Action<T1> action)
     {
         if (_setItem == SetItems.Item1) action(_item!);
     }
-    
+
     /// <summary>
-    /// Allows to use a delegate returning value on a set item.
+    ///     Allows to use a delegate returning value on a set item.
     /// </summary>
     /// <param name="func"></param>
     /// <typeparam name="TResult">Type of the returned value.</typeparam>
@@ -85,5 +85,98 @@ public readonly struct ValueVariant<T1> : IValueVariant
     {
         if (_setItem == SetItems.Item1) return func(_item!);
         return default;
+    }
+
+    /// <summary>
+    ///     Matches set element with a given action. Throws <see cref="BadValueVariantAccessException" /> if type isn't set.
+    /// </summary>
+    /// <param name="action"></param>
+    /// <typeparam name="T"></typeparam>
+    /// <exception cref="BadValueVariantAccessException"></exception>
+    public void Match<T>(Action<T> action)
+    {
+        if (TryGet(out T? value))
+            action(value!);
+        else
+            throw new BadValueVariantAccessException(typeof(T), this);
+    }
+
+    /// <summary>
+    ///     Matches set element with a given action. Executes fallback function if there's no matching type.
+    /// </summary>
+    /// <param name="action"></param>
+    /// <param name="fallback">Fallback action, executed if there's no matching type.</param>
+    /// <typeparam name="T"></typeparam>
+    public void MatchOrDefault<T>(Action<T> action, Action fallback)
+    {
+        if (TryGet(out T? value))
+            action(value!);
+        else
+            fallback();
+    }
+
+    /// <summary>
+    ///     Matches set element with a given action. Returns false if type isn't set.
+    /// </summary>
+    /// <param name="action"></param>
+    /// <typeparam name="T">Requested type.</typeparam>
+    /// <returns></returns>
+    public bool TryMatch<T>(Action<T> action)
+    {
+        if (TryGet(out T? value))
+        {
+            action(value!);
+            return true;
+        }
+
+        return false;
+    }
+
+    /// <summary>
+    ///     Matches set element with a given function. Throws <see cref="BadValueVariantAccessException" /> if type isn't set.
+    /// </summary>
+    /// <param name="func"></param>
+    /// <typeparam name="T"></typeparam>
+    /// <typeparam name="TResult"></typeparam>
+    /// <exception cref="BadValueVariantAccessException"></exception>
+    public TResult Match<T, TResult>(Func<T, TResult> func)
+    {
+        if (TryGet(out T? value)) return func(value!);
+
+        throw new BadValueVariantAccessException(typeof(T), this);
+    }
+
+    /// <summary>
+    ///     Matches set element with a given function. Returns default value if there's no matching type.
+    /// </summary>
+    /// <param name="func"></param>
+    /// <param name="default">Default value to return if there's no matching type.</param>
+    /// <typeparam name="T"></typeparam>
+    /// <typeparam name="TResult"></typeparam>
+    public TResult MatchOrDefault<T, TResult>(Func<T, TResult> func, TResult @default)
+    {
+        if (TryGet(out T? value)) return func(value!);
+
+        return @default;
+    }
+
+    /// <summary>
+    ///     Matches set element with a given action. Returns false if type isn't set.
+    /// </summary>
+    /// <param name="func"></param>
+    /// <param name="result">Extracted value, default if method returns false.</param>
+    /// <typeparam name="T">Requested type.</typeparam>
+    /// <typeparam name="TResult"></typeparam>
+    /// <returns></returns>
+    public bool TryMatch<T, TResult>(Func<T, TResult> func, out TResult? result)
+    {
+        if (TryGet(out T? value))
+        {
+            result = func(value!);
+            return true;
+        }
+
+        result = default;
+        return false;
     }
 }

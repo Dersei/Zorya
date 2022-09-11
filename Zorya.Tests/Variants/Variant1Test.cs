@@ -12,11 +12,11 @@ public class Tests
         v = 10;
         Assert.AreEqual(10, v.Get<int>());
     }
-    
+
     [Test]
     public void SetValue()
     {
-        Variant<int> v = new (10);
+        Variant<int> v = new(10);
         var test = v.Set(20);
         Assert.AreEqual(20, v.Get<int>());
         Assert.IsTrue(test);
@@ -47,7 +47,7 @@ public class Tests
         v = 10;
         Assert.Throws(typeof(BadVariantAccessException), () => v.Get<string>());
     }
-    
+
     [Test]
     public void Visit()
     {
