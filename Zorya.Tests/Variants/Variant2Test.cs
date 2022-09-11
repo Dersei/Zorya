@@ -11,21 +11,21 @@ public class Variant2Test
         Variant<int, string> v = "10";
         Assert.AreEqual("10", v.Get<string>());
     }
-    
+
     [Test]
     public void SetValue()
     {
-        Variant<int, string> v = new (10);
+        Variant<int, string> v = new(10);
         var test = v.Set("20");
         Assert.Throws<BadVariantAccessException>(() => v.Get<int>());
         Assert.AreEqual("20", v.Get<string>());
         Assert.IsTrue(test);
     }
-    
+
     [Test]
     public void SetValueFailure()
     {
-        Variant<int, string> v = new (10);
+        Variant<int, string> v = new(10);
         var test = v.Set(20.0);
         Assert.AreEqual(10, v.Get<int>());
         Assert.Throws<BadVariantAccessException>(() => v.Get<double>());
@@ -56,5 +56,12 @@ public class Variant2Test
         Variant<int, string> v;
         v = 10;
         Assert.Throws(typeof(BadVariantAccessException), () => v.Get<string>());
+    }
+
+    [Test]
+    public void Visit()
+    {
+        Variant<int, string> v = "10";
+        Assert.AreEqual(2, v.Visit(_ => 1, _ => 2));
     }
 }

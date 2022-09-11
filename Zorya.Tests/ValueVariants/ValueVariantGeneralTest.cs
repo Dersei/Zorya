@@ -7,6 +7,64 @@ namespace Zorya.Tests.ValueVariants;
 public class ValueVariantGeneralTest
 {
     [Test]
+    public void Match()
+    {
+        ValueVariant<int, string, double> v;
+        v = 10;
+        Assert.AreEqual(100, v.Match((int i) => i * 10));
+        v = "10";
+        Assert.AreEqual("1010", v.Match((string s) => s + 10));
+    }
+
+    [Test]
+    public void MatchFail()
+    {
+        ValueVariant<int, string, double> v;
+        v = 10;
+        Assert.Throws<BadValueVariantAccessException>(() => v.Match((string s) => s + 10));
+    }
+
+    [Test]
+    public void MatchOrDefault()
+    {
+        ValueVariant<int, string, double> v;
+        v = 10;
+        Assert.AreEqual(100, v.MatchOrDefault((int i) => i * 10, 11));
+        v = "10";
+        Assert.AreEqual("1010", v.MatchOrDefault((string s) => s + 10, "1000"));
+    }
+
+    [Test]
+    public void MatchOrDefaultFail()
+    {
+        ValueVariant<int, string, double> v;
+        v = "10";
+        Assert.AreEqual(11, v.MatchOrDefault((int i) => i * 10, 11));
+        v = 10;
+        Assert.AreEqual("1000", v.MatchOrDefault((string s) => s + 10, "1000"));
+    }
+
+    [Test]
+    public void TryMatch()
+    {
+        ValueVariant<int, string, double> v;
+        v = 10;
+        var test = v.TryMatch((int i) => i * 10, out var result);
+        Assert.AreEqual(true, test);
+        Assert.AreEqual(100, result);
+    }
+
+    [Test]
+    public void TryMatchFail()
+    {
+        ValueVariant<int, string, double> v;
+        v = "10";
+        var test = v.TryMatch((int i) => i * 10, out var result);
+        Assert.AreEqual(false, test);
+    }
+
+
+    [Test]
     public void ReferenceTypes()
     {
         ValueVariant<object, string, TestExampleRef> v;
@@ -22,12 +80,12 @@ public class ValueVariantGeneralTest
         v = new TestExampleEqual(10);
         Assert.AreEqual(new TestExampleEqual(10), v.Get<TestExampleEqual>());
     }
-    
+
     [Test]
     public void ValueNotSet()
     {
-        ValueVariant<object, string, TestExampleEqual> v = new ValueVariant<object, string, TestExampleEqual>();
-        Assert.Throws<BadValueVariantAccessException>(() =>v.Get<TestExampleEqual>());
+        var v = new ValueVariant<object, string, TestExampleEqual>();
+        Assert.Throws<BadValueVariantAccessException>(() => v.Get<TestExampleEqual>());
     }
 
     private class TestExampleRef
@@ -55,7 +113,7 @@ public class ValueVariantGeneralTest
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
             if (obj.GetType() != GetType()) return false;
-            return Equals((TestExampleEqual) obj);
+            return Equals((TestExampleEqual)obj);
         }
 
         public override int GetHashCode()

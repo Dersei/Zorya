@@ -22,9 +22,9 @@ public interface IVariant
     /// </summary>
     /// <returns></returns>
     public Type? GetSetType();
-    
+
     /// <summary>
-    /// Sets new value without making copy of the class.
+    ///     Sets new value without making copy of the class.
     /// </summary>
     /// <param name="value">New value to set.</param>
     /// <typeparam name="T">Type of new value.</typeparam>

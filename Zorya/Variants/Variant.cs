@@ -5,11 +5,104 @@ public abstract class Variant : IVariant
     protected SetItems SetItem = SetItems.None;
 
     public abstract bool Set<T>(T value);
-    
+
     public abstract T Get<T>();
     public abstract bool TryGet<T>(out T? value);
 
     public abstract Type? GetSetType();
+
+    /// <summary>
+    ///     Matches set element with a given action. Throws <see cref="BadVariantAccessException" /> if type isn't set.
+    /// </summary>
+    /// <param name="action"></param>
+    /// <typeparam name="T"></typeparam>
+    /// <exception cref="BadVariantAccessException"></exception>
+    public void Match<T>(Action<T> action)
+    {
+        if (TryGet(out T? value))
+            action(value!);
+        else
+            throw new BadVariantAccessException(typeof(T), this);
+    }
+
+    /// <summary>
+    ///     Matches set element with a given action. Executes fallback function if there's no matching type.
+    /// </summary>
+    /// <param name="action"></param>
+    /// <param name="fallback">Fallback action, executed if there's no matching type.</param>
+    /// <typeparam name="T"></typeparam>
+    public void MatchOrDefault<T>(Action<T> action, Action fallback)
+    {
+        if (TryGet(out T? value))
+            action(value!);
+        else
+            fallback();
+    }
+
+    /// <summary>
+    ///     Matches set element with a given action. Returns false if type isn't set.
+    /// </summary>
+    /// <param name="action"></param>
+    /// <typeparam name="T">Requested type.</typeparam>
+    /// <returns></returns>
+    public bool TryMatch<T>(Action<T> action)
+    {
+        if (TryGet(out T? value))
+        {
+            action(value!);
+            return true;
+        }
+
+        return false;
+    }
+
+    /// <summary>
+    ///     Matches set element with a given function. Throws <see cref="BadVariantAccessException" /> if type isn't set.
+    /// </summary>
+    /// <param name="func"></param>
+    /// <typeparam name="T"></typeparam>
+    /// <typeparam name="TResult"></typeparam>
+    /// <exception cref="BadVariantAccessException"></exception>
+    public TResult Match<T, TResult>(Func<T, TResult> func)
+    {
+        if (TryGet(out T? value)) return func(value!);
+
+        throw new BadVariantAccessException(typeof(T), this);
+    }
+
+    /// <summary>
+    ///     Matches set element with a given function. Returns default value if there's no matching type.
+    /// </summary>
+    /// <param name="func"></param>
+    /// <param name="default">Default value to return if there's no matching type.</param>
+    /// <typeparam name="T"></typeparam>
+    /// <typeparam name="TResult"></typeparam>
+    public TResult MatchOrDefault<T, TResult>(Func<T, TResult> func, TResult @default)
+    {
+        if (TryGet(out T? value)) return func(value!);
+
+        return @default;
+    }
+
+    /// <summary>
+    ///     Matches set element with a given action. Returns false if type isn't set.
+    /// </summary>
+    /// <param name="func"></param>
+    /// <param name="result">Extracted value, default if method returns false.</param>
+    /// <typeparam name="T">Requested type.</typeparam>
+    /// <typeparam name="TResult"></typeparam>
+    /// <returns></returns>
+    public bool TryMatch<T, TResult>(Func<T, TResult> func, out TResult? result)
+    {
+        if (TryGet(out T? value))
+        {
+            result = func(value!);
+            return true;
+        }
+
+        result = default;
+        return false;
+    }
 
     /// <summary>
     ///     Gets a value of the given type. Throws <see cref="BadVariantAccessException" /> if type isn't set.
@@ -34,6 +127,105 @@ public abstract class Variant : IVariant
         return variant.TryGet(out value);
     }
 
+    /// <summary>
+    ///     Matches set element with a given action. Throws <see cref="BadVariantAccessException" /> if type isn't set.
+    /// </summary>
+    /// <param name="variant">Tested variant.</param>
+    /// <param name="action"></param>
+    /// <typeparam name="T"></typeparam>
+    /// <exception cref="BadVariantAccessException"></exception>
+    public static void Match<T>(IVariant variant, Action<T> action)
+    {
+        if (variant.TryGet(out T? value))
+            action(value!);
+        else
+            throw new BadVariantAccessException(typeof(T), variant);
+    }
+
+    /// <summary>
+    ///     Matches set element with a given action. Executes fallback function if there's no matching type.
+    /// </summary>
+    /// <param name="variant">Tested variant.</param>
+    /// <param name="action"></param>
+    /// <param name="fallback">Fallback action, executed if there's no matching type.</param>
+    /// <typeparam name="T"></typeparam>
+    public static void MatchOrDefault<T>(IVariant variant, Action<T> action, Action fallback)
+    {
+        if (variant.TryGet(out T? value))
+            action(value!);
+        else
+            fallback();
+    }
+
+    /// <summary>
+    ///     Matches set element with a given action. Returns false if type isn't set.
+    /// </summary>
+    /// <param name="variant">Tested variant.</param>
+    /// <param name="action"></param>
+    /// <typeparam name="T">Requested type.</typeparam>
+    /// <returns></returns>
+    public static bool TryMatch<T>(IVariant variant, Action<T> action)
+    {
+        if (variant.TryGet(out T? value))
+        {
+            action(value!);
+            return true;
+        }
+
+        return false;
+    }
+
+    /// <summary>
+    ///     Matches set element with a given function. Throws <see cref="BadVariantAccessException" /> if type isn't set.
+    /// </summary>
+    /// <param name="variant">Tested variant.</param>
+    /// <param name="func"></param>
+    /// <typeparam name="T"></typeparam>
+    /// <typeparam name="TResult"></typeparam>
+    /// <exception cref="BadVariantAccessException"></exception>
+    public static TResult Match<T, TResult>(IVariant variant, Func<T, TResult> func)
+    {
+        if (variant.TryGet(out T? value)) return func(value!);
+
+        throw new BadVariantAccessException(typeof(T), variant);
+    }
+
+    /// <summary>
+    ///     Matches set element with a given function. Returns default value if there's no matching type.
+    /// </summary>
+    /// <param name="variant">Tested variant.</param>
+    /// <param name="func"></param>
+    /// <param name="default">Default value to return if there's no matching type.</param>
+    /// <typeparam name="T"></typeparam>
+    /// <typeparam name="TResult"></typeparam>
+    public static TResult MatchOrDefault<T, TResult>(IVariant variant, Func<T, TResult> func, TResult @default)
+    {
+        if (variant.TryGet(out T? value)) return func(value!);
+
+        return @default;
+    }
+
+    /// <summary>
+    ///     Matches set element with a given action. Returns false if type isn't set.
+    /// </summary>
+    /// <param name="variant">Tested variant.</param>
+    /// <param name="func"></param>
+    /// <param name="result">Extracted value, default if method returns false.</param>
+    /// <typeparam name="T">Requested type.</typeparam>
+    /// <typeparam name="TResult"></typeparam>
+    /// <returns></returns>
+    public static bool TryMatch<T, TResult>(IVariant variant, Func<T, TResult> func, out TResult? result)
+    {
+        if (variant.TryGet(out T? value))
+        {
+            result = func(value!);
+            return true;
+        }
+
+        result = default;
+        return false;
+    }
+
     protected bool TestItem<TItem, TValue>(TItem item, SetItems setItem, out TValue? value)
     {
         if (item is TValue v && SetItem == setItem)
@@ -45,7 +237,7 @@ public abstract class Variant : IVariant
         value = default;
         return false;
     }
-    
+
     protected bool SetItemInternal<TItem, TValue>(ref TItem item, SetItems setItem, TValue? value)
     {
         if (value is TItem v)

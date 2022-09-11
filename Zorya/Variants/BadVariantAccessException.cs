@@ -7,7 +7,7 @@ public class BadVariantAccessException : Exception
     {
     }
 
-    public BadVariantAccessException(Type expected, Variant variant) : base(
+    public BadVariantAccessException(Type expected, IVariant variant) : base(
         $"Bad variant access, expected: {expected}, but the set type is {variant.GetSetType()?.ToString() ?? "None"}")
     {
     }

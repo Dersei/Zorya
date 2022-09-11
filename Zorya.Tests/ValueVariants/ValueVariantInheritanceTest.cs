@@ -36,7 +36,7 @@ public class ValueVariantInheritanceTest
     public void ChildInParentInChildGet()
     {
         ValueVariant<int, TestExampleParent, TestExampleChild> v;
-        var refT = new TestExampleChild {Id = 10};
+        var refT = new TestExampleChild { Id = 10 };
         v = refT;
         Assert.AreEqual(10, v.Get<TestExampleChild>().Id);
     }
@@ -45,7 +45,7 @@ public class ValueVariantInheritanceTest
     public void ParentInChildInChildGet()
     {
         ValueVariant<int, TestExampleChild, TestExampleParent> v;
-        var refT = new TestExampleChild {Id = 10};
+        var refT = new TestExampleChild { Id = 10 };
         v = refT;
         Assert.AreEqual(10, v.Get<TestExampleChild>().Id);
     }

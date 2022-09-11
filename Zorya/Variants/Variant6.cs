@@ -47,41 +47,29 @@ public class Variant<T1, T2, T3, T4, T5, T6> : Variant, IVariant
         SetItem = SetItems.Item6;
     }
 
-    private T1? Item1 => _item1;
-
-    private T2? Item2 => _item2;
-
-    private T3? Item3 => _item3;
-
-    private T4? Item4 => _item4;
-
-    private T5? Item5 => _item5;
-
-    private T6? Item6 => _item6;
-
     public override T Get<T>()
     {
         return SetItem switch
         {
             SetItems.None => throw new BadVariantAccessException(typeof(T), this),
-            SetItems.Item1 when Item1 is T t1 => t1,
-            SetItems.Item2 when Item2 is T t2 => t2,
-            SetItems.Item3 when Item3 is T t3 => t3,
-            SetItems.Item4 when Item4 is T t4 => t4,
-            SetItems.Item5 when Item5 is T t5 => t5,
-            SetItems.Item6 when Item6 is T t6 => t6,
+            SetItems.Item1 when _item1 is T t1 => t1,
+            SetItems.Item2 when _item2 is T t2 => t2,
+            SetItems.Item3 when _item3 is T t3 => t3,
+            SetItems.Item4 when _item4 is T t4 => t4,
+            SetItems.Item5 when _item5 is T t5 => t5,
+            SetItems.Item6 when _item6 is T t6 => t6,
             _ => throw new BadVariantAccessException(typeof(T), this)
         };
     }
 
     public override bool TryGet<T>([MaybeNull] out T value)
     {
-        if (TestItem(Item1, SetItems.Item1, out value)) return true;
-        if (TestItem(Item2, SetItems.Item2, out value)) return true;
-        if (TestItem(Item3, SetItems.Item3, out value)) return true;
-        if (TestItem(Item4, SetItems.Item4, out value)) return true;
-        if (TestItem(Item5, SetItems.Item5, out value)) return true;
-        return TestItem(Item6, SetItems.Item6, out value);
+        if (TestItem(_item1, SetItems.Item1, out value)) return true;
+        if (TestItem(_item2, SetItems.Item2, out value)) return true;
+        if (TestItem(_item3, SetItems.Item3, out value)) return true;
+        if (TestItem(_item4, SetItems.Item4, out value)) return true;
+        if (TestItem(_item5, SetItems.Item5, out value)) return true;
+        return TestItem(_item6, SetItems.Item6, out value);
     }
 
     public override Type? GetSetType()
@@ -89,14 +77,24 @@ public class Variant<T1, T2, T3, T4, T5, T6> : Variant, IVariant
         return SetItem switch
         {
             SetItems.None => null,
-            SetItems.Item1 when Item1 is not null => Item1.GetType(),
-            SetItems.Item2 when Item2 is not null => Item2.GetType(),
-            SetItems.Item3 when Item3 is not null => Item3.GetType(),
-            SetItems.Item4 when Item4 is not null => Item4.GetType(),
-            SetItems.Item5 when Item5 is not null => Item5.GetType(),
-            SetItems.Item6 when Item6 is not null => Item6.GetType(),
+            SetItems.Item1 when _item1 is not null => _item1.GetType(),
+            SetItems.Item2 when _item2 is not null => _item2.GetType(),
+            SetItems.Item3 when _item3 is not null => _item3.GetType(),
+            SetItems.Item4 when _item4 is not null => _item4.GetType(),
+            SetItems.Item5 when _item5 is not null => _item5.GetType(),
+            SetItems.Item6 when _item6 is not null => _item6.GetType(),
             _ => throw new ArgumentOutOfRangeException()
         };
+    }
+
+    public override bool Set<T>(T value)
+    {
+        return SetItemInternal(ref _item1, SetItems.Item1, value)
+               || SetItemInternal(ref _item2, SetItems.Item2, value)
+               || SetItemInternal(ref _item3, SetItems.Item3, value)
+               || SetItemInternal(ref _item4, SetItems.Item4, value)
+               || SetItemInternal(ref _item5, SetItems.Item5, value)
+               || SetItemInternal(ref _item6, SetItems.Item6, value);
     }
 
 
@@ -129,16 +127,6 @@ public class Variant<T1, T2, T3, T4, T5, T6> : Variant, IVariant
     {
         return new Variant<T1, T2, T3, T4, T5, T6>(value);
     }
-    
-    public override bool Set<T>(T value)
-    {
-        return SetItemInternal(ref _item1, SetItems.Item1, value) 
-               || SetItemInternal(ref _item2, SetItems.Item2, value)
-               || SetItemInternal(ref _item3, SetItems.Item3, value)
-               || SetItemInternal(ref _item4, SetItems.Item4, value)
-               || SetItemInternal(ref _item5, SetItems.Item5, value)
-               || SetItemInternal(ref _item6, SetItems.Item6, value);
-    }
 
     /// <summary>
     ///     Gets a value of the given type. Throws <see cref="BadVariantAccessException" /> if type isn't set.
@@ -161,5 +149,39 @@ public class Variant<T1, T2, T3, T4, T5, T6> : Variant, IVariant
     public static bool TryGet<T>(Variant<T1, T2, T3, T4, T5, T6> variant, out T? value)
     {
         return variant.TryGet(out value);
+    }
+
+    /// <summary>
+    ///     Allows to use a delegate on set item.
+    /// </summary>
+    public void Visit(Action<T1> action1, Action<T2> action2, Action<T3> action3, Action<T4> action4,
+        Action<T5> action5, Action<T6> action6)
+    {
+        if (SetItem == SetItems.Item1) action1(_item1!);
+        if (SetItem == SetItems.Item2) action2(_item2!);
+        if (SetItem == SetItems.Item3) action3(_item3!);
+        if (SetItem == SetItems.Item4) action4(_item4!);
+        if (SetItem == SetItems.Item5) action5(_item5!);
+        if (SetItem == SetItems.Item6) action6(_item6!);
+    }
+
+    /// <summary>
+    ///     Allows to use a delegate returning value on a set item.
+    /// </summary>
+    /// <typeparam name="TResult">Type of the returned value.</typeparam>
+    /// <returns>Value returned from the delegate, default if there was no correct set item.</returns>
+    public TResult? Visit<TResult>(Func<T1, TResult> func1, Func<T2, TResult> func2, Func<T3, TResult> func3,
+        Func<T4, TResult> func4, Func<T5, TResult> func5, Func<T6, TResult> func6)
+    {
+        return SetItem switch
+        {
+            SetItems.Item1 => func1(_item1!),
+            SetItems.Item2 => func2(_item2!),
+            SetItems.Item3 => func3(_item3!),
+            SetItems.Item4 => func4(_item4!),
+            SetItems.Item5 => func5(_item5!),
+            SetItems.Item6 => func6(_item6!),
+            _ => default
+        };
     }
 }
