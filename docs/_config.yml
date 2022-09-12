@@ -2,4 +2,4 @@ remote_theme: Dersei/cayman-dark
 show_downloads: true
 github:
   zip_url: https://github.com/Dersei/Zorya/archive/refs/tags/v1.0.0.zip
-  
+  tar_url: https://github.com/Dersei/Zorya/archive/refs/tags/v1.0.0.tar.gz
