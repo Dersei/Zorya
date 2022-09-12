@@ -25,3 +25,9 @@ jobs:
       run: dotnet build src/Zorya.sln --configuration Release --no-restore
     - name: Test
       run: dotnet test src/Zorya.sln --no-build --verbosity normal
+    - name: Upload a build artifact
+      uses: actions/upload-artifact@3.1.0
+      with:
+        # Artifact name
+        name: Zorya
+        path: src/Zorya/bin/Release/net6.0/Zorya.dll
