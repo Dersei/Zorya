@@ -1,0 +1,44 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <PackageId>Dersei.Zorya</PackageId>
+        <Title>Zorya</Title>
+        <Authors>Dominik Andrzejczak</Authors>
+        <Description>C# implementation of the variant type.</Description>
+        <Copyright>Copyright © Dominik Andrzejczak 2022</Copyright>
+        <PackageProjectUrl>https://github.com/Dersei/Zorya</PackageProjectUrl>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <PackageIcon>zorya_icon_128.jpg</PackageIcon>
+        <PackageTags>variant, types, multiple values</PackageTags>
+        <AssemblyVersion>1.0.0</AssemblyVersion>
+        <FileVersion>1.0.0</FileVersion>
+        <RepositoryUrl>https://github.com/Dersei/Zorya</RepositoryUrl>
+        <RepositoryType>git</RepositoryType>
+    </PropertyGroup>
+
+    <PropertyGroup>
+        <PublishRepositoryUrl>true</PublishRepositoryUrl>
+        <EmbedUntrackedSources>true</EmbedUntrackedSources>
+        <IncludeSymbols>true</IncludeSymbols>
+        <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+        <Deterministic>true</Deterministic>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(GITHUB_ACTIONS)' == 'true'">
+        <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <None Include="..\..\build\assets\zorya_icon_128.jpg" Pack="true" PackagePath="">
+        <Link>zorya_icon_128.jpg</Link>
+      </None>
+    </ItemGroup>
+    
+    <ItemGroup>
+        <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="All" />
+    </ItemGroup>
+    
+</Project>
