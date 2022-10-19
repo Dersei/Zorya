@@ -45,5 +45,9 @@
     <PropertyGroup>
         <NoWarn>$(NoWarn);1591</NoWarn>
     </PropertyGroup>
+
+    <PropertyGroup>
+        <VersionPrefix>1.0.1</VersionPrefix>
+    </PropertyGroup>
     
 </Project>
