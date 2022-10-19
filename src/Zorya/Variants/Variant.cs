@@ -4,11 +4,33 @@ public abstract class Variant : IVariant
 {
     protected SetItems SetItem = SetItems.None;
 
+    /// <summary>
+    /// Sets a value to the given type without creating a new object.
+    /// </summary>
+    /// <param name="value">Value to set.</param>
+    /// <typeparam name="T"></typeparam>
+    /// <returns></returns>
     public abstract bool Set<T>(T value);
 
+    /// <summary>
+    ///     Gets a value of the given type. Throws <see cref="BadVariantAccessException" /> if type isn't set.
+    /// </summary>
+    /// <typeparam name="T">Requested type.</typeparam>
+    /// <returns></returns>
     public abstract T Get<T>();
+    
+    /// <summary>
+    ///     Gets a value of the given type. Returns false if type isn't set.
+    /// </summary>
+    /// <param name="value">Extracted value, default if method returns false.</param>
+    /// <typeparam name="T">Requested type.</typeparam>
+    /// <returns></returns>
     public abstract bool TryGet<T>(out T? value);
 
+    /// <summary>
+    /// Returns set type.
+    /// </summary>
+    /// <returns></returns>
     public abstract Type? GetSetType();
 
     /// <summary>
