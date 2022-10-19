@@ -1,6 +1,6 @@
 # Zorya
 
-<img src="https://user-images.githubusercontent.com/26044987/189364406-ee068429-e206-4cee-8950-fe8abfaa2b92.jpg" width="200">
+<img src="https://user-images.githubusercontent.com/26044987/196815159-5821225b-b35a-4dc0-b593-632874bdd4f2.png" width="200">
 
  C# implementation of variant type.
 Implementation of variant type both as a class (`Variant`) and a structure (`ValueVariant`). Both types supports up to eight elements and implement implicit cast operators.
@@ -65,7 +65,12 @@ if(v.GetSetType() == typeof(Point))
 {
 }
 ```
-Variant also allows to set a new element without creating a new object using `Set` method which returns `true` if successful:
+Because `ValueVariant` can be initialized without setting any value, it's possible to test if any item is set using `IsSet` method.
+```csharp
+var v = new ValueVariant<int, string>();
+Debug.Assert(v.IsSet()); //false
+```
+`Variant` also allows to set a new element without creating a new object using `Set` method which returns `true` if successful:
 ```csharp
 Variant<int, string> v = new (10);
 var wasSetSuccess = v.Set("20");
@@ -102,4 +107,5 @@ Variant<int, double, string> ParseInput(string input)
 ## Name
 
 > Zorya (lit. "Dawn"; also many variants: Zarya, Zara, Zaranitsa, Zoryushka, etc.) is a figure in Slavic folklore, a feminine personification of dawn, possibly goddess. Depending on tradition, she may appear as a singular entity, often called "The Red Maiden", or two or three sisters at once.[^link]
+
 [^link]: [Zorya - Wikipedia](https://en.wikipedia.org/wiki/Zorya).
