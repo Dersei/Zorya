@@ -134,6 +134,9 @@ public readonly struct ValueVariant<T1, T2, T3, T4, T5> : IValueVariant
         if (ValueVariant.TestItem(_item4, SetItems.Item4 == _setItem, out value)) return true;
         return ValueVariant.TestItem(_item5, SetItems.Item5 == _setItem, out value);
     }
+ 
+    /// <inheritdoc />
+    public bool IsSet() => GetSetType() != null;
 
     /// <summary>
     /// Returns set type.

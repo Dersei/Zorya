@@ -65,6 +65,9 @@ public readonly struct ValueVariant<T1> : IValueVariant
     {
         return ValueVariant.TestItem(_item, _setItem == SetItems.Item1, out value);
     }
+ 
+    /// <inheritdoc />
+    public bool IsSet() => GetSetType() != null;
 
     /// <summary>
     /// Returns set type.
@@ -79,7 +82,7 @@ public readonly struct ValueVariant<T1> : IValueVariant
             _ => throw new ArgumentOutOfRangeException()
         };
     }
-
+    
     /// <summary>
     ///     Allows to use a delegate on set item.
     /// </summary>

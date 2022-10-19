@@ -160,6 +160,9 @@ public readonly struct ValueVariant<T1, T2, T3, T4, T5, T6, T7, T8> : IValueVari
             _ => throw new BadValueVariantAccessException(typeof(T), this)
         };
     }
+ 
+    /// <inheritdoc />
+    public bool IsSet() => GetSetType() != null;
 
     /// <summary>
     ///     Get a value of the given type. Returns false if type isn't set.

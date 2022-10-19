@@ -83,7 +83,10 @@ public readonly struct ValueVariant<T1, T2> : IValueVariant
         if (ValueVariant.TestItem(_item1, SetItems.Item1 == _setItem, out value)) return true;
         return ValueVariant.TestItem(_item2, SetItems.Item2 == _setItem, out value);
     }
-
+    
+    /// <inheritdoc />
+    public bool IsSet() => GetSetType() != null;
+    
     /// <summary>
     /// Returns set type.
     /// </summary>
