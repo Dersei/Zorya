@@ -1,23 +1,26 @@
 ﻿namespace Zorya.Variants;
 
+/// <summary>
+/// The exception that is thrown if there is no type set in the variant.
+/// </summary>
 public class BadVariantAccessException : Exception
 {
-    public BadVariantAccessException() : base(
+    internal BadVariantAccessException() : base(
         "Bad variant access")
     {
     }
 
-    public BadVariantAccessException(Type expected, IVariant variant) : base(
+    internal BadVariantAccessException(Type expected, IVariant variant) : base(
         $"Bad variant access, expected: {expected}, but the set type is {variant.GetSetType()?.ToString() ?? "None"}")
     {
     }
 
-    public BadVariantAccessException(string message)
+    internal BadVariantAccessException(string message)
         : base(message)
     {
     }
 
-    public BadVariantAccessException(string message, Exception inner)
+    internal BadVariantAccessException(string message, Exception inner)
         : base(message, inner)
     {
     }

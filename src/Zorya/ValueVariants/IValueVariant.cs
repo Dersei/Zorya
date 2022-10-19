@@ -7,6 +7,12 @@ public interface IValueVariant
     /// </summary>
     /// <returns></returns>
     Type? GetSetType();
+    
+    /// <summary>
+    ///     Returns true if variant is set.
+    /// </summary>
+    /// <returns></returns>
+    bool IsSet();
 
     /// <summary>
     ///     Get a value of the given type. Throws <see cref="BadValueVariantAccessException" /> if type isn't set.

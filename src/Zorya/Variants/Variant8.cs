@@ -61,6 +61,7 @@ public class Variant<T1, T2, T3, T4, T5, T6, T7, T8> : Variant, IVariant
         SetItem = SetItems.Item8;
     }
 
+    ///<inheritdoc />
     public override T Get<T>()
     {
         return SetItem switch
@@ -78,6 +79,7 @@ public class Variant<T1, T2, T3, T4, T5, T6, T7, T8> : Variant, IVariant
         };
     }
 
+    ///<inheritdoc />
     public override bool TryGet<T>([MaybeNull] out T value)
     {
         if (TestItem(_item1, SetItems.Item1, out value)) return true;
@@ -90,6 +92,7 @@ public class Variant<T1, T2, T3, T4, T5, T6, T7, T8> : Variant, IVariant
         return TestItem(_item8, SetItems.Item8, out value);
     }
 
+    ///<inheritdoc />
     public override Type? GetSetType()
     {
         return SetItem switch
@@ -107,6 +110,7 @@ public class Variant<T1, T2, T3, T4, T5, T6, T7, T8> : Variant, IVariant
         };
     }
 
+    ///<inheritdoc />
     public override bool Set<T>(T value)
     {
         return SetItemInternal(ref _item1, SetItems.Item1, value)
@@ -221,5 +225,21 @@ public class Variant<T1, T2, T3, T4, T5, T6, T7, T8> : Variant, IVariant
             SetItems.Item8 => func8(_item8!),
             _ => default
         };
+    }
+    
+    public override string ToString()
+    {
+        return SetItem switch
+        {
+            SetItems.Item1 => _item1!.ToString(),
+            SetItems.Item2 => _item2!.ToString(),
+            SetItems.Item3 => _item3!.ToString(),
+            SetItems.Item4 => _item4!.ToString(),
+            SetItems.Item5 => _item5!.ToString(),
+            SetItems.Item6 => _item6!.ToString(),
+            SetItems.Item7 => _item7!.ToString(),
+            SetItems.Item8 => _item8!.ToString(),
+            _ => string.Empty
+        } ?? string.Empty;
     }
 }

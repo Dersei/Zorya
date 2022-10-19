@@ -87,6 +87,26 @@ public class ValueVariantGeneralTest
         var v = new ValueVariant<object, string, TestExampleEqual>();
         Assert.Throws<BadValueVariantAccessException>(() => v.Get<TestExampleEqual>());
     }
+    
+    [Test]
+    public void CheckIfSet()
+    {
+        var v = new ValueVariant<object, string, TestExampleEqual>();
+        Assert.False(v.IsSet());
+        
+        v = "test";
+        Assert.True(v.IsSet());
+    }
+    
+    [Test]
+    public void TestToString()
+    {
+        ValueVariant<object, string, TestExampleEqual> v = "test";
+        Assert.True(v.ToString().Contains("test"));
+        v = new TestExampleEqual(10);
+        Assert.True(v.ToString().Contains(nameof(TestExampleEqual)));
+        Assert.False(v.ToString().Contains("test"));
+    }
 
     private class TestExampleRef
     {

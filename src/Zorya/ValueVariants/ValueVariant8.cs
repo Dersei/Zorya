@@ -139,6 +139,11 @@ public readonly struct ValueVariant<T1, T2, T3, T4, T5, T6, T7, T8> : IValueVari
         return variant.TryGet(out value);
     }
 
+    /// <summary>
+    ///     Gets a value of the given type. Throws <see cref="BadValueVariantAccessException" /> if type isn't set.
+    /// </summary>
+    /// <typeparam name="T">Requested type.</typeparam>
+    /// <returns></returns>
     public T Get<T>()
     {
         return _setItem switch
@@ -155,7 +160,16 @@ public readonly struct ValueVariant<T1, T2, T3, T4, T5, T6, T7, T8> : IValueVari
             _ => throw new BadValueVariantAccessException(typeof(T), this)
         };
     }
+ 
+    /// <inheritdoc />
+    public bool IsSet() => GetSetType() != null;
 
+    /// <summary>
+    ///     Get a value of the given type. Returns false if type isn't set.
+    /// </summary>
+    /// <param name="value">Extracted value, default if method returns false.</param>
+    /// <typeparam name="T">Requested type.</typeparam>
+    /// <returns></returns>
     public bool TryGet<T>(out T? value)
     {
         if (ValueVariant.TestItem(_item1, SetItems.Item1 == _setItem, out value)) return true;
@@ -168,7 +182,10 @@ public readonly struct ValueVariant<T1, T2, T3, T4, T5, T6, T7, T8> : IValueVari
         return ValueVariant.TestItem(_item8, SetItems.Item8 == _setItem, out value);
     }
 
-
+    /// <summary>
+    /// Returns set type.
+    /// </summary>
+    /// <returns></returns>
     public Type? GetSetType()
     {
         return _setItem switch
@@ -316,5 +333,21 @@ public readonly struct ValueVariant<T1, T2, T3, T4, T5, T6, T7, T8> : IValueVari
 
         result = default;
         return false;
+    }
+
+    public override string ToString()
+    {
+        return _setItem switch
+        {
+            SetItems.Item1 => _item1!.ToString(),
+            SetItems.Item2 => _item2!.ToString(),
+            SetItems.Item3 => _item3!.ToString(),
+            SetItems.Item4 => _item4!.ToString(),
+            SetItems.Item5 => _item5!.ToString(),
+            SetItems.Item6 => _item6!.ToString(),
+            SetItems.Item7 => _item7!.ToString(),
+            SetItems.Item8 => _item8!.ToString(),
+            _ => string.Empty
+        } ?? string.Empty;
     }
 }

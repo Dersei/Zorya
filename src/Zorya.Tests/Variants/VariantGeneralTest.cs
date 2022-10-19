@@ -79,6 +79,16 @@ public class VariantGeneralTest
         v = new TestExampleEqual(10);
         Assert.AreEqual(new TestExampleEqual(10), v.Get<TestExampleEqual>());
     }
+    
+    [Test]
+    public void TestToString()
+    {
+        Variant<object, string, TestExampleEqual> v = "test";
+        Assert.True(v.ToString().Contains("test"));
+        v = new TestExampleEqual(10);
+        Assert.True(v.ToString().Contains(nameof(TestExampleEqual)));
+        Assert.False(v.ToString().Contains("test"));
+    }
 
     private class TestExampleRef
     {

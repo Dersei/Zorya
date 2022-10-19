@@ -27,6 +27,12 @@ public static class ValueVariant
         return false;
     }
 
+    /// <summary>
+    ///     Gets a value of the given type. Throws <see cref="BadValueVariantAccessException" /> if type isn't set.
+    /// </summary>
+    /// <param name="variant">Used variant.</param>
+    /// <typeparam name="T">Requested type.</typeparam>
+    /// <returns></returns>
     public static T Get<T>(IValueVariant variant)
     {
         return variant.Get<T>();

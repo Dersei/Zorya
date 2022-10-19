@@ -56,6 +56,11 @@ public readonly struct ValueVariant<T1, T2> : IValueVariant
         return variant.TryGet(out value);
     }
 
+    /// <summary>
+    ///     Gets a value of the given type. Throws <see cref="BadValueVariantAccessException" /> if type isn't set.
+    /// </summary>
+    /// <typeparam name="T">Requested type.</typeparam>
+    /// <returns></returns>
     public T Get<T>()
     {
         return _setItem switch
@@ -67,13 +72,25 @@ public readonly struct ValueVariant<T1, T2> : IValueVariant
         };
     }
 
+    /// <summary>
+    ///     Get a value of the given type. Returns false if type isn't set.
+    /// </summary>
+    /// <param name="value">Extracted value, default if method returns false.</param>
+    /// <typeparam name="T">Requested type.</typeparam>
+    /// <returns></returns>
     public bool TryGet<T>(out T? value)
     {
         if (ValueVariant.TestItem(_item1, SetItems.Item1 == _setItem, out value)) return true;
         return ValueVariant.TestItem(_item2, SetItems.Item2 == _setItem, out value);
     }
-
-
+    
+    /// <inheritdoc />
+    public bool IsSet() => GetSetType() != null;
+    
+    /// <summary>
+    /// Returns set type.
+    /// </summary>
+    /// <returns></returns>
     public Type? GetSetType()
     {
         return _setItem switch
@@ -200,5 +217,15 @@ public readonly struct ValueVariant<T1, T2> : IValueVariant
 
         result = default;
         return false;
+    }
+
+    public override string ToString()
+    {
+        return _setItem switch
+        {
+            SetItems.Item1 => _item1!.ToString(),
+            SetItems.Item2 => _item2!.ToString(),
+            _ => string.Empty
+        } ?? string.Empty;
     }
 }
