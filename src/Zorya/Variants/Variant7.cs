@@ -211,13 +211,13 @@ public class Variant<T1, T2, T3, T4, T5, T6, T7> : Variant, IVariant
     {
         return SetItem switch
         {
-            SetItems.Item1 => _item1!.ToString(),
-            SetItems.Item2 => _item2!.ToString(),
-            SetItems.Item3 => _item3!.ToString(),
-            SetItems.Item4 => _item4!.ToString(),
-            SetItems.Item5 => _item5!.ToString(),
-            SetItems.Item6 => _item6!.ToString(),
-            SetItems.Item7 => _item7!.ToString(),
+            SetItems.Item1 => _item1?.ToString(),
+            SetItems.Item2 => _item2?.ToString(),
+            SetItems.Item3 => _item3?.ToString(),
+            SetItems.Item4 => _item4?.ToString(),
+            SetItems.Item5 => _item5?.ToString(),
+            SetItems.Item6 => _item6?.ToString(),
+            SetItems.Item7 => _item7?.ToString(),
             _ => string.Empty
         } ?? string.Empty;
     }

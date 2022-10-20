@@ -96,6 +96,15 @@ public class ValueVariantGeneralTest
         
         v = "test";
         Assert.True(v.IsSet());
+        
+        ValueVariant<int, TestExampleEqual> v2 = null!;
+        Assert.False(v2.IsSet());
+        
+        ValueVariant<int, TestExampleEqual> v3 = 1;
+        Assert.True(v3.IsSet());
+
+        v3 = null!;
+        Assert.False(v3.IsSet());
     }
     
     [Test]

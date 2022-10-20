@@ -20,11 +20,13 @@ public readonly struct ValueVariant<T1, T2> : IValueVariant
 
     public static implicit operator ValueVariant<T1, T2>(T1 value)
     {
+        if (value is null) return default;
         return new ValueVariant<T1, T2>(value);
     }
 
     public static implicit operator ValueVariant<T1, T2>(T2 value)
     {
+        if (value is null) return default;
         return new ValueVariant<T1, T2>(value);
     }
 
@@ -85,7 +87,7 @@ public readonly struct ValueVariant<T1, T2> : IValueVariant
     }
     
     /// <inheritdoc />
-    public bool IsSet() => GetSetType() != null;
+    public bool IsSet() => _setItem != SetItems.None;
     
     /// <summary>
     /// Returns set type.
@@ -223,8 +225,8 @@ public readonly struct ValueVariant<T1, T2> : IValueVariant
     {
         return _setItem switch
         {
-            SetItems.Item1 => _item1!.ToString(),
-            SetItems.Item2 => _item2!.ToString(),
+            SetItems.Item1 => _item1?.ToString(),
+            SetItems.Item2 => _item2?.ToString(),
             _ => string.Empty
         } ?? string.Empty;
     }

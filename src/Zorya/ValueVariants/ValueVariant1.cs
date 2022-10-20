@@ -10,6 +10,7 @@ public readonly struct ValueVariant<T1> : IValueVariant
 
     public static implicit operator ValueVariant<T1>(T1 value)
     {
+        if (value is null) return default;
         return new ValueVariant<T1>(value);
     }
 
@@ -67,7 +68,7 @@ public readonly struct ValueVariant<T1> : IValueVariant
     }
  
     /// <inheritdoc />
-    public bool IsSet() => GetSetType() != null;
+    public bool IsSet() => _setItem != SetItems.None;
 
     /// <summary>
     /// Returns set type.

@@ -155,10 +155,10 @@ public class Variant<T1, T2, T3, T4> : Variant, IVariant
     {
         return SetItem switch
         {
-            SetItems.Item1 => _item1!.ToString(),
-            SetItems.Item2 => _item2!.ToString(),
-            SetItems.Item3 => _item3!.ToString(),
-            SetItems.Item4 => _item4!.ToString(),
+            SetItems.Item1 => _item1?.ToString(),
+            SetItems.Item2 => _item2?.ToString(),
+            SetItems.Item3 => _item3?.ToString(),
+            SetItems.Item4 => _item4?.ToString(),
             _ => string.Empty
         } ?? string.Empty;
     }

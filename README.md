@@ -104,6 +104,13 @@ Variant<int, double, string> ParseInput(string input)
 }
 ```
 
+## Remarks
+
+Until the version 1.0.1, due to the way value types and implicit operators work, it was possible to create a `ValueVariant` (with one reference type or `object` and another reference type) using `null`.  
+For example: `ValueVariant<string, int> v = null;` or `ValueVariant<string, object, int> v = null;`  
+Since the version 1.0.2 such operation will result in a default `ValueVariant` without any value set and with `IsSet` method returning `false`.  
+It's still possible to explicitly set a variant to `null` using its constructor.
+
 ## Name
 
 > Zorya (lit. "Dawn"; also many variants: Zarya, Zara, Zaranitsa, Zoryushka, etc.) is a figure in Slavic folklore, a feminine personification of dawn, possibly goddess. Depending on tradition, she may appear as a singular entity, often called "The Red Maiden", or two or three sisters at once.[^link]

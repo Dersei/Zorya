@@ -17,6 +17,14 @@ public class VariantGeneralTest
     }
 
     [Test]
+    public void SetValue()
+    {
+        Variant<int, string> v = new(10);
+        var test = v.Set((string)null!);
+        Assert.IsFalse(test);
+    }
+    
+    [Test]
     public void MatchFail()
     {
         Variant<int, string, double> v;
