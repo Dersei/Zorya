@@ -111,6 +111,17 @@ For example: `ValueVariant<string, int> v = null;` or `ValueVariant<string, obje
 Since the version 1.0.2 such operation will result in a default `ValueVariant` without any value set and with `IsSet` method returning `false`.  
 It's still possible to explicitly set a variant to `null` using its constructor.
 
+Until the version 1.0.1 variants used default equality. Since the version 1.0.2 all variants support `IEquatable` interface, `==`, `!=` operators and `Equals` method.
+
+In case of the `Variant` type two objects `v1` and `v2` are equal if:
+1. they have the same type, including the order of types,
+2. `v1 is not null && v2 is not null`,
+3. `ReferenceEquals(v1, v2)` returns true,
+4. otherwise if they both have the same items set and values of those items are the same.
+
+In case of the `ValueVariant` type two objects `v1` and `v2` are equal if:
+1. they have the same type, including the order of types,
+2. they both have the same items set and values of those items are the same.
 ## Name
 
 > Zorya (lit. "Dawn"; also many variants: Zarya, Zara, Zaranitsa, Zoryushka, etc.) is a figure in Slavic folklore, a feminine personification of dawn, possibly goddess. Depending on tradition, she may appear as a singular entity, often called "The Red Maiden", or two or three sisters at once.[^link]

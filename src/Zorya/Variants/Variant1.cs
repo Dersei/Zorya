@@ -2,7 +2,7 @@
 
 namespace Zorya.Variants;
 
-public class Variant<T1> : Variant, IVariant
+public class Variant<T1> : Variant, IVariant, IEquatable<Variant<T1>>
 {
     private T1? _item;
 
@@ -96,5 +96,41 @@ public class Variant<T1> : Variant, IVariant
     public override string ToString()
     {
         return _item?.ToString() ?? string.Empty;
+    }
+
+    public bool Equals(Variant<T1>? other)
+    {
+        if (ReferenceEquals(null, other)) return false;
+        if (ReferenceEquals(this, other)) return true;
+        if (SetItem != other.SetItem) return false;
+        return SetItem switch
+        {
+            SetItems.None => true,
+            SetItems.Item1 => EqualityComparer<T1?>.Default.Equals(_item, other._item),
+            _ => false
+        };
+    }
+
+    public override bool Equals(object? obj)
+    {
+        if (ReferenceEquals(null, obj)) return false;
+        if (ReferenceEquals(this, obj)) return true;
+        if (obj.GetType() != GetType()) return false;
+        return Equals((Variant<T1>) obj);
+    }
+
+    public override int GetHashCode()
+    {
+        return HashCode.Combine((int)SetItem, _item);
+    }
+
+    public static bool operator ==(Variant<T1>? left, Variant<T1>? right)
+    {
+        return Equals(left, right);
+    }
+
+    public static bool operator !=(Variant<T1>? left, Variant<T1>? right)
+    {
+        return !Equals(left, right);
     }
 }

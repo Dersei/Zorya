@@ -2,7 +2,8 @@
 
 namespace Zorya.ValueVariants;
 
-public readonly struct ValueVariant<T1, T2> : IValueVariant
+public readonly struct ValueVariant<T1, T2> : IValueVariant,
+    IEquatable<ValueVariant<T1, T2>>
 {
     public ValueVariant(T1 item1)
     {
@@ -85,10 +86,10 @@ public readonly struct ValueVariant<T1, T2> : IValueVariant
         if (ValueVariant.TestItem(_item1, SetItems.Item1 == _setItem, out value)) return true;
         return ValueVariant.TestItem(_item2, SetItems.Item2 == _setItem, out value);
     }
-    
+
     /// <inheritdoc />
     public bool IsSet() => _setItem != SetItems.None;
-    
+
     /// <summary>
     /// Returns set type.
     /// </summary>
@@ -229,5 +230,37 @@ public readonly struct ValueVariant<T1, T2> : IValueVariant
             SetItems.Item2 => _item2?.ToString(),
             _ => string.Empty
         } ?? string.Empty;
+    }
+
+    public bool Equals(ValueVariant<T1, T2> other)
+    {
+        return _setItem == other._setItem 
+               && _setItem switch
+               {
+                   SetItems.None => true,
+                   SetItems.Item1 => EqualityComparer<T1?>.Default.Equals(_item1, other._item1),
+                   SetItems.Item2 => EqualityComparer<T2?>.Default.Equals(_item2, other._item2),
+                   _ => false
+               };
+    }
+
+    public override bool Equals(object? obj)
+    {
+        return obj is ValueVariant<T1, T2> other && Equals(other);
+    }
+
+    public override int GetHashCode()
+    {
+        return HashCode.Combine((int) _setItem, _item1, _item2);
+    }
+
+    public static bool operator ==(ValueVariant<T1, T2> left, ValueVariant<T1, T2> right)
+    {
+        return left.Equals(right);
+    }
+
+    public static bool operator !=(ValueVariant<T1, T2> left, ValueVariant<T1, T2> right)
+    {
+        return !left.Equals(right);
     }
 }

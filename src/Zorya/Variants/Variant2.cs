@@ -2,7 +2,7 @@
 
 namespace Zorya.Variants;
 
-public class Variant<T1, T2> : Variant, IVariant
+public class Variant<T1, T2> : Variant, IVariant, IEquatable<Variant<T1, T2>>
 {
     private T1? _item1;
     private T2? _item2;
@@ -113,7 +113,7 @@ public class Variant<T1, T2> : Variant, IVariant
             _ => default
         };
     }
-    
+
     public override string ToString()
     {
         return SetItem switch
@@ -122,5 +122,42 @@ public class Variant<T1, T2> : Variant, IVariant
             SetItems.Item2 => _item2?.ToString(),
             _ => string.Empty
         } ?? string.Empty;
+    }
+
+    public bool Equals(Variant<T1, T2>? other)
+    {
+        if (ReferenceEquals(null, other)) return false;
+        if (ReferenceEquals(this, other)) return true;
+        if (SetItem != other.SetItem) return false;
+        return SetItem switch
+        {
+            SetItems.None => true,
+            SetItems.Item1 => EqualityComparer<T1?>.Default.Equals(_item1, other._item1),
+            SetItems.Item2 => EqualityComparer<T2?>.Default.Equals(_item2, other._item2),
+            _ => false
+        };
+    }
+
+    public override bool Equals(object? obj)
+    {
+        if (ReferenceEquals(null, obj)) return false;
+        if (ReferenceEquals(this, obj)) return true;
+        if (obj.GetType() != GetType()) return false;
+        return Equals((Variant<T1, T2>) obj);
+    }
+
+    public override int GetHashCode()
+    {
+        return HashCode.Combine(_item1, _item2);
+    }
+
+    public static bool operator ==(Variant<T1, T2>? left, Variant<T1, T2>? right)
+    {
+        return Equals(left, right);
+    }
+
+    public static bool operator !=(Variant<T1, T2>? left, Variant<T1, T2>? right)
+    {
+        return !Equals(left, right);
     }
 }

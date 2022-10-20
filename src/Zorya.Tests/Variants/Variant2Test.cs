@@ -64,4 +64,20 @@ public class Variant2Test
         Variant<int, string> v = "10";
         Assert.AreEqual(2, v.Visit(_ => 1, _ => 2));
     }
+    
+    [Test]
+    public void Equality()
+    {
+        Variant<int, string> v1 = "test";
+        Variant<int, string> v2 = "test";
+        Assert.AreEqual(v1, v2);
+    }
+    
+    [Test]
+    public void Inequality()
+    {
+        Variant<int, string> v1 = "test";
+        Variant<int, string> v2 = 10;
+        Assert.AreNotEqual(v1, v2);
+    }
 }

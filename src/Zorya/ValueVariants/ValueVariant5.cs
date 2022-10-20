@@ -2,7 +2,8 @@
 
 namespace Zorya.ValueVariants;
 
-public readonly struct ValueVariant<T1, T2, T3, T4, T5> : IValueVariant
+public readonly struct ValueVariant<T1, T2, T3, T4, T5> : IValueVariant,
+    IEquatable<ValueVariant<T1, T2, T3, T4, T5>>
 {
     private ValueVariant(bool _)
     {
@@ -139,7 +140,7 @@ public readonly struct ValueVariant<T1, T2, T3, T4, T5> : IValueVariant
         if (ValueVariant.TestItem(_item4, SetItems.Item4 == _setItem, out value)) return true;
         return ValueVariant.TestItem(_item5, SetItems.Item5 == _setItem, out value);
     }
- 
+
     /// <inheritdoc />
     public bool IsSet() => _setItem != SetItems.None;
 
@@ -297,5 +298,40 @@ public readonly struct ValueVariant<T1, T2, T3, T4, T5> : IValueVariant
             SetItems.Item5 => _item5?.ToString(),
             _ => string.Empty
         } ?? string.Empty;
+    }
+
+    public bool Equals(ValueVariant<T1, T2, T3, T4, T5> other)
+    {
+        return _setItem == other._setItem 
+               && _setItem switch
+               {
+                   SetItems.None => true,
+                   SetItems.Item1 => EqualityComparer<T1?>.Default.Equals(_item1, other._item1),
+                   SetItems.Item2 => EqualityComparer<T2?>.Default.Equals(_item2, other._item2),
+                   SetItems.Item3 => EqualityComparer<T3?>.Default.Equals(_item3, other._item3),
+                   SetItems.Item4 => EqualityComparer<T4?>.Default.Equals(_item4, other._item4),
+                   SetItems.Item5 => EqualityComparer<T5?>.Default.Equals(_item5, other._item5),
+                   _ => false
+               };
+    }
+
+    public override bool Equals(object? obj)
+    {
+        return obj is ValueVariant<T1, T2, T3, T4, T5> other && Equals(other);
+    }
+
+    public override int GetHashCode()
+    {
+        return HashCode.Combine((int) _setItem, _item1, _item2, _item3, _item4, _item5);
+    }
+
+    public static bool operator ==(ValueVariant<T1, T2, T3, T4, T5> left, ValueVariant<T1, T2, T3, T4, T5> right)
+    {
+        return left.Equals(right);
+    }
+
+    public static bool operator !=(ValueVariant<T1, T2, T3, T4, T5> left, ValueVariant<T1, T2, T3, T4, T5> right)
+    {
+        return !left.Equals(right);
     }
 }

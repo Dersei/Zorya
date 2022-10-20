@@ -45,4 +45,20 @@ public class ValueVariant4Test
         v = 10L;
         Assert.AreEqual(4, v.Visit(_ => 1, _ => 2, _ => 3, _ => 4));
     }
+    
+    [Test]
+    public void Equality()
+    {
+        ValueVariant<int, string, double, long> v1 = 10L;
+        ValueVariant<int, string, double, long> v2 = 10L;
+        Assert.AreEqual(v1, v2);
+    }
+    
+    [Test]
+    public void Inequality()
+    {
+        ValueVariant<int, string, double, long> v1 = 10;
+        ValueVariant<int, string, double, long> v2 = 10L;
+        Assert.AreNotEqual(v1, v2);
+    }
 }

@@ -2,7 +2,8 @@
 
 namespace Zorya.Variants;
 
-public class Variant<T1, T2, T3, T4, T5, T6, T7> : Variant, IVariant
+public class Variant<T1, T2, T3, T4, T5, T6, T7> : Variant, IVariant,
+    IEquatable<Variant<T1, T2, T3, T4, T5, T6, T7>>
 {
     private T1? _item1;
     private T2? _item2;
@@ -206,7 +207,7 @@ public class Variant<T1, T2, T3, T4, T5, T6, T7> : Variant, IVariant
             _ => default
         };
     }
-    
+
     public override string ToString()
     {
         return SetItem switch
@@ -220,5 +221,49 @@ public class Variant<T1, T2, T3, T4, T5, T6, T7> : Variant, IVariant
             SetItems.Item7 => _item7?.ToString(),
             _ => string.Empty
         } ?? string.Empty;
+    }
+
+    public bool Equals(Variant<T1, T2, T3, T4, T5, T6, T7>? other)
+    {
+        if (ReferenceEquals(null, other)) return false;
+        if (ReferenceEquals(this, other)) return true;
+        if (SetItem != other.SetItem) return false;
+        return SetItem switch
+        {
+            SetItems.None => true,
+            SetItems.Item1 => EqualityComparer<T1?>.Default.Equals(_item1, other._item1),
+            SetItems.Item2 => EqualityComparer<T2?>.Default.Equals(_item2, other._item2),
+            SetItems.Item3 => EqualityComparer<T3?>.Default.Equals(_item3, other._item3),
+            SetItems.Item4 => EqualityComparer<T4?>.Default.Equals(_item4, other._item4),
+            SetItems.Item5 => EqualityComparer<T5?>.Default.Equals(_item5, other._item5),
+            SetItems.Item6 => EqualityComparer<T6?>.Default.Equals(_item6, other._item6),
+            SetItems.Item7 => EqualityComparer<T7?>.Default.Equals(_item7, other._item7),
+            _ => false
+        };
+    }
+
+    public override bool Equals(object? obj)
+    {
+        if (ReferenceEquals(null, obj)) return false;
+        if (ReferenceEquals(this, obj)) return true;
+        if (obj.GetType() != GetType()) return false;
+        return Equals((Variant<T1, T2, T3, T4, T5, T6, T7>) obj);
+    }
+
+    public override int GetHashCode()
+    {
+        return HashCode.Combine(_item1, _item2, _item3, _item4, _item5, _item6, _item7);
+    }
+
+    public static bool operator ==(Variant<T1, T2, T3, T4, T5, T6, T7>? left,
+        Variant<T1, T2, T3, T4, T5, T6, T7>? right)
+    {
+        return Equals(left, right);
+    }
+
+    public static bool operator !=(Variant<T1, T2, T3, T4, T5, T6, T7>? left,
+        Variant<T1, T2, T3, T4, T5, T6, T7>? right)
+    {
+        return !Equals(left, right);
     }
 }

@@ -55,4 +55,20 @@ public class Tests
         v = 10;
         Assert.AreEqual(1, v.Visit(_ => 1));
     }
+    
+    [Test]
+    public void Equality()
+    {
+        Variant<string> v1 = "test";
+        Variant<string> v2 = "test";
+        Assert.AreEqual(v1, v2);
+    }
+    
+    [Test]
+    public void Inequality()
+    {
+        Variant<int> v1 = 11;
+        Variant<int> v2 = 10;
+        Assert.AreNotEqual(v1, v2);
+    }
 }

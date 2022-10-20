@@ -46,4 +46,20 @@ public class Variant6Test
         v = new Point(1, 1);
         Assert.AreEqual(6, v.Visit(_ => 1, _ => 2, _ => 3, _ => 4, _ => 5, _ => 6));
     }
+    
+    [Test]
+    public void Equality()
+    {
+        Variant<int, string, double, long, float, Point> v1 = new Point(10, 11);
+        Variant<int, string, double, long, float, Point> v2 = new Point(10, 11);
+        Assert.AreEqual(v1, v2);
+    }
+
+    [Test]
+    public void Inequality()
+    {
+        Variant<int, string, double, long, float, Point> v1 = 10;
+        Variant<int, string, double, long, float, Point> v2 = new Point(10, 11);
+        Assert.AreNotEqual(v1, v2);
+    }
 }

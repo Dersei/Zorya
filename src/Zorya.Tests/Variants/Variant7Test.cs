@@ -46,4 +46,20 @@ public class Variant7Test
         v = (byte)10;
         Assert.AreEqual(7, v.Visit(_ => 1, _ => 2, _ => 3, _ => 4, _ => 5, _ => 6, _ => 7));
     }
+    
+    [Test]
+    public void Equality()
+    {
+        Variant<int, string, double, long, float, Point, byte> v1 = (byte)10;
+        Variant<int, string, double, long, float, Point, byte> v2 = (byte)10;
+        Assert.AreEqual(v1, v2);
+    }
+
+    [Test]
+    public void Inequality()
+    {
+        Variant<int, string, double, long, float, Point, byte> v1 = 10;
+        Variant<int, string, double, long, float, Point, byte> v2 = (byte)10;
+        Assert.AreNotEqual(v1, v2);
+    }
 }

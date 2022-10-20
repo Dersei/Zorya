@@ -45,4 +45,20 @@ public class Variant5Test
         v = 10f;
         Assert.AreEqual(5, v.Visit(_ => 1, _ => 2, _ => 3, _ => 4, _ => 5));
     }
+    
+    [Test]
+    public void Equality()
+    {
+        Variant<int, string, double, long, float> v1 = 10f;
+        Variant<int, string, double, long, float> v2 = 10f;
+        Assert.AreEqual(v1, v2);
+    }
+    
+    [Test]
+    public void Inequality()
+    {
+        Variant<int, string, double, long, float> v1 = 10;
+        Variant<int, string, double, long, float> v2 = 10f;
+        Assert.AreNotEqual(v1, v2);
+    }
 }
