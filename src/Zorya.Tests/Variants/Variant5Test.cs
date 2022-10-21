@@ -61,4 +61,13 @@ public class Variant5Test
         Variant<int, string, double, long, float> v2 = 10f;
         Assert.AreNotEqual(v1, v2);
     }
+    
+    [Test]
+    public void IsSet()
+    {
+        Variant<int, string, double, long, float> v;
+        v = 10f;
+        Assert.AreEqual(true, v.IsSet<float>());
+        Assert.AreEqual(false, v.IsSet<int>());
+    }
 }

@@ -59,4 +59,13 @@ public class ValueVariant2Test
         ValueVariant<int, string> v2 = 10;
         Assert.AreNotEqual(v1, v2);
     }
+    
+    [Test]
+    public void IsSet()
+    {
+        ValueVariant<int, string> v;
+        v = "10";
+        Assert.AreEqual(true, v.IsSet<string>());
+        Assert.AreEqual(false, v.IsSet<int>());
+    }
 }

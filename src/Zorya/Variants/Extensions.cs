@@ -7,5 +7,5 @@ public static class Extensions
     /// </summary>
     /// <param name="variant"></param>
     /// <returns></returns>
-    public static bool IsSet(this IVariant? variant) => variant?.GetSetType() != null;
+    public static bool IsValid(this IVariant? variant) => variant?.GetSetType() != null;
 }

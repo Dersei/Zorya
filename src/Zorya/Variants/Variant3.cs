@@ -65,7 +65,7 @@ public class Variant<T1, T2, T3> : Variant, IVariant, IEquatable<Variant<T1, T2,
             SetItems.Item1 when _item1 is not null => _item1.GetType(),
             SetItems.Item2 when _item2 is not null => _item2.GetType(),
             SetItems.Item3 when _item3 is not null => _item3.GetType(),
-            _ => throw new ArgumentOutOfRangeException()
+            _ => null
         };
     }
 
@@ -112,9 +112,9 @@ public class Variant<T1, T2, T3> : Variant, IVariant, IEquatable<Variant<T1, T2,
     /// </summary>
     public void Visit(Action<T1> action1, Action<T2> action2, Action<T3> action3)
     {
-        if (SetItem == SetItems.Item1) action1(_item1!);
-        if (SetItem == SetItems.Item2) action2(_item2!);
-        if (SetItem == SetItems.Item3) action3(_item3!);
+        if (SetItem == SetItems.Item1 && _item1 is not null) action1(_item1);
+        if (SetItem == SetItems.Item2 && _item2 is not null) action2(_item2);
+        if (SetItem == SetItems.Item3 && _item3 is not null) action3(_item3);
     }
 
     /// <summary>
@@ -126,9 +126,9 @@ public class Variant<T1, T2, T3> : Variant, IVariant, IEquatable<Variant<T1, T2,
     {
         return SetItem switch
         {
-            SetItems.Item1 => func1(_item1!),
-            SetItems.Item2 => func2(_item2!),
-            SetItems.Item3 => func3(_item3!),
+            SetItems.Item1 when _item1 is not null => func1(_item1),
+            SetItems.Item2 when _item2 is not null  => func2(_item2),
+            SetItems.Item3 when _item3 is not null  => func3(_item3),
             _ => default
         };
     }

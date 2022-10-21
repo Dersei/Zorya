@@ -97,6 +97,44 @@ public class VariantGeneralTest
         Assert.True(v.ToString().Contains(nameof(TestExampleEqual)));
         Assert.False(v.ToString().Contains("test"));
     }
+    
+    [Test]
+    public void CheckIfValid()
+    {
+        var v = new Variant<object, string>(null);
+        Assert.False(v.IsValid());
+        
+        v = "test";
+        Assert.True(v.IsValid());
+        
+        Variant<int, TestExampleEqual> v2 = null!;
+        Assert.False(v2.IsValid());
+        
+        Variant<int, TestExampleEqual> v3 = 1;
+        Assert.True(v3.IsValid());
+
+        v3 = null!;
+        Assert.False(v3.IsValid());
+    }
+
+    [Test]
+    public void TestNullCases()
+    {
+        Variant<int, string, double, long, float, byte, char> v = new(null);
+        Assert.Throws<BadVariantAccessException>(() => v.Get<string>());
+        Assert.AreEqual(null, v.GetSetType());
+        Assert.False(v.TryGet(out string? _));
+        Assert.AreEqual(0, v.Visit(_ => 1, _ => 2, _ => 3, _ => 4, _ => 5, _ => 6, _ => 7));
+        Variant<int, string> v1 = new(null);
+        Variant<int, string> v2 = new(null);
+        Assert.AreEqual(v1, v2);
+        Assert.False(v.IsSet<string>());
+
+        var value = 0;
+        v.Visit(_ => value = 1, _ => value = 2, _ => value = 3, _ => value = 4, _ => value = 5, _ => value = 6,
+            _ => value = 7);
+        Assert.AreEqual(0, value);
+    }
 
     private class TestExampleRef
     {

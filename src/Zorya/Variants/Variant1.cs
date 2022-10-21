@@ -42,7 +42,7 @@ public class Variant<T1> : Variant, IVariant, IEquatable<Variant<T1>>
         {
             SetItems.None => null,
             SetItems.Item1 when _item is not null => _item.GetType(),
-            _ => throw new ArgumentOutOfRangeException()
+            _ => null
         };
     }
 
@@ -79,7 +79,7 @@ public class Variant<T1> : Variant, IVariant, IEquatable<Variant<T1>>
     /// </summary>
     public void Visit(Action<T1> action)
     {
-        if (SetItem == SetItems.Item1) action(_item!);
+        if (SetItem == SetItems.Item1 && _item is not null) action(_item);
     }
 
     /// <summary>
@@ -89,7 +89,8 @@ public class Variant<T1> : Variant, IVariant, IEquatable<Variant<T1>>
     /// <returns>Value returned from the delegate, default if there was no correct set item.</returns>
     public TResult? Visit<TResult>(Func<T1, TResult> func)
     {
-        if (SetItem == SetItems.Item1) return func(_item!);
+        if (SetItem == SetItems.Item1 && _item is not null)
+            return func(_item);
         return default;
     }
 
@@ -121,7 +122,7 @@ public class Variant<T1> : Variant, IVariant, IEquatable<Variant<T1>>
 
     public override int GetHashCode()
     {
-        return HashCode.Combine((int)SetItem, _item);
+        return HashCode.Combine((int) SetItem, _item);
     }
 
     public static bool operator ==(Variant<T1>? left, Variant<T1>? right)

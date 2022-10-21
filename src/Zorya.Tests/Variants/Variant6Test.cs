@@ -62,4 +62,13 @@ public class Variant6Test
         Variant<int, string, double, long, float, Point> v2 = new Point(10, 11);
         Assert.AreNotEqual(v1, v2);
     }
+    
+    [Test]
+    public void IsSet()
+    {
+        Variant<int, string, double, long, float, Point> v;
+        v = new Point(10, 10);
+        Assert.AreEqual(true, v.IsSet<Point>());
+        Assert.AreEqual(false, v.IsSet<int>());
+    }
 }

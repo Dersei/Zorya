@@ -84,4 +84,13 @@ public class Variant8Test
         Variant<int, string, double, long, float, Point, byte, char> v2 = 'c';
         Assert.AreNotEqual(v1, v2);
     }
+    
+    [Test]
+    public void IsSet()
+    {
+        Variant<int, string, double, long, float, Point, byte, char> v;
+        v = 'c';
+        Assert.AreEqual(true, v.IsSet<char>());
+        Assert.AreEqual(false, v.IsSet<int>());
+    }
 }

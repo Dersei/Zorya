@@ -61,4 +61,13 @@ public class ValueVariant4Test
         ValueVariant<int, string, double, long> v2 = 10L;
         Assert.AreNotEqual(v1, v2);
     }
+    
+    [Test]
+    public void IsSet()
+    {
+        ValueVariant<int, string, double, long> v;
+        v = 10L;
+        Assert.AreEqual(true, v.IsSet<long>());
+        Assert.AreEqual(false, v.IsSet<int>());
+    }
 }

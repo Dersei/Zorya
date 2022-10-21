@@ -62,4 +62,13 @@ public class ValueVariant7Test
         ValueVariant<int, string, double, long, float, Point, byte> v2 = (byte)10;
         Assert.AreNotEqual(v1, v2);
     }
+    
+    [Test]
+    public void IsSet()
+    {
+        ValueVariant<int, string, double, long, float, Point, byte> v;
+        v = (byte)10;
+        Assert.AreEqual(true, v.IsSet<byte>());
+        Assert.AreEqual(false, v.IsSet<int>());
+    }
 }

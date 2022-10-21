@@ -107,7 +107,7 @@ public class Variant<T1, T2, T3, T4, T5, T6, T7, T8> : Variant, IVariant,
             SetItems.Item6 when _item6 is not null => _item6.GetType(),
             SetItems.Item7 when _item7 is not null => _item7.GetType(),
             SetItems.Item8 when _item8 is not null => _item8.GetType(),
-            _ => throw new ArgumentOutOfRangeException()
+            _ => null
         };
     }
 
@@ -195,14 +195,14 @@ public class Variant<T1, T2, T3, T4, T5, T6, T7, T8> : Variant, IVariant,
     public void Visit(Action<T1> action1, Action<T2> action2, Action<T3> action3, Action<T4> action4,
         Action<T5> action5, Action<T6> action6, Action<T7> action7, Action<T8> action8)
     {
-        if (SetItem == SetItems.Item1) action1(_item1!);
-        if (SetItem == SetItems.Item2) action2(_item2!);
-        if (SetItem == SetItems.Item3) action3(_item3!);
-        if (SetItem == SetItems.Item4) action4(_item4!);
-        if (SetItem == SetItems.Item5) action5(_item5!);
-        if (SetItem == SetItems.Item6) action6(_item6!);
-        if (SetItem == SetItems.Item7) action7(_item7!);
-        if (SetItem == SetItems.Item8) action8(_item8!);
+        if (SetItem == SetItems.Item1 && _item1 is not null) action1(_item1);
+        if (SetItem == SetItems.Item2 && _item2 is not null) action2(_item2);
+        if (SetItem == SetItems.Item3 && _item3 is not null) action3(_item3);
+        if (SetItem == SetItems.Item4 && _item4 is not null) action4(_item4);
+        if (SetItem == SetItems.Item5 && _item5 is not null) action5(_item5);
+        if (SetItem == SetItems.Item6 && _item6 is not null) action6(_item6);
+        if (SetItem == SetItems.Item7 && _item7 is not null) action7(_item7);
+        if (SetItem == SetItems.Item8 && _item8 is not null) action8(_item8);
     }
 
     /// <summary>
@@ -216,14 +216,14 @@ public class Variant<T1, T2, T3, T4, T5, T6, T7, T8> : Variant, IVariant,
     {
         return SetItem switch
         {
-            SetItems.Item1 => func1(_item1!),
-            SetItems.Item2 => func2(_item2!),
-            SetItems.Item3 => func3(_item3!),
-            SetItems.Item4 => func4(_item4!),
-            SetItems.Item5 => func5(_item5!),
-            SetItems.Item6 => func6(_item6!),
-            SetItems.Item7 => func7(_item7!),
-            SetItems.Item8 => func8(_item8!),
+            SetItems.Item1 when _item1 is not null => func1(_item1),
+            SetItems.Item2 when _item2 is not null  => func2(_item2),
+            SetItems.Item3 when _item3 is not null  => func3(_item3),
+            SetItems.Item4 when _item4 is not null  => func4(_item4),
+            SetItems.Item5 when _item5 is not null  => func5(_item5),
+            SetItems.Item6 when _item6 is not null  => func6(_item6),
+            SetItems.Item7 when _item7 is not null  => func7(_item7),
+            SetItems.Item8 when _item8 is not null  => func8(_item8),
             _ => default
         };
     }

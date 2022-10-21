@@ -136,6 +136,9 @@ public readonly struct ValueVariant<T1, T2, T3, T4, T5, T6, T7> : IValueVariant,
         return variant.TryGet(out value);
     }
 
+    /// <inheritdoc />
+    public bool IsSet<T>() => _setItem != SetItems.None && TryGet(out T? _);
+
     /// <summary>
     ///     Gets a value of the given type. Throws <see cref="BadValueVariantAccessException" /> if type isn't set.
     /// </summary>
@@ -175,7 +178,7 @@ public readonly struct ValueVariant<T1, T2, T3, T4, T5, T6, T7> : IValueVariant,
     }
 
     /// <inheritdoc />
-    public bool IsSet() => _setItem != SetItems.None;
+    public bool IsValid() => _setItem != SetItems.None && GetSetType() is not null;
 
     /// <summary>
     /// Returns set type.
@@ -193,7 +196,7 @@ public readonly struct ValueVariant<T1, T2, T3, T4, T5, T6, T7> : IValueVariant,
             SetItems.Item5 when _item5 is not null => _item5.GetType(),
             SetItems.Item6 when _item6 is not null => _item6.GetType(),
             SetItems.Item7 when _item7 is not null => _item7.GetType(),
-            _ => throw new ArgumentOutOfRangeException()
+            _ => null
         };
     }
 
@@ -203,13 +206,13 @@ public readonly struct ValueVariant<T1, T2, T3, T4, T5, T6, T7> : IValueVariant,
     public void Visit(Action<T1> action1, Action<T2> action2, Action<T3> action3, Action<T4> action4,
         Action<T5> action5, Action<T6> action6, Action<T7> action7)
     {
-        if (_setItem == SetItems.Item1) action1(_item1!);
-        if (_setItem == SetItems.Item2) action2(_item2!);
-        if (_setItem == SetItems.Item3) action3(_item3!);
-        if (_setItem == SetItems.Item4) action4(_item4!);
-        if (_setItem == SetItems.Item5) action5(_item5!);
-        if (_setItem == SetItems.Item6) action6(_item6!);
-        if (_setItem == SetItems.Item7) action7(_item7!);
+        if (_setItem == SetItems.Item1 && _item1 is not null) action1(_item1);
+        if (_setItem == SetItems.Item2 && _item2 is not null) action2(_item2);
+        if (_setItem == SetItems.Item3 && _item3 is not null) action3(_item3);
+        if (_setItem == SetItems.Item4 && _item4 is not null) action4(_item4);
+        if (_setItem == SetItems.Item5 && _item5 is not null) action5(_item5);
+        if (_setItem == SetItems.Item6 && _item6 is not null) action6(_item6);
+        if (_setItem == SetItems.Item7 && _item7 is not null) action7(_item7);
     }
 
     /// <summary>
@@ -222,13 +225,13 @@ public readonly struct ValueVariant<T1, T2, T3, T4, T5, T6, T7> : IValueVariant,
     {
         return _setItem switch
         {
-            SetItems.Item1 => func1(_item1!),
-            SetItems.Item2 => func2(_item2!),
-            SetItems.Item3 => func3(_item3!),
-            SetItems.Item4 => func4(_item4!),
-            SetItems.Item5 => func5(_item5!),
-            SetItems.Item6 => func6(_item6!),
-            SetItems.Item7 => func7(_item7!),
+            SetItems.Item1 when _item1 is not null => func1(_item1),
+            SetItems.Item2 when _item2 is not null  => func2(_item2),
+            SetItems.Item3 when _item3 is not null  => func3(_item3),
+            SetItems.Item4 when _item4 is not null  => func4(_item4),
+            SetItems.Item5 when _item5 is not null  => func5(_item5),
+            SetItems.Item6 when _item6 is not null  => func6(_item6),
+            SetItems.Item7 when _item7 is not null  => func7(_item7),
             _ => default
         };
     }

@@ -51,7 +51,6 @@ public readonly struct ValueVariant<T1, T2, T3> : IValueVariant,
     private readonly SetItems _setItem = SetItems.None;
 
     private readonly T1? _item1;
-
     private readonly T2? _item2;
     private readonly T3? _item3;
 
@@ -77,6 +76,9 @@ public readonly struct ValueVariant<T1, T2, T3> : IValueVariant,
     {
         return variant.TryGet(out value);
     }
+
+    /// <inheritdoc />
+    public bool IsSet<T>() => _setItem != SetItems.None && TryGet(out T? _);
 
     /// <summary>
     ///     Gets a value of the given type. Throws <see cref="BadValueVariantAccessException" /> if type isn't set.
@@ -109,7 +111,7 @@ public readonly struct ValueVariant<T1, T2, T3> : IValueVariant,
     }
 
     /// <inheritdoc />
-    public bool IsSet() => _setItem != SetItems.None;
+    public bool IsValid() => _setItem != SetItems.None && GetSetType() is not null;
 
     /// <summary>
     /// Returns set type.
@@ -123,7 +125,7 @@ public readonly struct ValueVariant<T1, T2, T3> : IValueVariant,
             SetItems.Item1 when _item1 is not null => _item1.GetType(),
             SetItems.Item2 when _item2 is not null => _item2.GetType(),
             SetItems.Item3 when _item3 is not null => _item3.GetType(),
-            _ => throw new ArgumentOutOfRangeException()
+            _ => null
         };
     }
 
@@ -132,9 +134,9 @@ public readonly struct ValueVariant<T1, T2, T3> : IValueVariant,
     /// </summary>
     public void Visit(Action<T1> action1, Action<T2> action2, Action<T3> action3)
     {
-        if (_setItem == SetItems.Item1) action1(_item1!);
-        if (_setItem == SetItems.Item2) action2(_item2!);
-        if (_setItem == SetItems.Item3) action3(_item3!);
+        if (_setItem == SetItems.Item1 && _item1 is not null) action1(_item1);
+        if (_setItem == SetItems.Item2 && _item2 is not null) action2(_item2);
+        if (_setItem == SetItems.Item3 && _item3 is not null) action3(_item3);
     }
 
     /// <summary>
@@ -146,9 +148,9 @@ public readonly struct ValueVariant<T1, T2, T3> : IValueVariant,
     {
         return _setItem switch
         {
-            SetItems.Item1 => func1(_item1!),
-            SetItems.Item2 => func2(_item2!),
-            SetItems.Item3 => func3(_item3!),
+            SetItems.Item1 when _item1 is not null => func1(_item1),
+            SetItems.Item2 when _item2 is not null  => func2(_item2),
+            SetItems.Item3 when _item3 is not null  => func3(_item3),
             _ => default
         };
     }

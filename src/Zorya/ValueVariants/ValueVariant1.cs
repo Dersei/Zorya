@@ -42,6 +42,9 @@ public readonly struct ValueVariant<T1> : IValueVariant,
         return variant.TryGet(out value);
     }
 
+    /// <inheritdoc />
+    public bool IsSet<T>() => _setItem != SetItems.None && TryGet(out T? _);
+
     /// <summary>
     ///     Gets a value of the given type. Throws <see cref="BadValueVariantAccessException" /> if type isn't set.
     /// </summary>
@@ -69,7 +72,7 @@ public readonly struct ValueVariant<T1> : IValueVariant,
     }
 
     /// <inheritdoc />
-    public bool IsSet() => _setItem != SetItems.None;
+    public bool IsValid() => _setItem != SetItems.None && GetSetType() is not null;
 
     /// <summary>
     /// Returns set type.
@@ -81,7 +84,7 @@ public readonly struct ValueVariant<T1> : IValueVariant,
         {
             SetItems.None => null,
             SetItems.Item1 when _item is not null => _item.GetType(),
-            _ => throw new ArgumentOutOfRangeException()
+            _ => null
         };
     }
 
@@ -91,7 +94,7 @@ public readonly struct ValueVariant<T1> : IValueVariant,
     /// <param name="action"></param>
     public void Visit(Action<T1> action)
     {
-        if (_setItem == SetItems.Item1) action(_item!);
+        if (_setItem == SetItems.Item1 && _item is not null) action(_item);
     }
 
     /// <summary>
@@ -102,7 +105,7 @@ public readonly struct ValueVariant<T1> : IValueVariant,
     /// <returns>Value returned from the delegate, default if there was no correct set item.</returns>
     public TResult? Visit<TResult>(Func<T1, TResult> func)
     {
-        if (_setItem == SetItems.Item1) return func(_item!);
+        if (_setItem == SetItems.Item1 && _item is not null) return func(_item!);
         return default;
     }
 

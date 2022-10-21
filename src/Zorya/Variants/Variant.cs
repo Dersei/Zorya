@@ -18,7 +18,9 @@ public abstract class Variant : IVariant
     /// <typeparam name="T">Requested type.</typeparam>
     /// <returns></returns>
     public abstract T Get<T>();
-    
+
+    public bool IsSet<T>() => SetItem != SetItems.None && TryGet(out T? _);
+
     /// <summary>
     ///     Gets a value of the given type. Returns false if type isn't set.
     /// </summary>
@@ -250,7 +252,7 @@ public abstract class Variant : IVariant
 
     protected bool TestItem<TItem, TValue>(TItem item, SetItems setItem, out TValue? value)
     {
-        if (item is TValue v && SetItem == setItem)
+        if (SetItem == setItem && item is TValue v)
         {
             value = v;
             return true;
