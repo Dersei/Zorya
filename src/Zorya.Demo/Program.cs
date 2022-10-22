@@ -39,15 +39,14 @@ using Zorya.Variants;
 //     v = new Variant8Demo<int, decimal, char, byte, object, long, string, bool>("true");
 //     v.GetUnsafeCastResultInline<string>();
 // return;
-BenchmarkRunner.Run<GetBenchmark>(DefaultConfig.Instance
+BenchmarkRunner.Run<GetComplexBenchmark>(DefaultConfig.Instance
     .AddColumn(TargetMethodColumn.Method)
     .AddColumn(StatisticColumn.Mean)
     .AddColumn(StatisticColumn.Median)
-    .AddColumn(StatisticColumn.Min)
-    .AddColumn(StatisticColumn.Max)
+    .HideColumns(StatisticColumn.StdDev)
+    .HideColumns(BaselineRatioColumn.RatioMean)
+    .HideColumns(BaselineRatioColumn.RatioStdDev)
     .AddColumn(StatisticColumn.OperationsPerSecond)
     .AddColumn(RankColumn.Arabic)
-    .AddExporter(CsvExporter.Default)
-    .AddExporter(CsvMeasurementsExporter.Default)
     .AddLogger(ConsoleLogger.Default)
     .AddDiagnoser(MemoryDiagnoser.Default));

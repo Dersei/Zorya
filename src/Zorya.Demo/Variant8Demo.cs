@@ -229,7 +229,6 @@ public class Variant8Demo<T1, T2, T3, T4, T5, T6, T7, T8>
     //     return default;
     // }
 
-    //[MethodImpl(MethodImplOptions.AggressiveInlining)]
     public T? GetUnsafe<T>()
     {
         return SetItem switch
