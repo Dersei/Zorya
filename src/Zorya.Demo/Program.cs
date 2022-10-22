@@ -29,7 +29,17 @@ using Zorya.Variants;
 // TypeLayout.PrintLayout<ValueVariant<int, string, char, byte>>();
 // TypeLayout.PrintLayout<ValueVariant<int, string, char>>();
 
-BenchmarkRunner.Run<Benchmark>(DefaultConfig.Instance
+// Variant8Demo<int, decimal, char, byte, object, long, string, bool> v = new Variant8Demo<int, decimal, char, byte, object, long, string, bool>(true);
+// Console.WriteLine(v.GetUnsafe<bool>());
+//
+// return;
+
+// Variant8Demo<int, decimal, char, byte, object, long, string, bool> v = null;
+//
+//     v = new Variant8Demo<int, decimal, char, byte, object, long, string, bool>("true");
+//     v.GetUnsafeCastResultInline<string>();
+// return;
+BenchmarkRunner.Run<GetBenchmark>(DefaultConfig.Instance
     .AddColumn(TargetMethodColumn.Method)
     .AddColumn(StatisticColumn.Mean)
     .AddColumn(StatisticColumn.Median)

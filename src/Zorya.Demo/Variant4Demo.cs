@@ -59,6 +59,7 @@ public class Variant4DemoNullCheck<T1, T2, T3, T4>
         };
     }
 
+    //[MethodImpl(MethodImplOptions.AggressiveInlining)]
     public T? GetWithTypeOf<T>()
     {
         return _setItem switch
@@ -71,7 +72,8 @@ public class Variant4DemoNullCheck<T1, T2, T3, T4>
             _ => default
         };
     }
-
+    
+    //[MethodImpl(MethodImplOptions.AggressiveInlining)]
     public T? GetWithTypeOfNullCheck<T>()
     {
         return _setItem switch
@@ -120,7 +122,7 @@ public class Variant4DemoNullCheck<T1, T2, T3, T4>
         return false;
     }
 
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    //[MethodImpl(MethodImplOptions.AggressiveInlining)]
     public T? GetWithTest<T>()
     {
         if (_setItem == SetItems.None) return default;
