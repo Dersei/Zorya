@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics.CodeAnalysis;
+using System.Runtime.CompilerServices;
 
 namespace Zorya.Variants;
 
@@ -19,17 +20,19 @@ public class Variant<T1> : Variant, IVariant, IEquatable<Variant<T1>>
     }
 
     ///<inheritdoc />
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public override T Get<T>()
     {
         return SetItem switch
         {
             SetItems.None => throw new BadVariantAccessException(typeof(T1), this),
-            SetItems.Item1 when _item is T t => t,
+            SetItems.Item1 when typeof(T) == typeof(T1) && _item is T t1 => t1,
             _ => throw new BadVariantAccessException(typeof(T1), this)
         };
     }
 
     ///<inheritdoc />
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public override bool TryGet<T>([MaybeNull] out T value)
     {
         return TestItem(_item, SetItems.Item1, out value);
@@ -41,7 +44,7 @@ public class Variant<T1> : Variant, IVariant, IEquatable<Variant<T1>>
         return SetItem switch
         {
             SetItems.None => null,
-            SetItems.Item1 when _item is not null => _item.GetType(),
+            SetItems.Item1 when _item is not null => typeof(T1),
             _ => null
         };
     }

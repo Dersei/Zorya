@@ -1,4 +1,6 @@
-﻿namespace Zorya.ValueVariants;
+﻿using System.Runtime.CompilerServices;
+
+namespace Zorya.ValueVariants;
 
 public readonly struct ValueVariant<T1> : IValueVariant,
     IEquatable<ValueVariant<T1>>
@@ -50,12 +52,13 @@ public readonly struct ValueVariant<T1> : IValueVariant,
     /// </summary>
     /// <typeparam name="T">Requested type.</typeparam>
     /// <returns></returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public T Get<T>()
     {
         return _setItem switch
         {
             SetItems.None => throw new BadValueVariantAccessException(typeof(T), this),
-            SetItems.Item1 when _item is T t => t,
+            SetItems.Item1 when typeof(T) == typeof(T1) && _item is T t1 => t1,
             _ => throw new BadValueVariantAccessException(typeof(T), this)
         };
     }
@@ -66,6 +69,7 @@ public readonly struct ValueVariant<T1> : IValueVariant,
     /// <param name="value">Extracted value, default if method returns false.</param>
     /// <typeparam name="T">Requested type.</typeparam>
     /// <returns></returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public bool TryGet<T>(out T? value)
     {
         return ValueVariant.TestItem(_item, _setItem == SetItems.Item1, out value);
@@ -83,7 +87,7 @@ public readonly struct ValueVariant<T1> : IValueVariant,
         return _setItem switch
         {
             SetItems.None => null,
-            SetItems.Item1 when _item is not null => _item.GetType(),
+            SetItems.Item1 when _item is not null => typeof(T1),
             _ => null
         };
     }
@@ -225,7 +229,7 @@ public readonly struct ValueVariant<T1> : IValueVariant,
 
     public override int GetHashCode()
     {
-        return HashCode.Combine((int) _setItem, _item);
+        return HashCode.Combine((int)_setItem, _item);
     }
 
     public static bool operator ==(ValueVariant<T1> left, ValueVariant<T1> right)

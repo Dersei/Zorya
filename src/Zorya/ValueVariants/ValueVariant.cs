@@ -17,7 +17,7 @@ public static class ValueVariant
 {
     internal static bool TestItem<TItem, TValue>(TItem item, bool isCorrectItem, out TValue? value)
     {
-        if (isCorrectItem && item is TValue v)
+        if (isCorrectItem && typeof(TItem) == typeof(TValue) && item is TValue v)
         {
             value = v;
             return true;

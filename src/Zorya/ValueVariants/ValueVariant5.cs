@@ -109,22 +109,23 @@ public readonly struct ValueVariant<T1, T2, T3, T4, T5> : IValueVariant,
 
     /// <inheritdoc />
     public bool IsSet<T>() => _setItem != SetItems.None && TryGet(out T? _);
-    
+
     /// <summary>
     ///     Gets a value of the given type. Throws <see cref="BadValueVariantAccessException" /> if type isn't set.
     /// </summary>
     /// <typeparam name="T">Requested type.</typeparam>
     /// <returns></returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public T Get<T>()
     {
         return _setItem switch
         {
             SetItems.None => throw new BadValueVariantAccessException(typeof(T), this),
-            SetItems.Item1 when _item1 is T t1 => t1,
-            SetItems.Item2 when _item2 is T t2 => t2,
-            SetItems.Item3 when _item3 is T t3 => t3,
-            SetItems.Item4 when _item4 is T t4 => t4,
-            SetItems.Item5 when _item5 is T t5 => t5,
+            SetItems.Item1 when typeof(T) == typeof(T1) && _item1 is T t1 => t1,
+            SetItems.Item2 when typeof(T) == typeof(T2) && _item2 is T t2 => t2,
+            SetItems.Item3 when typeof(T) == typeof(T3) && _item3 is T t3 => t3,
+            SetItems.Item4 when typeof(T) == typeof(T4) && _item4 is T t4 => t4,
+            SetItems.Item5 when typeof(T) == typeof(T5) && _item5 is T t5 => t5,
             _ => throw new BadValueVariantAccessException(typeof(T), this)
         };
     }
@@ -135,6 +136,7 @@ public readonly struct ValueVariant<T1, T2, T3, T4, T5> : IValueVariant,
     /// <param name="value">Extracted value, default if method returns false.</param>
     /// <typeparam name="T">Requested type.</typeparam>
     /// <returns></returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public bool TryGet<T>(out T? value)
     {
         if (ValueVariant.TestItem(_item1, SetItems.Item1 == _setItem, out value)) return true;
@@ -156,11 +158,11 @@ public readonly struct ValueVariant<T1, T2, T3, T4, T5> : IValueVariant,
         return _setItem switch
         {
             SetItems.None => null,
-            SetItems.Item1 when _item1 is not null => _item1.GetType(),
-            SetItems.Item2 when _item2 is not null => _item2.GetType(),
-            SetItems.Item3 when _item3 is not null => _item3.GetType(),
-            SetItems.Item4 when _item4 is not null => _item4.GetType(),
-            SetItems.Item5 when _item5 is not null => _item5.GetType(),
+            SetItems.Item1 when _item1 is not null => typeof(T1),
+            SetItems.Item2 when _item2 is not null => typeof(T2),
+            SetItems.Item3 when _item3 is not null => typeof(T3),
+            SetItems.Item4 when _item4 is not null => typeof(T4),
+            SetItems.Item5 when _item5 is not null => typeof(T5),
             _ => null
         };
     }
@@ -189,10 +191,10 @@ public readonly struct ValueVariant<T1, T2, T3, T4, T5> : IValueVariant,
         return _setItem switch
         {
             SetItems.Item1 when _item1 is not null => func1(_item1),
-            SetItems.Item2 when _item2 is not null  => func2(_item2),
-            SetItems.Item3 when _item3 is not null  => func3(_item3),
-            SetItems.Item4 when _item4 is not null  => func4(_item4),
-            SetItems.Item5 when _item5 is not null  => func5(_item5),
+            SetItems.Item2 when _item2 is not null => func2(_item2),
+            SetItems.Item3 when _item3 is not null => func3(_item3),
+            SetItems.Item4 when _item4 is not null => func4(_item4),
+            SetItems.Item5 when _item5 is not null => func5(_item5),
             _ => default
         };
     }
@@ -305,7 +307,7 @@ public readonly struct ValueVariant<T1, T2, T3, T4, T5> : IValueVariant,
 
     public bool Equals(ValueVariant<T1, T2, T3, T4, T5> other)
     {
-        return _setItem == other._setItem 
+        return _setItem == other._setItem
                && _setItem switch
                {
                    SetItems.None => true,
@@ -325,7 +327,7 @@ public readonly struct ValueVariant<T1, T2, T3, T4, T5> : IValueVariant,
 
     public override int GetHashCode()
     {
-        return HashCode.Combine((int) _setItem, _item1, _item2, _item3, _item4, _item5);
+        return HashCode.Combine((int)_setItem, _item1, _item2, _item3, _item4, _item5);
     }
 
     public static bool operator ==(ValueVariant<T1, T2, T3, T4, T5> left, ValueVariant<T1, T2, T3, T4, T5> right)

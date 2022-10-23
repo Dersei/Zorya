@@ -29,7 +29,7 @@ public class VariantInheritanceTest
         Variant<int, string, TestExampleParent> v;
         var refT = new TestExampleChild();
         v = refT;
-        Assert.AreEqual(refT, v.Get<TestExampleChild>());
+        Assert.Throws<BadVariantAccessException>(() => v.Get<TestExampleChild>());
     }
     
     [Test] //?
@@ -38,7 +38,7 @@ public class VariantInheritanceTest
         Variant<int, string, TestExampleParent> v;
         var refT = new TestExampleChild();
         v = refT;
-        Assert.AreEqual(typeof(TestExampleChild), v.GetSetType());
+        Assert.AreEqual(typeof(TestExampleParent), v.GetSetType());
     }
 
     [Test] //?
@@ -47,7 +47,7 @@ public class VariantInheritanceTest
         Variant<int, string, TestExampleChild> v;
         var refT = new TestExampleChild();
         v = refT;
-        Assert.AreEqual(refT, v.Get<TestExampleParent>());
+        Assert.Throws<BadVariantAccessException>(() => v.Get<TestExampleParent>());
     }
 
     [Test]
@@ -66,6 +66,13 @@ public class VariantInheritanceTest
         var refT = new TestExampleChild { Id = 10 };
         v = refT;
         Assert.AreEqual(10, v.Get<TestExampleChild>().Id);
+    }
+    
+    [Test]
+    public void GetObject()
+    {
+        var v =  new Variant<int, decimal, char, byte, object, long, string, bool>("true");;
+        Assert.Throws<BadVariantAccessException>(() => v.Get<object>());
     }
     
     [Test]
@@ -92,7 +99,7 @@ public class VariantInheritanceTest
         Variant<int, TestExampleParent, TestExampleChild> v;
         var refT = new TestExampleChild { Id = 10 };
         v = refT;
-        Assert.AreEqual(10, v.Get<TestExampleParent>().Id);
+        Assert.Throws<BadVariantAccessException>(() => v.Get<TestExampleParent>());
     }
 
     [Test] //?
@@ -101,7 +108,7 @@ public class VariantInheritanceTest
         Variant<int, TestExampleChild, TestExampleParent> v;
         var refT = new TestExampleChild { Id = 10 };
         v = refT;
-        Assert.AreEqual(10, v.Get<TestExampleParent>().Id);
+        Assert.Throws<BadVariantAccessException>(() => v.Get<TestExampleParent>());
     }
 
 

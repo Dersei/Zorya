@@ -14,7 +14,7 @@ namespace Zorya.Demo;
 [InliningDiagnoser(false, new[] { nameof(Variants), nameof(ValueVariants) })]
 public class GetComplexBenchmark
 {
-    private const int LoopIterations = 10_000;
+    private const int LoopIterations = 100;
 
     [Benchmark(Baseline = true)]
     [BenchmarkCategory("Get", "Struct")]
@@ -34,6 +34,31 @@ public class GetComplexBenchmark
             var l = v.GetStandard<long>();
             var s = v.GetStandard<string>();
             rs = "" + i + d + c + b + o + l + s;
+            if (d > 110)
+            {
+                Console.WriteLine(d);
+            }
+
+            if (c > 120)
+            {
+                Console.WriteLine(d + c);
+            }
+
+            if (b > 100)
+            {
+                Console.WriteLine(b + d + c);
+            }
+
+            if (o is double)
+            {
+                Console.WriteLine(o.ToString());
+            }
+
+            if (l > 10)
+            {
+                Console.WriteLine(l * 2);
+            }
+
             r = v.GetStandard<bool>();
         }
 
@@ -59,6 +84,31 @@ public class GetComplexBenchmark
             var l = v.GetStandard<long>();
             var s = v.GetStandard<bool>();
             rs = "" + i + d + c + b + o + l + s;
+            if (d > 110)
+            {
+                Console.WriteLine(d);
+            }
+
+            if (c > 120)
+            {
+                Console.WriteLine(d + c);
+            }
+
+            if (b > 100)
+            {
+                Console.WriteLine(b + d + c);
+            }
+
+            if (o is double)
+            {
+                Console.WriteLine(o.ToString());
+            }
+
+            if (l > 10)
+            {
+                Console.WriteLine(l * 2);
+            }
+
             r = v.GetStandard<string>();
         }
 
@@ -84,6 +134,31 @@ public class GetComplexBenchmark
             var l = v.GetStandardInline<long>();
             var s = v.GetStandardInline<string>();
             rs = "" + i + d + c + b + o + l + s;
+            if (d > 110)
+            {
+                Console.WriteLine(d);
+            }
+
+            if (c > 120)
+            {
+                Console.WriteLine(d + c);
+            }
+
+            if (b > 100)
+            {
+                Console.WriteLine(b + d + c);
+            }
+
+            if (o is double)
+            {
+                Console.WriteLine(o.ToString());
+            }
+
+            if (l > 10)
+            {
+                Console.WriteLine(l * 2);
+            }
+
             r = v.GetStandardInline<bool>();
         }
 
@@ -109,6 +184,31 @@ public class GetComplexBenchmark
             var l = v.GetStandardInline<long>();
             var s = v.GetStandardInline<bool>();
             rs = "" + i + d + c + b + o + l + s;
+            if (d > 110)
+            {
+                Console.WriteLine(d);
+            }
+
+            if (c > 120)
+            {
+                Console.WriteLine(d + c);
+            }
+
+            if (b > 100)
+            {
+                Console.WriteLine(b + d + c);
+            }
+
+            if (o is double)
+            {
+                Console.WriteLine(o.ToString());
+            }
+
+            if (l > 10)
+            {
+                Console.WriteLine(l * 2);
+            }
+
             r = v.GetStandardInline<string>();
         }
 
@@ -136,6 +236,31 @@ public class GetComplexBenchmark
             var l = v.GetDoubleCheck<long>();
             var s = v.GetDoubleCheck<string>();
             rs = "" + i + d + c + b + o + l + s;
+            if (d > 110)
+            {
+                Console.WriteLine(d);
+            }
+
+            if (c > 120)
+            {
+                Console.WriteLine(d + c);
+            }
+
+            if (b > 100)
+            {
+                Console.WriteLine(b + d + c);
+            }
+
+            if (o is double)
+            {
+                Console.WriteLine(o.ToString());
+            }
+
+            if (l > 10)
+            {
+                Console.WriteLine(l * 2);
+            }
+
             r = v.GetDoubleCheck<bool>();
         }
 
@@ -161,6 +286,31 @@ public class GetComplexBenchmark
             var l = v.GetDoubleCheck<long>();
             var s = v.GetDoubleCheck<bool>();
             rs = "" + i + d + c + b + o + l + s;
+            if (d > 110)
+            {
+                Console.WriteLine(d);
+            }
+
+            if (c > 120)
+            {
+                Console.WriteLine(d + c);
+            }
+
+            if (b > 100)
+            {
+                Console.WriteLine(b + d + c);
+            }
+
+            if (o is double)
+            {
+                Console.WriteLine(o.ToString());
+            }
+
+            if (l > 10)
+            {
+                Console.WriteLine(l * 2);
+            }
+
             r = v.GetDoubleCheck<string>();
         }
 
@@ -186,6 +336,31 @@ public class GetComplexBenchmark
             var l = v.GetDoubleCheckInline<long>();
             var s = v.GetDoubleCheckInline<string>();
             rs = "" + i + d + c + b + o + l + s;
+            if (d > 110)
+            {
+                Console.WriteLine(d);
+            }
+
+            if (c > 120)
+            {
+                Console.WriteLine(d + c);
+            }
+
+            if (b > 100)
+            {
+                Console.WriteLine(b + d + c);
+            }
+
+            if (o is double)
+            {
+                Console.WriteLine(o.ToString());
+            }
+
+            if (l > 10)
+            {
+                Console.WriteLine(l * 2);
+            }
+
             r = v.GetDoubleCheckInline<bool>();
         }
 
@@ -211,6 +386,31 @@ public class GetComplexBenchmark
             var l = v.GetDoubleCheckInline<long>();
             var s = v.GetDoubleCheckInline<bool>();
             rs = "" + i + d + c + b + o + l + s;
+            if (d > 110)
+            {
+                Console.WriteLine(d);
+            }
+
+            if (c > 120)
+            {
+                Console.WriteLine(d + c);
+            }
+
+            if (b > 100)
+            {
+                Console.WriteLine(b + d + c);
+            }
+
+            if (o is double)
+            {
+                Console.WriteLine(o.ToString());
+            }
+
+            if (l > 10)
+            {
+                Console.WriteLine(l * 2);
+            }
+
             r = v.GetDoubleCheckInline<string>();
         }
 
@@ -238,6 +438,31 @@ public class GetComplexBenchmark
             var l = v.GetUnsafe<long>();
             var s = v.GetUnsafe<string>();
             rs = "" + i + d + c + b + o + l + s;
+            if (d > 110)
+            {
+                Console.WriteLine(d);
+            }
+
+            if (c > 120)
+            {
+                Console.WriteLine(d + c);
+            }
+
+            if (b > 100)
+            {
+                Console.WriteLine(b + d + c);
+            }
+
+            if (o is double)
+            {
+                Console.WriteLine(o.ToString());
+            }
+
+            if (l > 10)
+            {
+                Console.WriteLine(l * 2);
+            }
+
             r = v.GetUnsafe<bool>();
         }
 
@@ -263,6 +488,31 @@ public class GetComplexBenchmark
             var l = v.GetUnsafe<long>();
             var s = v.GetUnsafe<bool>();
             rs = "" + i + d + c + b + o + l + s;
+            if (d > 110)
+            {
+                Console.WriteLine(d);
+            }
+
+            if (c > 120)
+            {
+                Console.WriteLine(d + c);
+            }
+
+            if (b > 100)
+            {
+                Console.WriteLine(b + d + c);
+            }
+
+            if (o is double)
+            {
+                Console.WriteLine(o.ToString());
+            }
+
+            if (l > 10)
+            {
+                Console.WriteLine(l * 2);
+            }
+
             r = v.GetUnsafe<string>();
         }
 
@@ -288,6 +538,31 @@ public class GetComplexBenchmark
             var l = v.GetUnsafeInline<long>();
             var s = v.GetUnsafeInline<string>();
             rs = "" + i + d + c + b + o + l + s;
+            if (d > 110)
+            {
+                Console.WriteLine(d);
+            }
+
+            if (c > 120)
+            {
+                Console.WriteLine(d + c);
+            }
+
+            if (b > 100)
+            {
+                Console.WriteLine(b + d + c);
+            }
+
+            if (o is double)
+            {
+                Console.WriteLine(o.ToString());
+            }
+
+            if (l > 10)
+            {
+                Console.WriteLine(l * 2);
+            }
+
             r = v.GetUnsafeInline<bool>();
         }
 
@@ -313,6 +588,31 @@ public class GetComplexBenchmark
             var l = v.GetUnsafeInline<long>();
             var s = v.GetUnsafeInline<bool>();
             rs = "" + i + d + c + b + o + l + s;
+            if (d > 110)
+            {
+                Console.WriteLine(d);
+            }
+
+            if (c > 120)
+            {
+                Console.WriteLine(d + c);
+            }
+
+            if (b > 100)
+            {
+                Console.WriteLine(b + d + c);
+            }
+
+            if (o is double)
+            {
+                Console.WriteLine(o.ToString());
+            }
+
+            if (l > 10)
+            {
+                Console.WriteLine(l * 2);
+            }
+
             r = v.GetUnsafeInline<string>();
         }
 
@@ -340,6 +640,31 @@ public class GetComplexBenchmark
             var l = v.GetUnsafeNullCheck<long>();
             var s = v.GetUnsafeNullCheck<string>();
             rs = "" + i + d + c + b + o + l + s;
+            if (d > 110)
+            {
+                Console.WriteLine(d);
+            }
+
+            if (c > 120)
+            {
+                Console.WriteLine(d + c);
+            }
+
+            if (b > 100)
+            {
+                Console.WriteLine(b + d + c);
+            }
+
+            if (o is double)
+            {
+                Console.WriteLine(o.ToString());
+            }
+
+            if (l > 10)
+            {
+                Console.WriteLine(l * 2);
+            }
+
             r = v.GetUnsafeNullCheck<bool>();
         }
 
@@ -365,6 +690,31 @@ public class GetComplexBenchmark
             var l = v.GetUnsafeNullCheck<long>();
             var s = v.GetUnsafeNullCheck<bool>();
             rs = "" + i + d + c + b + o + l + s;
+            if (d > 110)
+            {
+                Console.WriteLine(d);
+            }
+
+            if (c > 120)
+            {
+                Console.WriteLine(d + c);
+            }
+
+            if (b > 100)
+            {
+                Console.WriteLine(b + d + c);
+            }
+
+            if (o is double)
+            {
+                Console.WriteLine(o.ToString());
+            }
+
+            if (l > 10)
+            {
+                Console.WriteLine(l * 2);
+            }
+
             r = v.GetUnsafeNullCheck<string>();
         }
 
@@ -390,6 +740,31 @@ public class GetComplexBenchmark
             var l = v.GetUnsafeNullCheckInline<long>();
             var s = v.GetUnsafeNullCheckInline<string>();
             rs = "" + i + d + c + b + o + l + s;
+            if (d > 110)
+            {
+                Console.WriteLine(d);
+            }
+
+            if (c > 120)
+            {
+                Console.WriteLine(d + c);
+            }
+
+            if (b > 100)
+            {
+                Console.WriteLine(b + d + c);
+            }
+
+            if (o is double)
+            {
+                Console.WriteLine(o.ToString());
+            }
+
+            if (l > 10)
+            {
+                Console.WriteLine(l * 2);
+            }
+
             r = v.GetUnsafeNullCheckInline<bool>();
         }
 
@@ -415,6 +790,31 @@ public class GetComplexBenchmark
             var l = v.GetUnsafeNullCheckInline<long>();
             var s = v.GetUnsafeNullCheckInline<bool>();
             rs = "" + i + d + c + b + o + l + s;
+            if (d > 110)
+            {
+                Console.WriteLine(d);
+            }
+
+            if (c > 120)
+            {
+                Console.WriteLine(d + c);
+            }
+
+            if (b > 100)
+            {
+                Console.WriteLine(b + d + c);
+            }
+
+            if (o is double)
+            {
+                Console.WriteLine(o.ToString());
+            }
+
+            if (l > 10)
+            {
+                Console.WriteLine(l * 2);
+            }
+
             r = v.GetUnsafeNullCheckInline<string>();
         }
 

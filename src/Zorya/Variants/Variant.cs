@@ -252,7 +252,7 @@ public abstract class Variant : IVariant
 
     protected bool TestItem<TItem, TValue>(TItem item, SetItems setItem, out TValue? value)
     {
-        if (SetItem == setItem && item is TValue v)
+        if (SetItem == setItem && typeof(TItem) == typeof(TValue) && item is TValue v)
         {
             value = v;
             return true;
@@ -264,7 +264,7 @@ public abstract class Variant : IVariant
 
     protected bool SetItemInternal<TItem, TValue>(ref TItem item, SetItems setItem, TValue? value)
     {
-        if (value is TItem v)
+        if (typeof(TValue) == typeof(TItem) && value is TItem v)
         {
             SetItem = setItem switch
             {

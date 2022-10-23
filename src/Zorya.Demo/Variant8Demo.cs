@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 
 namespace Zorya.Demo;
@@ -118,13 +119,13 @@ public class Variant8Demo<T1, T2, T3, T4, T5, T6, T7, T8>
         {
             SetItems.None => default,
             SetItems.Item1 when typeof(T) == typeof(T1) && _item1 is T t1 => t1,
-            SetItems.Item2 when typeof(T) == typeof(T2) &&_item2 is T t2 => t2,
-            SetItems.Item3 when typeof(T) == typeof(T3) &&_item3 is T t3 => t3,
-            SetItems.Item4 when typeof(T) == typeof(T4) &&_item4 is T t4 => t4,
-            SetItems.Item5 when typeof(T) == typeof(T5) &&_item5 is T t5 => t5,
-            SetItems.Item6 when typeof(T) == typeof(T6) &&_item6 is T t6 => t6,
-            SetItems.Item7 when typeof(T) == typeof(T7) &&_item7 is T t7 => t7,
-            SetItems.Item8 when typeof(T) == typeof(T8) &&_item8 is T t8 => t8,
+            SetItems.Item2 when typeof(T) == typeof(T2) && _item2 is T t2 => t2,
+            SetItems.Item3 when typeof(T) == typeof(T3) && _item3 is T t3 => t3,
+            SetItems.Item4 when typeof(T) == typeof(T4) && _item4 is T t4 => t4,
+            SetItems.Item5 when typeof(T) == typeof(T5) && _item5 is T t5 => t5,
+            SetItems.Item6 when typeof(T) == typeof(T6) && _item6 is T t6 => t6,
+            SetItems.Item7 when typeof(T) == typeof(T7) && _item7 is T t7 => t7,
+            SetItems.Item8 when typeof(T) == typeof(T8) && _item8 is T t8 => t8,
             _ => default
         };
     }
@@ -146,88 +147,7 @@ public class Variant8Demo<T1, T2, T3, T4, T5, T6, T7, T8>
             _ => default
         };
     }
-    
-    // public T? GetTripleCheck<T>()
-    // {
-    //     return SetItem switch
-    //     {
-    //         SetItems.None => default,
-    //         SetItems.Item1 when typeof(T) == typeof(T1) &&_item1 != null && _item1 is T t1 => t1,
-    //         SetItems.Item2 when typeof(T) == typeof(T2) &&_item2 != null && _item2 is T t2 => t2,
-    //         SetItems.Item3 when typeof(T) == typeof(T3) &&_item3 != null && _item3 is T t3 => t3,
-    //         SetItems.Item4 when typeof(T) == typeof(T4) &&_item4 != null && _item4 is T t4 => t4,
-    //         SetItems.Item5 when typeof(T) == typeof(T5) &&_item5 != null && _item5 is T t5 => t5,
-    //         SetItems.Item6 when typeof(T) == typeof(T6) &&_item6 != null && _item6 is T t6 => t6,
-    //         SetItems.Item7 when typeof(T) == typeof(T7) &&_item7 != null && _item7 is T t7 => t7,
-    //         SetItems.Item8 when typeof(T) == typeof(T8) &&_item8 != null && _item8 is T t8 => t8,
-    //         _ => default
-    //     };
-    // }
-    //
-    // [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    // public T? GetTripleCheckInline<T>()
-    // {
-    //     return SetItem switch
-    //     {
-    //         SetItems.None => default,
-    //         SetItems.Item1 when typeof(T) == typeof(T1) &&_item1 != null && _item1 is T t1 => t1,
-    //         SetItems.Item2 when typeof(T) == typeof(T2) &&_item2 != null && _item2 is T t2 => t2,
-    //         SetItems.Item3 when typeof(T) == typeof(T3) &&_item3 != null && _item3 is T t3 => t3,
-    //         SetItems.Item4 when typeof(T) == typeof(T4) &&_item4 != null && _item4 is T t4 => t4,
-    //         SetItems.Item5 when typeof(T) == typeof(T5) &&_item5 != null && _item5 is T t5 => t5,
-    //         SetItems.Item6 when typeof(T) == typeof(T6) &&_item6 != null && _item6 is T t6 => t6,
-    //         SetItems.Item7 when typeof(T) == typeof(T7) &&_item7 != null && _item7 is T t7 => t7,
-    //         SetItems.Item8 when typeof(T) == typeof(T8) &&_item8 != null && _item8 is T t8 => t8,
-    //         _ => default
-    //     };
-    // }
-    
-    // public T? GetIf<T>()
-    // {
-    //     if (SetItem == SetItems.None)
-    //         return default;
-    //     if (SetItem == SetItems.Item1 && _item1 is T t1)
-    //         return t1;
-    //     if (SetItem == SetItems.Item2 && _item2 is T t2)
-    //         return t2;
-    //     if (SetItem == SetItems.Item3 && _item3 is T t3)
-    //         return t3;
-    //     if (SetItem == SetItems.Item4 && _item4 is T t4)
-    //         return t4;
-    //     if (SetItem == SetItems.Item5 && _item5 is T t5)
-    //         return t5;
-    //     if (SetItem == SetItems.Item6 && _item6 is T t6)
-    //         return t6;
-    //     if (SetItem == SetItems.Item7 && _item7 is T t7)
-    //         return t7;
-    //     if (SetItem == SetItems.Item8 && _item8 is T t8)
-    //         return t8;
-    //     return default;
-    // }
-    //
-    // [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    // public T? GetIfInline<T>()
-    // {
-    //     if (SetItem == SetItems.None)
-    //         return default;
-    //     if (SetItem == SetItems.Item1 && _item1 is T t1)
-    //         return t1;
-    //     if (SetItem == SetItems.Item2 && _item2 is T t2)
-    //         return t2;
-    //     if (SetItem == SetItems.Item3 && _item3 is T t3)
-    //         return t3;
-    //     if (SetItem == SetItems.Item4 && _item4 is T t4)
-    //         return t4;
-    //     if (SetItem == SetItems.Item5 && _item5 is T t5)
-    //         return t5;
-    //     if (SetItem == SetItems.Item6 && _item6 is T t6)
-    //         return t6;
-    //     if (SetItem == SetItems.Item7 && _item7 is T t7)
-    //         return t7;
-    //     if (SetItem == SetItems.Item8 && _item8 is T t8)
-    //         return t8;
-    //     return default;
-    // }
+ 
 
     public T? GetUnsafe<T>()
     {
@@ -300,85 +220,68 @@ public class Variant8Demo<T1, T2, T3, T4, T5, T6, T7, T8>
         };
     }
     
-    // //[MethodImpl(MethodImplOptions.AggressiveInlining)]
-    // public T? GetUnsafeCastResult<T>()
-    // {
-    //     object? result = SetItem switch
-    //     {
-    //         SetItems.None => default,
-    //         SetItems.Item1 => _item1,
-    //         SetItems.Item2 => _item2,
-    //         SetItems.Item3 => _item3,
-    //         SetItems.Item4 => _item4,
-    //         SetItems.Item5 => _item5,
-    //         SetItems.Item6 => _item6,
-    //         SetItems.Item7 => _item7,
-    //         SetItems.Item8 => _item8,
-    //         _ => default
-    //     };
-    //     return result is T r ? r : default;
-    // }
-    //
-    // [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    // public T? GetUnsafeCastResultInline<T>()
-    // {
-    //     object? result = SetItem switch
-    //     {
-    //         SetItems.None => default,
-    //         SetItems.Item1 => _item1,
-    //         SetItems.Item2 => _item2,
-    //         SetItems.Item3 => _item3,
-    //         SetItems.Item4 => _item4,
-    //         SetItems.Item5 => _item5,
-    //         SetItems.Item6 => _item6,
-    //         SetItems.Item7 => _item7,
-    //         SetItems.Item8 => _item8,
-    //         _ => default
-    //     };
-    //     return result is T r ? r : default;
-    // } 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private bool TestItem<TItem, TValue>(TItem item, SetItems setItem, out TValue? value)
+    {
+        if (SetItem == setItem && typeof(TItem) == typeof(TValue) && item is TValue v)
+        {
+            value = v;
+            return true;
+        }
 
+        value = default;
+        return false;
+    }
     
-    // //[MethodImpl(MethodImplOptions.AggressiveInlining)]
-    // private bool TestItem<TItem, TValue>(TItem item, SetItems setItem, out TValue? value)
-    // {
-    //     if (SetItem == setItem && item is TValue v)
-    //     {
-    //         value = v;
-    //         return true;
-    //     }
-    //
-    //     value = default;
-    //     return false;
-    // }
-    //
-    // //[MethodImpl(MethodImplOptions.AggressiveInlining)]
-    // public T? GetTestItem<T>()
-    // {
-    //     if (SetItem == SetItems.None) return default;
-    //     if (TestItem(_item1, SetItems.Item1, out T? result)) return result;
-    //     if (TestItem(_item2, SetItems.Item2, out result)) return result;
-    //     if (TestItem(_item3, SetItems.Item3, out result)) return result;
-    //     if (TestItem(_item4, SetItems.Item4, out result)) return result;
-    //     if (TestItem(_item5, SetItems.Item5, out result)) return result;
-    //     if (TestItem(_item6, SetItems.Item6, out result)) return result;
-    //     if (TestItem(_item7, SetItems.Item7, out result)) return result;
-    //     if (TestItem(_item8, SetItems.Item8, out result)) return result;
-    //     return default;
-    // }
-    //
-    // [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    // public T? GetTestItemInline<T>()
-    // {
-    //     if (SetItem == SetItems.None) return default;
-    //     if (TestItem(_item1, SetItems.Item1, out T? result)) return result;
-    //     if (TestItem(_item2, SetItems.Item2, out result)) return result;
-    //     if (TestItem(_item3, SetItems.Item3, out result)) return result;
-    //     if (TestItem(_item4, SetItems.Item4, out result)) return result;
-    //     if (TestItem(_item5, SetItems.Item5, out result)) return result;
-    //     if (TestItem(_item6, SetItems.Item6, out result)) return result;
-    //     if (TestItem(_item7, SetItems.Item7, out result)) return result;
-    //     if (TestItem(_item8, SetItems.Item8, out result)) return result;
-    //     return default;
-    // }
+    public bool TryGet<T>([MaybeNull] out T value)
+    {
+        if (TestItem(_item1, SetItems.Item1, out value)) return true;
+        if (TestItem(_item2, SetItems.Item2, out value)) return true;
+        if (TestItem(_item3, SetItems.Item3, out value)) return true;
+        if (TestItem(_item4, SetItems.Item4, out value)) return true;
+        if (TestItem(_item5, SetItems.Item5, out value)) return true;
+        if (TestItem(_item6, SetItems.Item6, out value)) return true;
+        if (TestItem(_item7, SetItems.Item7, out value)) return true;
+        return TestItem(_item8, SetItems.Item8, out value);
+    }
+    
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public bool TryGetInline<T>([MaybeNull] out T value)
+    {
+        if (TestItem(_item1, SetItems.Item1, out value)) return true;
+        if (TestItem(_item2, SetItems.Item2, out value)) return true;
+        if (TestItem(_item3, SetItems.Item3, out value)) return true;
+        if (TestItem(_item4, SetItems.Item4, out value)) return true;
+        if (TestItem(_item5, SetItems.Item5, out value)) return true;
+        if (TestItem(_item6, SetItems.Item6, out value)) return true;
+        if (TestItem(_item7, SetItems.Item7, out value)) return true;
+        return TestItem(_item8, SetItems.Item8, out value);
+    }
+    
+    public void Visit(Action<T1> action1, Action<T2> action2, Action<T3> action3, Action<T4> action4,
+        Action<T5> action5, Action<T6> action6, Action<T7> action7, Action<T8> action8)
+    {
+        if (SetItem == SetItems.Item1 && _item1 is not null) action1(_item1);
+        if (SetItem == SetItems.Item2 && _item2 is not null) action2(_item2);
+        if (SetItem == SetItems.Item3 && _item3 is not null) action3(_item3);
+        if (SetItem == SetItems.Item4 && _item4 is not null) action4(_item4);
+        if (SetItem == SetItems.Item5 && _item5 is not null) action5(_item5);
+        if (SetItem == SetItems.Item6 && _item6 is not null) action6(_item6);
+        if (SetItem == SetItems.Item7 && _item7 is not null) action7(_item7);
+        if (SetItem == SetItems.Item8 && _item8 is not null) action8(_item8);
+    }
+    
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public void VisitInline(Action<T1> action1, Action<T2> action2, Action<T3> action3, Action<T4> action4,
+        Action<T5> action5, Action<T6> action6, Action<T7> action7, Action<T8> action8)
+    {
+        if (SetItem == SetItems.Item1 && _item1 is not null) action1(_item1);
+        if (SetItem == SetItems.Item2 && _item2 is not null) action2(_item2);
+        if (SetItem == SetItems.Item3 && _item3 is not null) action3(_item3);
+        if (SetItem == SetItems.Item4 && _item4 is not null) action4(_item4);
+        if (SetItem == SetItems.Item5 && _item5 is not null) action5(_item5);
+        if (SetItem == SetItems.Item6 && _item6 is not null) action6(_item6);
+        if (SetItem == SetItems.Item7 && _item7 is not null) action7(_item7);
+        if (SetItem == SetItems.Item8 && _item8 is not null) action8(_item8);
+    }
 }

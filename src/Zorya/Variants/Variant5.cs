@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics.CodeAnalysis;
+using System.Runtime.CompilerServices;
 
 namespace Zorya.Variants;
 
@@ -42,21 +43,23 @@ public class Variant<T1, T2, T3, T4, T5> : Variant, IVariant,
     }
 
     ///<inheritdoc />
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public override T Get<T>()
     {
         return SetItem switch
         {
             SetItems.None => throw new BadVariantAccessException(typeof(T), this),
-            SetItems.Item1 when _item1 is T t1 => t1,
-            SetItems.Item2 when _item2 is T t2 => t2,
-            SetItems.Item3 when _item3 is T t3 => t3,
-            SetItems.Item4 when _item4 is T t4 => t4,
-            SetItems.Item5 when _item5 is T t5 => t5,
+            SetItems.Item1 when typeof(T) == typeof(T1) && _item1 is T t1 => t1,
+            SetItems.Item2 when typeof(T) == typeof(T2) && _item2 is T t2 => t2,
+            SetItems.Item3 when typeof(T) == typeof(T3) && _item3 is T t3 => t3,
+            SetItems.Item4 when typeof(T) == typeof(T4) && _item4 is T t4 => t4,
+            SetItems.Item5 when typeof(T) == typeof(T5) && _item5 is T t5 => t5,
             _ => throw new BadVariantAccessException(typeof(T), this)
         };
     }
 
     ///<inheritdoc />
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public override bool TryGet<T>([MaybeNull] out T value)
     {
         if (TestItem(_item1, SetItems.Item1, out value)) return true;
@@ -72,11 +75,11 @@ public class Variant<T1, T2, T3, T4, T5> : Variant, IVariant,
         return SetItem switch
         {
             SetItems.None => null,
-            SetItems.Item1 when _item1 is not null => _item1.GetType(),
-            SetItems.Item2 when _item2 is not null => _item2.GetType(),
-            SetItems.Item3 when _item3 is not null => _item3.GetType(),
-            SetItems.Item4 when _item4 is not null => _item4.GetType(),
-            SetItems.Item5 when _item5 is not null => _item5.GetType(),
+            SetItems.Item1 when _item1 is not null => typeof(T1),
+            SetItems.Item2 when _item2 is not null => typeof(T2),
+            SetItems.Item3 when _item3 is not null => typeof(T3),
+            SetItems.Item4 when _item4 is not null => typeof(T4),
+            SetItems.Item5 when _item5 is not null => typeof(T5),
             _ => null
         };
     }
