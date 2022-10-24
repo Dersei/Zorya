@@ -110,7 +110,46 @@ public class ValueVariantInheritanceTest
         v = refT;
         Assert.Throws<BadValueVariantAccessException>(() => v.Get<TestExampleParent>());
     }
+    
+    [Test]
+    public void IsSet()
+    {
+        ValueVariant<int, TestExampleChild, TestExampleParent> v;
+        var refT = new TestExampleChild { Id = 10 };
+        v = refT;
+        Assert.AreEqual(true, v.IsSet<TestExampleChild>());
+        Assert.AreEqual(false, v.IsSet<TestExampleParent>());
+    }
+    
+    [Test]
+    public void IsSetParent()
+    {
+        ValueVariant<int, TestExampleParent> v;
+        var refT = new TestExampleChild { Id = 10 };
+        v = refT;
+        Assert.AreEqual(false, v.IsSet<TestExampleChild>());
+        Assert.AreEqual(true, v.IsSet<TestExampleParent>());
+    }
 
+    [Test]
+    public void TryGet()
+    {
+        ValueVariant<int, TestExampleChild, TestExampleParent> v;
+        var refT = new TestExampleChild { Id = 10 };
+        v = refT;
+        Assert.AreEqual(true, v.TryGet<TestExampleChild>(out _));
+        Assert.AreEqual(false, v.TryGet<TestExampleParent>(out _));
+    }
+    
+    [Test]
+    public void TryGetParent()
+    {
+        ValueVariant<int, TestExampleParent> v;
+        var refT = new TestExampleChild { Id = 10 };
+        v = refT;
+        Assert.AreEqual(true, v.TryGet<TestExampleParent>(out _));
+        Assert.AreEqual(false, v.TryGet<TestExampleChild>(out _));
+    }
 
     private class TestExampleParent
     {

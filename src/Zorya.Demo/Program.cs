@@ -31,7 +31,7 @@ using Zorya.Variants;
 // TypeLayout.PrintLayout<ImplVariantClassicStruct<int, decimal, char, byte, object, long, string, bool>>();
 // return;
 
-BenchmarkRunner.Run<GetLibraryBenchmark>(DefaultConfig.Instance
+BenchmarkRunner.Run<ImplementationBenchmark>(DefaultConfig.Instance
     .AddColumn(TargetMethodColumn.Method)
     .AddColumn(StatisticColumn.Mean)
     .AddColumn(StatisticColumn.Median)

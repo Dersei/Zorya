@@ -122,6 +122,17 @@ Variant<int, double, string> ParseInput(string input)
 ```
 
 ## Remarks
+### Types
+Both types allow support only explicitly set types. Although it's possible to set a variant to hold an object of a child class of one of its types, there's no possibility to extract that object in the other way than by using a parent type.
+For example:
+```csharp
+Variant<Parent> v = new Child();
+v.Get<Child>(); //throws BadVariantAccessException
+v.Get<Parent>(); //returns the Child object
+```
+The same is true for other methods like `TryGet` or `Visit`.
+
+### IsValid()
 
 Both `Variant` and `ValueVariant` can be in invalid state. There are three possible reasons for that:
 1. creating either of the types with the constructor passing in `null` when it's possible.
@@ -135,6 +146,8 @@ Although it's still possible in some cases to pass `null` to constructor, the va
 Until the version 1.0.1, due to the way value types and implicit operators work, it was possible to create a `ValueVariant` (with one reference type or `object` and another reference type) using `null`.  
 For example: `ValueVariant<string, int> v = null;` or `ValueVariant<string, object, int> v = null;`  
 Since the version 1.0.2 such operation will result in a default `ValueVariant` without any value set and with `IsValid` method returning `false`.  
+
+### Equality
 
 Until the version 1.0.1 variants used default equality. Since the version 1.0.2 all variants support `IEquatable` interface, `==`, `!=` operators and `Equals` method.
 

@@ -110,6 +110,46 @@ public class VariantInheritanceTest
         v = refT;
         Assert.Throws<BadVariantAccessException>(() => v.Get<TestExampleParent>());
     }
+    
+    [Test]
+    public void IsSet()
+    {
+        Variant<int, TestExampleChild, TestExampleParent> v;
+        var refT = new TestExampleChild { Id = 10 };
+        v = refT;
+        Assert.AreEqual(true, v.IsSet<TestExampleChild>());
+        Assert.AreEqual(false, v.IsSet<TestExampleParent>());
+    }
+    
+    [Test]
+    public void IsSetParent()
+    {
+        Variant<int, TestExampleParent> v;
+        var refT = new TestExampleChild { Id = 10 };
+        v = refT;
+        Assert.AreEqual(false, v.IsSet<TestExampleChild>());
+        Assert.AreEqual(true, v.IsSet<TestExampleParent>());
+    }
+    
+    [Test]
+    public void TryGet()
+    {
+        Variant<int, TestExampleChild, TestExampleParent> v;
+        var refT = new TestExampleChild { Id = 10 };
+        v = refT;
+        Assert.AreEqual(true, v.TryGet<TestExampleChild>(out _));
+        Assert.AreEqual(false, v.TryGet<TestExampleParent>(out _));
+    }
+    
+    [Test]
+    public void TryGetParent()
+    {
+        Variant<int, TestExampleParent> v;
+        var refT = new TestExampleChild { Id = 10 };
+        v = refT;
+        Assert.AreEqual(true, v.TryGet<TestExampleParent>(out _));
+        Assert.AreEqual(false, v.TryGet<TestExampleChild>(out _));
+    }
 
 
     private class TestExampleParent
