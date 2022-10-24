@@ -1,8 +1,6 @@
 ﻿using BenchmarkDotNet.Columns;
 using BenchmarkDotNet.Configs;
 using BenchmarkDotNet.Diagnosers;
-using BenchmarkDotNet.Exporters;
-using BenchmarkDotNet.Exporters.Csv;
 using BenchmarkDotNet.Loggers;
 using BenchmarkDotNet.Running;
 using ObjectLayoutInspector;
@@ -24,27 +22,8 @@ using Zorya.Variants;
 // var v = new Variant<int, string, char>('c');
 //
 // v.Match((char c) => Console.WriteLine(c));
-// TypeLayout.PrintLayout<Variant<int, string, char, byte, long, double, object, decimal>>();
-// TypeLayout.PrintLayout<Variant<int, string, char, byte>>();
-TypeLayout.PrintLayout<Variant<int, string, char>>();
-TypeLayout.PrintLayout<PaddingVariantChildField>();
-TypeLayout.PrintLayout<PaddingVariantChildProperty>();
-TypeLayout.PrintLayout<PaddingVariantChildMethod>();
-// TypeLayout.PrintLayout<ValueVariant<int, string, char, byte, long, double, object, decimal>>();
-// TypeLayout.PrintLayout<ValueVariant<int, string, char, byte>>();
-// TypeLayout.PrintLayout<ValueVariant<int, string, char>>();
-//return;
-// Variant8Demo<int, decimal, char, byte, object, long, string, bool> v = new Variant8Demo<int, decimal, char, byte, object, long, string, bool>(true);
-// Console.WriteLine(v.GetUnsafe<bool>());
-//
-// return;
 
-// Variant8Demo<int, decimal, char, byte, object, long, string, bool> v = null;
-//
-//     v = new Variant8Demo<int, decimal, char, byte, object, long, string, bool>("true");
-//     v.GetUnsafeCastResultInline<string>();
-// return;
-BenchmarkRunner.Run<InheritancePaddingBenchmark>(DefaultConfig.Instance
+BenchmarkRunner.Run<MemoryBenchmark>(DefaultConfig.Instance
     .AddColumn(TargetMethodColumn.Method)
     .AddColumn(StatisticColumn.Mean)
     .AddColumn(StatisticColumn.Median)

@@ -10,11 +10,11 @@ namespace Zorya.Demo;
 [DisassemblyDiagnoser]
 [GroupBenchmarksBy(BenchmarkLogicalGroupRule.ByCategory)]
 [CategoriesColumn]
-[Orderer(SummaryOrderPolicy.Declared)]
+[Orderer(SummaryOrderPolicy.FastestToSlowest)]
 [InliningDiagnoser(false, new []{nameof(Zorya.Variants), nameof(Zorya.ValueVariants)})]
 public class MemoryBenchmark
 {
-    private const int LoopIterations = 10_000;
+    private const int LoopIterations = 10;
     
     [Benchmark(Baseline = true)]
     [BenchmarkCategory("Class")]
@@ -25,6 +25,62 @@ public class MemoryBenchmark
         for (int i = 0; i < LoopIterations; i++)
         {
             v = new Variant<int, string, char>(1);
+        }
+
+        return v;
+    }
+    
+    [Benchmark]
+    [BenchmarkCategory("Class")]
+    public Variant<int> Variant1Int()
+    {
+        Variant<int> v = null;
+
+        for (int i = 0; i < LoopIterations; i++)
+        {
+            v = new Variant<int>(1);
+        }
+
+        return v;
+    }
+    
+    [Benchmark]
+    [BenchmarkCategory("Class")]
+    public Variant<string> Variant1String()
+    {
+        Variant<string> v = null;
+
+        for (int i = 0; i < LoopIterations; i++)
+        {
+            v = new Variant<string>("1");
+        }
+
+        return v;
+    }
+    
+    [Benchmark]
+    [BenchmarkCategory("Struct")]
+    public ValueVariant<int> ValueVariant1Int()
+    {
+        ValueVariant<int> v = new();
+
+        for (int i = 0; i < LoopIterations; i++)
+        {
+            v = new ValueVariant<int>(1);
+        }
+
+        return v;
+    }
+    
+    [Benchmark]
+    [BenchmarkCategory("Struct")]
+    public ValueVariant<string> ValueVariant1String()
+    {
+        ValueVariant<string> v = new();
+
+        for (int i = 0; i < LoopIterations; i++)
+        {
+            v = new ValueVariant<string>("1");
         }
 
         return v;

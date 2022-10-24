@@ -3,35 +3,43 @@ using System.Runtime.CompilerServices;
 
 namespace Zorya.Variants;
 
-public class Variant<T1, T2, T3> : Variant, IVariant, IEquatable<Variant<T1, T2, T3>>
+public sealed class Variant<T1, T2, T3> : Variant, IVariant, IEquatable<Variant<T1, T2, T3>>
 {
     private T1? _item1;
     private T2? _item2;
     private T3? _item3;
+    
+    private SetItems _setItem;
+    
+    protected override SetItems SetItem
+    {
+        get => _setItem;
+        set => _setItem = value;
+    }
 
     public Variant(T1 item1)
     {
         _item1 = item1;
-        SetItem = SetItems.Item1;
+        _setItem = SetItems.Item1;
     }
 
     public Variant(T2 item2)
     {
         _item2 = item2;
-        SetItem = SetItems.Item2;
+        _setItem = SetItems.Item2;
     }
 
     public Variant(T3 item3)
     {
         _item3 = item3;
-        SetItem = SetItems.Item3;
+        _setItem = SetItems.Item3;
     }
 
     ///<inheritdoc />
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public override T Get<T>()
     {
-        return SetItem switch
+        return _setItem switch
         {
             SetItems.None => throw new BadVariantAccessException(typeof(T), this),
             SetItems.Item1 when typeof(T) == typeof(T1) && _item1 is T t1 => t1,
@@ -62,7 +70,7 @@ public class Variant<T1, T2, T3> : Variant, IVariant, IEquatable<Variant<T1, T2,
     ///<inheritdoc />
     public override Type? GetSetType()
     {
-        return SetItem switch
+        return _setItem switch
         {
             SetItems.None => null,
             SetItems.Item1 when _item1 is not null => typeof(T1),
@@ -115,9 +123,9 @@ public class Variant<T1, T2, T3> : Variant, IVariant, IEquatable<Variant<T1, T2,
     /// </summary>
     public void Visit(Action<T1> action1, Action<T2> action2, Action<T3> action3)
     {
-        if (SetItem == SetItems.Item1 && _item1 is not null) action1(_item1);
-        if (SetItem == SetItems.Item2 && _item2 is not null) action2(_item2);
-        if (SetItem == SetItems.Item3 && _item3 is not null) action3(_item3);
+        if (_setItem == SetItems.Item1 && _item1 is not null) action1(_item1);
+        if (_setItem == SetItems.Item2 && _item2 is not null) action2(_item2);
+        if (_setItem == SetItems.Item3 && _item3 is not null) action3(_item3);
     }
 
     /// <summary>
@@ -127,7 +135,7 @@ public class Variant<T1, T2, T3> : Variant, IVariant, IEquatable<Variant<T1, T2,
     /// <returns>Value returned from the delegate, default if there was no correct set item.</returns>
     public TResult? Visit<TResult>(Func<T1, TResult> func1, Func<T2, TResult> func2, Func<T3, TResult> func3)
     {
-        return SetItem switch
+        return _setItem switch
         {
             SetItems.Item1 when _item1 is not null => func1(_item1),
             SetItems.Item2 when _item2 is not null  => func2(_item2),
@@ -138,7 +146,7 @@ public class Variant<T1, T2, T3> : Variant, IVariant, IEquatable<Variant<T1, T2,
 
     public override string ToString()
     {
-        return SetItem switch
+        return _setItem switch
         {
             SetItems.Item1 => _item1?.ToString(),
             SetItems.Item2 => _item2?.ToString(),
@@ -151,8 +159,8 @@ public class Variant<T1, T2, T3> : Variant, IVariant, IEquatable<Variant<T1, T2,
     {
         if (ReferenceEquals(null, other)) return false;
         if (ReferenceEquals(this, other)) return true;
-        if (SetItem != other.SetItem) return false;
-        return SetItem switch
+        if (_setItem != other._setItem) return false;
+        return _setItem switch
         {
             SetItems.None => true,
             SetItems.Item1 => EqualityComparer<T1?>.Default.Equals(_item1, other._item1),

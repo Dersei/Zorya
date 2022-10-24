@@ -3,14 +3,23 @@ using System.Runtime.CompilerServices;
 
 namespace Zorya.Variants;
 
-public class Variant<T1> : Variant, IVariant, IEquatable<Variant<T1>>
+public sealed class Variant<T1> : Variant, IVariant, IEquatable<Variant<T1>>
 {
     private T1? _item;
+    
 
     public Variant(T1 item)
     {
         _item = item;
-        SetItem = SetItems.Item1;
+        _setItem = SetItems.Item1;
+    }
+
+    private SetItems _setItem;
+    
+    protected override SetItems SetItem
+    {
+        get => _setItem;
+        set => _setItem = value;
     }
 
     ///<inheritdoc />
@@ -23,7 +32,7 @@ public class Variant<T1> : Variant, IVariant, IEquatable<Variant<T1>>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public override T Get<T>()
     {
-        return SetItem switch
+        return _setItem switch
         {
             SetItems.None => throw new BadVariantAccessException(typeof(T1), this),
             SetItems.Item1 when typeof(T) == typeof(T1) && _item is T t1 => t1,
@@ -41,7 +50,7 @@ public class Variant<T1> : Variant, IVariant, IEquatable<Variant<T1>>
     ///<inheritdoc />
     public override Type? GetSetType()
     {
-        return SetItem switch
+        return _setItem switch
         {
             SetItems.None => null,
             SetItems.Item1 when _item is not null => typeof(T1),
@@ -82,7 +91,7 @@ public class Variant<T1> : Variant, IVariant, IEquatable<Variant<T1>>
     /// </summary>
     public void Visit(Action<T1> action)
     {
-        if (SetItem == SetItems.Item1 && _item is not null) action(_item);
+        if (_setItem == SetItems.Item1 && _item is not null) action(_item);
     }
 
     /// <summary>
@@ -92,7 +101,7 @@ public class Variant<T1> : Variant, IVariant, IEquatable<Variant<T1>>
     /// <returns>Value returned from the delegate, default if there was no correct set item.</returns>
     public TResult? Visit<TResult>(Func<T1, TResult> func)
     {
-        if (SetItem == SetItems.Item1 && _item is not null)
+        if (_setItem == SetItems.Item1 && _item is not null)
             return func(_item);
         return default;
     }
@@ -106,8 +115,8 @@ public class Variant<T1> : Variant, IVariant, IEquatable<Variant<T1>>
     {
         if (ReferenceEquals(null, other)) return false;
         if (ReferenceEquals(this, other)) return true;
-        if (SetItem != other.SetItem) return false;
-        return SetItem switch
+        if (_setItem != other._setItem) return false;
+        return _setItem switch
         {
             SetItems.None => true,
             SetItems.Item1 => EqualityComparer<T1?>.Default.Equals(_item, other._item),
@@ -125,7 +134,7 @@ public class Variant<T1> : Variant, IVariant, IEquatable<Variant<T1>>
 
     public override int GetHashCode()
     {
-        return HashCode.Combine((int) SetItem, _item);
+        return HashCode.Combine((int) _setItem, _item);
     }
 
     public static bool operator ==(Variant<T1>? left, Variant<T1>? right)

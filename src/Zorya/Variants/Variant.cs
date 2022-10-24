@@ -2,8 +2,7 @@
 
 public abstract class Variant : IVariant
 {
-    protected SetItems SetItem = SetItems.None;
-
+    protected abstract SetItems SetItem { get; set; }
     /// <summary>
     /// Sets a value to the given type without creating a new object.
     /// </summary>
