@@ -57,6 +57,26 @@ public class InheritancePaddingBenchmark
     
     [Benchmark]
     [BenchmarkCategory("Class")]
+    public string PaddingVariantChildPropertyInline()
+    {
+        PaddingVariantChildPropertyInline v = null;
+        string s = string.Empty;
+        for (int i = 0; i < LoopIterations; i++)
+        {
+            v = new PaddingVariantChildPropertyInline();
+            s = v.GetSetItem();
+            Trace.Assert(s != null);
+            s = v.GetSetItem();
+            Trace.Assert(s != null);
+            s = v.GetSetItem();
+            Trace.Assert(s != null);
+        }
+
+        return s;
+    }
+    
+    [Benchmark]
+    [BenchmarkCategory("Class")]
     public string PaddingVariantChildPropertySealed()
     {
         PaddingVariantChildPropertySealed v = null;
@@ -124,6 +144,47 @@ public class InheritancePaddingBenchmark
         for (int i = 0; i < LoopIterations; i++)
         {
             v = new PaddingVariantChildMethod();
+            s = v.GetSetItem();
+            Trace.Assert(s != null);
+            s = v.GetSetItem();
+            Trace.Assert(s != null);
+            s = v.GetSetItem();
+            Trace.Assert(s != null);
+        }
+
+        return s;
+    }
+    
+    [Benchmark]
+    [BenchmarkCategory("Class")]
+    public string PaddingVariantChildMethodInline()
+    {
+        PaddingVariantChildMethodInline v = null;
+        string s = string.Empty;
+        for (int i = 0; i < LoopIterations; i++)
+        {
+            v = new PaddingVariantChildMethodInline();
+            s = v.GetSetItem();
+            Trace.Assert(s != null);
+            s = v.GetSetItem();
+            Trace.Assert(s != null);
+            s = v.GetSetItem();
+            Trace.Assert(s != null);
+        }
+
+        return s;
+    }
+    
+        
+    [Benchmark]
+    [BenchmarkCategory("Class")]
+    public string PaddingVariantChildMethodSealedInline()
+    {
+        PaddingVariantChildMethodSealedInline v = null;
+        string s = string.Empty;
+        for (int i = 0; i < LoopIterations; i++)
+        {
+            v = new PaddingVariantChildMethodSealedInline();
             s = v.GetSetItem();
             Trace.Assert(s != null);
             s = v.GetSetItem();

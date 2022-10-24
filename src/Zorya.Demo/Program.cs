@@ -29,10 +29,11 @@ using Zorya.Variants;
 TypeLayout.PrintLayout<Variant<int, string, char>>();
 TypeLayout.PrintLayout<PaddingVariantChildField>();
 TypeLayout.PrintLayout<PaddingVariantChildProperty>();
+TypeLayout.PrintLayout<PaddingVariantChildMethod>();
 // TypeLayout.PrintLayout<ValueVariant<int, string, char, byte, long, double, object, decimal>>();
 // TypeLayout.PrintLayout<ValueVariant<int, string, char, byte>>();
 // TypeLayout.PrintLayout<ValueVariant<int, string, char>>();
-// return;
+//return;
 // Variant8Demo<int, decimal, char, byte, object, long, string, bool> v = new Variant8Demo<int, decimal, char, byte, object, long, string, bool>(true);
 // Console.WriteLine(v.GetUnsafe<bool>());
 //

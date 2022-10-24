@@ -86,6 +86,35 @@ public class PaddingVariantChildProperty : PaddingVariantParentProperty
     }
 }
 
+public class PaddingVariantChildPropertyInline : PaddingVariantParentProperty
+{
+    private SetItems _setItem;
+    
+    
+    private string S;
+    private int I;
+    private char C;
+
+    protected override SetItems SetItem
+    {
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        get => _setItem;
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        set => _setItem = value;
+    }
+    
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public override string TestInline()
+    {
+        return _setItem + S + I + C;
+    }
+
+    public override string Test()
+    {
+        return _setItem + S + I + C;
+    }
+}
+
 public sealed class PaddingVariantChildPropertySealed : PaddingVariantParentProperty
 {
     private SetItems _setItem;
@@ -166,6 +195,9 @@ public abstract class PaddingVariantParentMethod
 public class PaddingVariantChildMethodSealed : PaddingVariantParentMethod
 {
     private SetItems _setItems;
+    private string S;
+    private int I;
+    private char C;
     
     protected sealed override SetItems SetItem()
     {
@@ -176,10 +208,43 @@ public class PaddingVariantChildMethodSealed : PaddingVariantParentMethod
 public class PaddingVariantChildMethod : PaddingVariantParentMethod
 {
     private SetItems _setItems;
+    private string S;
+    private int I;
+    private char C;
     
     protected override SetItems SetItem()
     {
         return _setItems;
     }
 }
+
+public class PaddingVariantChildMethodInline : PaddingVariantParentMethod
+{
+    private SetItems _setItems;
+    private string S;
+    private int I;
+    private char C;
+    
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    protected override SetItems SetItem()
+    {
+        return _setItems;
+    }
+}
+
+public class PaddingVariantChildMethodSealedInline : PaddingVariantParentMethod
+{
+    private SetItems _setItems;
+     private string S;
+        private int I;
+        private char C;
+    
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    protected sealed override SetItems SetItem()
+    {
+        return _setItems;
+    }
+}
+
+
 
