@@ -46,4 +46,29 @@ public class ValueVariant8Test
         v = 'c';
         Assert.AreEqual(8, v.Visit(_ => 1, _ => 2, _ => 3, _ => 4, _ => 5, _ => 6, _ => 7, _ => 8));
     }
+    
+    [Test]
+    public void Equality()
+    {
+        ValueVariant<int, string, double, long, float, Point, byte, char> v1 = 'c';
+        ValueVariant<int, string, double, long, float, Point, byte, char> v2 = 'c';
+        Assert.AreEqual(v1, v2);
+    }
+
+    [Test]
+    public void Inequality()
+    {
+        ValueVariant<int, string, double, long, float, Point, byte, char> v1 = 10;
+        ValueVariant<int, string, double, long, float, Point, byte, char> v2 = 'c';
+        Assert.AreNotEqual(v1, v2);
+    }
+    
+    [Test]
+    public void IsSet()
+    {
+        ValueVariant<int, string, double, long, float, Point, byte, char> v;
+        v = 'c';
+        Assert.AreEqual(true, v.IsSet<char>());
+        Assert.AreEqual(false, v.IsSet<int>());
+    }
 }

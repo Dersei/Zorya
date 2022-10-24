@@ -2,7 +2,8 @@
 
 namespace Zorya.ValueVariants;
 
-public readonly struct ValueVariant<T1, T2, T3, T4, T5, T6> : IValueVariant
+public readonly struct ValueVariant<T1, T2, T3, T4, T5, T6> : IValueVariant,
+    IEquatable<ValueVariant<T1, T2, T3, T4, T5, T6>>
 {
     private ValueVariant(bool _)
     {
@@ -53,31 +54,37 @@ public readonly struct ValueVariant<T1, T2, T3, T4, T5, T6> : IValueVariant
 
     public static implicit operator ValueVariant<T1, T2, T3, T4, T5, T6>(T1 value)
     {
+        if (value is null) return default;
         return new ValueVariant<T1, T2, T3, T4, T5, T6>(value);
     }
 
     public static implicit operator ValueVariant<T1, T2, T3, T4, T5, T6>(T2 value)
     {
+        if (value is null) return default;
         return new ValueVariant<T1, T2, T3, T4, T5, T6>(value);
     }
 
     public static implicit operator ValueVariant<T1, T2, T3, T4, T5, T6>(T3 value)
     {
+        if (value is null) return default;
         return new ValueVariant<T1, T2, T3, T4, T5, T6>(value);
     }
 
     public static implicit operator ValueVariant<T1, T2, T3, T4, T5, T6>(T4 value)
     {
+        if (value is null) return default;
         return new ValueVariant<T1, T2, T3, T4, T5, T6>(value);
     }
 
     public static implicit operator ValueVariant<T1, T2, T3, T4, T5, T6>(T5 value)
     {
+        if (value is null) return default;
         return new ValueVariant<T1, T2, T3, T4, T5, T6>(value);
     }
 
     public static implicit operator ValueVariant<T1, T2, T3, T4, T5, T6>(T6 value)
     {
+        if (value is null) return default;
         return new ValueVariant<T1, T2, T3, T4, T5, T6>(value);
     }
 
@@ -115,22 +122,26 @@ public readonly struct ValueVariant<T1, T2, T3, T4, T5, T6> : IValueVariant
         return variant.TryGet(out value);
     }
 
+    /// <inheritdoc />
+    public bool IsSet<T>() => _setItem != SetItems.None && TryGet(out T? _);
+
     /// <summary>
     ///     Gets a value of the given type. Throws <see cref="BadValueVariantAccessException" /> if type isn't set.
     /// </summary>
     /// <typeparam name="T">Requested type.</typeparam>
     /// <returns></returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public T Get<T>()
     {
         return _setItem switch
         {
             SetItems.None => throw new BadValueVariantAccessException(typeof(T), this),
-            SetItems.Item1 when _item1 is T t1 => t1,
-            SetItems.Item2 when _item2 is T t2 => t2,
-            SetItems.Item3 when _item3 is T t3 => t3,
-            SetItems.Item4 when _item4 is T t4 => t4,
-            SetItems.Item5 when _item5 is T t5 => t5,
-            SetItems.Item6 when _item6 is T t6 => t6,
+            SetItems.Item1 when typeof(T) == typeof(T1) && _item1 is T t1 => t1,
+            SetItems.Item2 when typeof(T) == typeof(T2) && _item2 is T t2 => t2,
+            SetItems.Item3 when typeof(T) == typeof(T3) && _item3 is T t3 => t3,
+            SetItems.Item4 when typeof(T) == typeof(T4) && _item4 is T t4 => t4,
+            SetItems.Item5 when typeof(T) == typeof(T5) && _item5 is T t5 => t5,
+            SetItems.Item6 when typeof(T) == typeof(T6) && _item6 is T t6 => t6,
             _ => throw new BadValueVariantAccessException(typeof(T), this)
         };
     }
@@ -141,6 +152,7 @@ public readonly struct ValueVariant<T1, T2, T3, T4, T5, T6> : IValueVariant
     /// <param name="value">Extracted value, default if method returns false.</param>
     /// <typeparam name="T">Requested type.</typeparam>
     /// <returns></returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public bool TryGet<T>(out T? value)
     {
         if (ValueVariant.TestItem(_item1, SetItems.Item1 == _setItem, out value)) return true;
@@ -150,9 +162,9 @@ public readonly struct ValueVariant<T1, T2, T3, T4, T5, T6> : IValueVariant
         if (ValueVariant.TestItem(_item5, SetItems.Item5 == _setItem, out value)) return true;
         return ValueVariant.TestItem(_item6, SetItems.Item6 == _setItem, out value);
     }
- 
+
     /// <inheritdoc />
-    public bool IsSet() => GetSetType() != null;
+    public bool IsValid() => _setItem != SetItems.None && GetSetType() is not null;
 
     /// <summary>
     /// Returns set type.
@@ -163,13 +175,13 @@ public readonly struct ValueVariant<T1, T2, T3, T4, T5, T6> : IValueVariant
         return _setItem switch
         {
             SetItems.None => null,
-            SetItems.Item1 when _item1 is not null => _item1.GetType(),
-            SetItems.Item2 when _item2 is not null => _item2.GetType(),
-            SetItems.Item3 when _item3 is not null => _item3.GetType(),
-            SetItems.Item4 when _item4 is not null => _item4.GetType(),
-            SetItems.Item5 when _item5 is not null => _item5.GetType(),
-            SetItems.Item6 when _item6 is not null => _item6.GetType(),
-            _ => throw new ArgumentOutOfRangeException()
+            SetItems.Item1 when _item1 is not null => typeof(T1),
+            SetItems.Item2 when _item2 is not null => typeof(T2),
+            SetItems.Item3 when _item3 is not null => typeof(T3),
+            SetItems.Item4 when _item4 is not null => typeof(T4),
+            SetItems.Item5 when _item5 is not null => typeof(T5),
+            SetItems.Item6 when _item6 is not null => typeof(T6),
+            _ => null
         };
     }
 
@@ -179,12 +191,12 @@ public readonly struct ValueVariant<T1, T2, T3, T4, T5, T6> : IValueVariant
     public void Visit(Action<T1> action1, Action<T2> action2, Action<T3> action3, Action<T4> action4,
         Action<T5> action5, Action<T6> action6)
     {
-        if (_setItem == SetItems.Item1) action1(_item1!);
-        if (_setItem == SetItems.Item2) action2(_item2!);
-        if (_setItem == SetItems.Item3) action3(_item3!);
-        if (_setItem == SetItems.Item4) action4(_item4!);
-        if (_setItem == SetItems.Item5) action5(_item5!);
-        if (_setItem == SetItems.Item6) action6(_item6!);
+        if (_setItem == SetItems.Item1 && _item1 is not null) action1(_item1);
+        if (_setItem == SetItems.Item2 && _item2 is not null) action2(_item2);
+        if (_setItem == SetItems.Item3 && _item3 is not null) action3(_item3);
+        if (_setItem == SetItems.Item4 && _item4 is not null) action4(_item4);
+        if (_setItem == SetItems.Item5 && _item5 is not null) action5(_item5);
+        if (_setItem == SetItems.Item6 && _item6 is not null) action6(_item6);
     }
 
     /// <summary>
@@ -197,12 +209,12 @@ public readonly struct ValueVariant<T1, T2, T3, T4, T5, T6> : IValueVariant
     {
         return _setItem switch
         {
-            SetItems.Item1 => func1(_item1!),
-            SetItems.Item2 => func2(_item2!),
-            SetItems.Item3 => func3(_item3!),
-            SetItems.Item4 => func4(_item4!),
-            SetItems.Item5 => func5(_item5!),
-            SetItems.Item6 => func6(_item6!),
+            SetItems.Item1 when _item1 is not null => func1(_item1),
+            SetItems.Item2 when _item2 is not null => func2(_item2),
+            SetItems.Item3 when _item3 is not null => func3(_item3),
+            SetItems.Item4 when _item4 is not null => func4(_item4),
+            SetItems.Item5 when _item5 is not null => func5(_item5),
+            SetItems.Item6 when _item6 is not null => func6(_item6),
             _ => default
         };
     }
@@ -304,13 +316,51 @@ public readonly struct ValueVariant<T1, T2, T3, T4, T5, T6> : IValueVariant
     {
         return _setItem switch
         {
-            SetItems.Item1 => _item1!.ToString(),
-            SetItems.Item2 => _item2!.ToString(),
-            SetItems.Item3 => _item3!.ToString(),
-            SetItems.Item4 => _item4!.ToString(),
-            SetItems.Item5 => _item5!.ToString(),
-            SetItems.Item6 => _item6!.ToString(),
+            SetItems.Item1 => _item1?.ToString(),
+            SetItems.Item2 => _item2?.ToString(),
+            SetItems.Item3 => _item3?.ToString(),
+            SetItems.Item4 => _item4?.ToString(),
+            SetItems.Item5 => _item5?.ToString(),
+            SetItems.Item6 => _item6?.ToString(),
             _ => string.Empty
         } ?? string.Empty;
+    }
+
+    public bool Equals(ValueVariant<T1, T2, T3, T4, T5, T6> other)
+    {
+        return _setItem == other._setItem
+               && _setItem switch
+               {
+                   SetItems.None => true,
+                   SetItems.Item1 => EqualityComparer<T1?>.Default.Equals(_item1, other._item1),
+                   SetItems.Item2 => EqualityComparer<T2?>.Default.Equals(_item2, other._item2),
+                   SetItems.Item3 => EqualityComparer<T3?>.Default.Equals(_item3, other._item3),
+                   SetItems.Item4 => EqualityComparer<T4?>.Default.Equals(_item4, other._item4),
+                   SetItems.Item5 => EqualityComparer<T5?>.Default.Equals(_item5, other._item5),
+                   SetItems.Item6 => EqualityComparer<T6?>.Default.Equals(_item6, other._item6),
+                   _ => false
+               };
+    }
+
+    public override bool Equals(object? obj)
+    {
+        return obj is ValueVariant<T1, T2, T3, T4, T5, T6> other && Equals(other);
+    }
+
+    public override int GetHashCode()
+    {
+        return HashCode.Combine((int)_setItem, _item1, _item2, _item3, _item4, _item5, _item6);
+    }
+
+    public static bool operator ==(ValueVariant<T1, T2, T3, T4, T5, T6> left,
+        ValueVariant<T1, T2, T3, T4, T5, T6> right)
+    {
+        return left.Equals(right);
+    }
+
+    public static bool operator !=(ValueVariant<T1, T2, T3, T4, T5, T6> left,
+        ValueVariant<T1, T2, T3, T4, T5, T6> right)
+    {
+        return !left.Equals(right);
     }
 }

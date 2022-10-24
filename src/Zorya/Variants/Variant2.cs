@@ -1,61 +1,65 @@
 ﻿using System.Diagnostics.CodeAnalysis;
+using System.Runtime.CompilerServices;
 
 namespace Zorya.Variants;
 
-public class Variant<T1, T2> : Variant, IVariant
+public sealed class Variant<T1, T2> : Variant, IVariant, IEquatable<Variant<T1, T2>>
 {
-    private T1? _item1;
-    private T2? _item2;
+    private IVariantValue _value;
+
+    private SetItems _setItem;
+
+    protected override SetItems SetItem
+    {
+        get => _setItem;
+        set => _setItem = value;
+    }
 
     public Variant(T1 item1)
     {
-        _item1 = item1;
-        SetItem = SetItems.Item1;
+        _value = new VariantValue<T1>(item1);
+        _setItem = SetItems.Item1;
     }
 
     public Variant(T2 item2)
     {
-        _item2 = item2;
-        SetItem = SetItems.Item2;
+        _value = new VariantValue<T2>(item2);
+        _setItem = SetItems.Item2;
     }
 
     ///<inheritdoc />
     public override bool Set<T>(T value)
     {
-        return SetItemInternal(ref _item1, SetItems.Item1, value) ||
-               SetItemInternal(ref _item2, SetItems.Item2, value);
+        return SetItemInternalValue<T1, T>(ref _value, SetItems.Item1, value)
+               || SetItemInternalValue<T2, T>(ref _value, SetItems.Item2, value);
     }
 
     ///<inheritdoc />
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public override T Get<T>()
     {
-        return SetItem switch
-        {
-            SetItems.None => throw new BadVariantAccessException(typeof(T), this),
-            SetItems.Item1 when _item1 is T t1 => t1,
-            SetItems.Item2 when _item2 is T t2 => t2,
-            _ => throw new BadVariantAccessException(typeof(T), this)
-        };
+        if (_value is VariantValue<T> {Item: { } item})
+            return item;
+        throw new BadVariantAccessException(typeof(T), this);
     }
 
     ///<inheritdoc />
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public override bool TryGet<T>([MaybeNull] out T value)
     {
-        if (TestItem(_item1, SetItems.Item1, out value)) return true;
-        return TestItem(_item2, SetItems.Item2, out value);
+        if (_value is VariantValue<T> {Item: { } item})
+        {
+            value = item;
+            return true;
+        }
+
+        value = default;
+        return false;
     }
 
     ///<inheritdoc />
-    public override Type? GetSetType()
-    {
-        return SetItem switch
-        {
-            SetItems.None => null,
-            SetItems.Item1 when _item1 is not null => _item1.GetType(),
-            SetItems.Item2 when _item2 is not null => _item2.GetType(),
-            _ => throw new ArgumentOutOfRangeException()
-        };
-    }
+    public override Type? GetSetType() => _value.IsValid() ? _value.GetSetType() : null;
+
 
     public static implicit operator Variant<T1, T2>(T1 value)
     {
@@ -95,8 +99,8 @@ public class Variant<T1, T2> : Variant, IVariant
     /// </summary>
     public void Visit(Action<T1> action1, Action<T2> action2)
     {
-        if (SetItem == SetItems.Item1) action1(_item1!);
-        if (SetItem == SetItems.Item2) action2(_item2!);
+        if (_setItem == SetItems.Item1 && _value is VariantValue<T1> {Item : { } value1}) action1(value1);
+        if (_setItem == SetItems.Item2 && _value is VariantValue<T2> {Item : { } value2}) action2(value2);
     }
 
     /// <summary>
@@ -106,21 +110,47 @@ public class Variant<T1, T2> : Variant, IVariant
     /// <returns>Value returned from the delegate, default if there was no correct set item.</returns>
     public TResult? Visit<TResult>(Func<T1, TResult> func1, Func<T2, TResult> func2)
     {
-        return SetItem switch
+        return _setItem switch
         {
-            SetItems.Item1 => func1(_item1!),
-            SetItems.Item2 => func2(_item2!),
+            SetItems.Item1 when _value is VariantValue<T1> {Item : { } value1} => func1(value1),
+            SetItems.Item2 when _value is VariantValue<T2> {Item : { } value2} => func2(value2),
             _ => default
         };
     }
-    
+
     public override string ToString()
     {
-        return SetItem switch
-        {
-            SetItems.Item1 => _item1!.ToString(),
-            SetItems.Item2 => _item2!.ToString(),
-            _ => string.Empty
-        } ?? string.Empty;
+        return _value.ToString() ?? string.Empty;
+    }
+
+    public bool Equals(Variant<T1, T2>? other)
+    {
+        if (ReferenceEquals(null, other)) return false;
+        if (ReferenceEquals(this, other)) return true;
+        return _setItem == other._setItem && _value.GetSetType() == other._value.GetSetType() &&
+               _value.Equals(other._value);
+    }
+
+    public override bool Equals(object? obj)
+    {
+        if (ReferenceEquals(null, obj)) return false;
+        if (ReferenceEquals(this, obj)) return true;
+        if (obj.GetType() != GetType()) return false;
+        return Equals((Variant<T1, T2>) obj);
+    }
+
+    public override int GetHashCode()
+    {
+        return HashCode.Combine(_value, (int) _setItem);
+    }
+
+    public static bool operator ==(Variant<T1, T2>? left, Variant<T1, T2>? right)
+    {
+        return Equals(left, right);
+    }
+
+    public static bool operator !=(Variant<T1, T2>? left, Variant<T1, T2>? right)
+    {
+        return !Equals(left, right);
     }
 }

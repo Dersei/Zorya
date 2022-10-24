@@ -7,8 +7,21 @@
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
+    <PropertyGroup>
+        <PlatformTarget>AnyCPU</PlatformTarget>
+        <DebugType>pdbonly</DebugType>
+        <DebugSymbols>true</DebugSymbols>
+    </PropertyGroup>
+
     <ItemGroup>
-        <ProjectReference Include="..\Zorya\Zorya.csproj"/>
+        <ProjectReference Include="..\Zorya\Zorya.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="BenchmarkDotNet" Version="0.13.2" />
+      <PackageReference Include="BenchmarkDotNet.Annotations" Version="0.13.2" />
+      <PackageReference Include="BenchmarkDotNet.Diagnostics.Windows" Version="0.13.2" />
+      <PackageReference Include="ObjectLayoutInspector" Version="0.1.4" />
     </ItemGroup>
 
 </Project>

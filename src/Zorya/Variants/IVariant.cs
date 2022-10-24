@@ -8,6 +8,13 @@ public interface IVariant
     /// <typeparam name="T">Requested type.</typeparam>
     /// <returns></returns>
     public T Get<T>();
+    
+    /// <summary>
+    /// Returns true if the given type is set.
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <returns></returns>
+    bool IsSet<T>();
 
     /// <summary>
     ///     Gets a value of the given type. Returns false if type isn't set.

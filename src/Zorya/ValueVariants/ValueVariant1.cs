@@ -1,6 +1,9 @@
-﻿namespace Zorya.ValueVariants;
+﻿using System.Runtime.CompilerServices;
 
-public readonly struct ValueVariant<T1> : IValueVariant
+namespace Zorya.ValueVariants;
+
+public readonly struct ValueVariant<T1> : IValueVariant,
+    IEquatable<ValueVariant<T1>>
 {
     public ValueVariant(T1 item)
     {
@@ -10,6 +13,7 @@ public readonly struct ValueVariant<T1> : IValueVariant
 
     public static implicit operator ValueVariant<T1>(T1 value)
     {
+        if (value is null) return default;
         return new ValueVariant<T1>(value);
     }
 
@@ -40,17 +44,21 @@ public readonly struct ValueVariant<T1> : IValueVariant
         return variant.TryGet(out value);
     }
 
+    /// <inheritdoc />
+    public bool IsSet<T>() => _setItem != SetItems.None && TryGet(out T? _);
+
     /// <summary>
     ///     Gets a value of the given type. Throws <see cref="BadValueVariantAccessException" /> if type isn't set.
     /// </summary>
     /// <typeparam name="T">Requested type.</typeparam>
     /// <returns></returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public T Get<T>()
     {
         return _setItem switch
         {
             SetItems.None => throw new BadValueVariantAccessException(typeof(T), this),
-            SetItems.Item1 when _item is T t => t,
+            SetItems.Item1 when typeof(T) == typeof(T1) && _item is T t1 => t1,
             _ => throw new BadValueVariantAccessException(typeof(T), this)
         };
     }
@@ -61,13 +69,14 @@ public readonly struct ValueVariant<T1> : IValueVariant
     /// <param name="value">Extracted value, default if method returns false.</param>
     /// <typeparam name="T">Requested type.</typeparam>
     /// <returns></returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public bool TryGet<T>(out T? value)
     {
         return ValueVariant.TestItem(_item, _setItem == SetItems.Item1, out value);
     }
- 
+
     /// <inheritdoc />
-    public bool IsSet() => GetSetType() != null;
+    public bool IsValid() => _setItem != SetItems.None && GetSetType() is not null;
 
     /// <summary>
     /// Returns set type.
@@ -78,18 +87,18 @@ public readonly struct ValueVariant<T1> : IValueVariant
         return _setItem switch
         {
             SetItems.None => null,
-            SetItems.Item1 when _item is not null => _item.GetType(),
-            _ => throw new ArgumentOutOfRangeException()
+            SetItems.Item1 when _item is not null => typeof(T1),
+            _ => null
         };
     }
-    
+
     /// <summary>
     ///     Allows to use a delegate on set item.
     /// </summary>
     /// <param name="action"></param>
     public void Visit(Action<T1> action)
     {
-        if (_setItem == SetItems.Item1) action(_item!);
+        if (_setItem == SetItems.Item1 && _item is not null) action(_item);
     }
 
     /// <summary>
@@ -100,7 +109,7 @@ public readonly struct ValueVariant<T1> : IValueVariant
     /// <returns>Value returned from the delegate, default if there was no correct set item.</returns>
     public TResult? Visit<TResult>(Func<T1, TResult> func)
     {
-        if (_setItem == SetItems.Item1) return func(_item!);
+        if (_setItem == SetItems.Item1 && _item is not null) return func(_item!);
         return default;
     }
 
@@ -200,5 +209,36 @@ public readonly struct ValueVariant<T1> : IValueVariant
     public override string ToString()
     {
         return _item?.ToString() ?? string.Empty;
+    }
+
+    public bool Equals(ValueVariant<T1> other)
+    {
+        return _setItem == other._setItem
+               && _setItem switch
+               {
+                   SetItems.None => true,
+                   SetItems.Item1 => EqualityComparer<T1?>.Default.Equals(_item, other._item),
+                   _ => false
+               };
+    }
+
+    public override bool Equals(object? obj)
+    {
+        return obj is ValueVariant<T1> other && Equals(other);
+    }
+
+    public override int GetHashCode()
+    {
+        return HashCode.Combine((int)_setItem, _item);
+    }
+
+    public static bool operator ==(ValueVariant<T1> left, ValueVariant<T1> right)
+    {
+        return left.Equals(right);
+    }
+
+    public static bool operator !=(ValueVariant<T1> left, ValueVariant<T1> right)
+    {
+        return !left.Equals(right);
     }
 }

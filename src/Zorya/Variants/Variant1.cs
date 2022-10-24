@@ -1,15 +1,25 @@
 ﻿using System.Diagnostics.CodeAnalysis;
+using System.Runtime.CompilerServices;
 
 namespace Zorya.Variants;
 
-public class Variant<T1> : Variant, IVariant
+public sealed class Variant<T1> : Variant, IVariant, IEquatable<Variant<T1>>
 {
     private T1? _item;
+
 
     public Variant(T1 item)
     {
         _item = item;
-        SetItem = SetItems.Item1;
+        _setItem = SetItems.Item1;
+    }
+
+    private SetItems _setItem;
+
+    protected override SetItems SetItem
+    {
+        get => _setItem;
+        set => _setItem = value;
     }
 
     ///<inheritdoc />
@@ -19,17 +29,19 @@ public class Variant<T1> : Variant, IVariant
     }
 
     ///<inheritdoc />
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public override T Get<T>()
     {
-        return SetItem switch
+        return _setItem switch
         {
             SetItems.None => throw new BadVariantAccessException(typeof(T1), this),
-            SetItems.Item1 when _item is T t => t,
+            SetItems.Item1 when typeof(T) == typeof(T1) && _item is T t1 => t1,
             _ => throw new BadVariantAccessException(typeof(T1), this)
         };
     }
 
     ///<inheritdoc />
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public override bool TryGet<T>([MaybeNull] out T value)
     {
         return TestItem(_item, SetItems.Item1, out value);
@@ -38,11 +50,11 @@ public class Variant<T1> : Variant, IVariant
     ///<inheritdoc />
     public override Type? GetSetType()
     {
-        return SetItem switch
+        return _setItem switch
         {
             SetItems.None => null,
-            SetItems.Item1 when _item is not null => _item.GetType(),
-            _ => throw new ArgumentOutOfRangeException()
+            SetItems.Item1 when _item is not null => typeof(T1),
+            _ => null
         };
     }
 
@@ -79,7 +91,7 @@ public class Variant<T1> : Variant, IVariant
     /// </summary>
     public void Visit(Action<T1> action)
     {
-        if (SetItem == SetItems.Item1) action(_item!);
+        if (_setItem == SetItems.Item1 && _item is not null) action(_item);
     }
 
     /// <summary>
@@ -89,12 +101,49 @@ public class Variant<T1> : Variant, IVariant
     /// <returns>Value returned from the delegate, default if there was no correct set item.</returns>
     public TResult? Visit<TResult>(Func<T1, TResult> func)
     {
-        if (SetItem == SetItems.Item1) return func(_item!);
+        if (_setItem == SetItems.Item1 && _item is not null)
+            return func(_item);
         return default;
     }
 
     public override string ToString()
     {
         return _item?.ToString() ?? string.Empty;
+    }
+
+    public bool Equals(Variant<T1>? other)
+    {
+        if (ReferenceEquals(null, other)) return false;
+        if (ReferenceEquals(this, other)) return true;
+        if (_setItem != other._setItem) return false;
+        return _setItem switch
+        {
+            SetItems.None => true,
+            SetItems.Item1 => EqualityComparer<T1?>.Default.Equals(_item, other._item),
+            _ => false
+        };
+    }
+
+    public override bool Equals(object? obj)
+    {
+        if (ReferenceEquals(null, obj)) return false;
+        if (ReferenceEquals(this, obj)) return true;
+        if (obj.GetType() != GetType()) return false;
+        return Equals((Variant<T1>) obj);
+    }
+
+    public override int GetHashCode()
+    {
+        return HashCode.Combine((int) _setItem, _item);
+    }
+
+    public static bool operator ==(Variant<T1>? left, Variant<T1>? right)
+    {
+        return Equals(left, right);
+    }
+
+    public static bool operator !=(Variant<T1>? left, Variant<T1>? right)
+    {
+        return !Equals(left, right);
     }
 }

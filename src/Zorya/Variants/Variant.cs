@@ -2,8 +2,7 @@
 
 public abstract class Variant : IVariant
 {
-    protected SetItems SetItem = SetItems.None;
-
+    protected abstract SetItems SetItem { get; set; }
     /// <summary>
     /// Sets a value to the given type without creating a new object.
     /// </summary>
@@ -18,7 +17,9 @@ public abstract class Variant : IVariant
     /// <typeparam name="T">Requested type.</typeparam>
     /// <returns></returns>
     public abstract T Get<T>();
-    
+
+    public bool IsSet<T>() => SetItem != SetItems.None && TryGet(out T? _);
+
     /// <summary>
     ///     Gets a value of the given type. Returns false if type isn't set.
     /// </summary>
@@ -250,7 +251,7 @@ public abstract class Variant : IVariant
 
     protected bool TestItem<TItem, TValue>(TItem item, SetItems setItem, out TValue? value)
     {
-        if (item is TValue v && SetItem == setItem)
+        if (SetItem == setItem && typeof(TItem) == typeof(TValue) && item is TValue v)
         {
             value = v;
             return true;
@@ -262,7 +263,7 @@ public abstract class Variant : IVariant
 
     protected bool SetItemInternal<TItem, TValue>(ref TItem item, SetItems setItem, TValue? value)
     {
-        if (value is TItem v)
+        if (typeof(TValue) == typeof(TItem) && value is TItem v)
         {
             SetItem = setItem switch
             {
@@ -277,6 +278,29 @@ public abstract class Variant : IVariant
                 _ => throw new ArgumentOutOfRangeException(nameof(setItem), setItem, null)
             };
             item = v;
+            return true;
+        }
+
+        return false;
+    }
+    
+    protected bool SetItemInternalValue<TItem, TValue>(ref IVariantValue item, SetItems setItem, TValue? value)
+    {
+        if (typeof(TValue) == typeof(TItem) && value is TItem v)
+        {
+            SetItem = setItem switch
+            {
+                SetItems.Item1 => SetItems.Item1,
+                SetItems.Item2 => SetItems.Item2,
+                SetItems.Item3 => SetItems.Item3,
+                SetItems.Item4 => SetItems.Item4,
+                SetItems.Item5 => SetItems.Item5,
+                SetItems.Item6 => SetItems.Item6,
+                SetItems.Item7 => SetItems.Item7,
+                SetItems.Item8 => SetItems.Item8,
+                _ => throw new ArgumentOutOfRangeException(nameof(setItem), setItem, null)
+            };
+            item = new VariantValue<TItem>(v);
             return true;
         }
 

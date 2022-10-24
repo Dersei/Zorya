@@ -43,4 +43,29 @@ public class ValueVariant2Test
         ValueVariant<int, string> v = "10";
         Assert.AreEqual(2, v.Visit(_ => 1, _ => 2));
     }
+    
+    [Test]
+    public void Equality()
+    {
+        ValueVariant<int, string> v1 = "test";
+        ValueVariant<int, string> v2 = "test";
+        Assert.AreEqual(v1, v2);
+    }
+    
+    [Test]
+    public void Inequality()
+    {
+        ValueVariant<int, string> v1 = "test";
+        ValueVariant<int, string> v2 = 10;
+        Assert.AreNotEqual(v1, v2);
+    }
+    
+    [Test]
+    public void IsSet()
+    {
+        ValueVariant<int, string> v;
+        v = "10";
+        Assert.AreEqual(true, v.IsSet<string>());
+        Assert.AreEqual(false, v.IsSet<int>());
+    }
 }

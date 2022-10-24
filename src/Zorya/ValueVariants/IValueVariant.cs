@@ -9,10 +9,17 @@ public interface IValueVariant
     Type? GetSetType();
     
     /// <summary>
-    ///     Returns true if variant is set.
+    ///     Returns true if variant is valid.
     /// </summary>
     /// <returns></returns>
-    bool IsSet();
+    bool IsValid();
+
+    /// <summary>
+    /// Returns true if the given type is set.
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <returns></returns>
+    bool IsSet<T>();
 
     /// <summary>
     ///     Get a value of the given type. Throws <see cref="BadValueVariantAccessException" /> if type isn't set.
