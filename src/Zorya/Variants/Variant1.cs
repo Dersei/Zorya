@@ -6,7 +6,7 @@ namespace Zorya.Variants;
 public sealed class Variant<T1> : Variant, IVariant, IEquatable<Variant<T1>>
 {
     private T1? _item;
-    
+
 
     public Variant(T1 item)
     {
@@ -15,7 +15,7 @@ public sealed class Variant<T1> : Variant, IVariant, IEquatable<Variant<T1>>
     }
 
     private SetItems _setItem;
-    
+
     protected override SetItems SetItem
     {
         get => _setItem;

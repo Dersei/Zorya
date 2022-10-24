@@ -283,6 +283,29 @@ public abstract class Variant : IVariant
 
         return false;
     }
+    
+    protected bool SetItemInternalValue<TItem, TValue>(ref IVariantValue item, SetItems setItem, TValue? value)
+    {
+        if (typeof(TValue) == typeof(TItem) && value is TItem v)
+        {
+            SetItem = setItem switch
+            {
+                SetItems.Item1 => SetItems.Item1,
+                SetItems.Item2 => SetItems.Item2,
+                SetItems.Item3 => SetItems.Item3,
+                SetItems.Item4 => SetItems.Item4,
+                SetItems.Item5 => SetItems.Item5,
+                SetItems.Item6 => SetItems.Item6,
+                SetItems.Item7 => SetItems.Item7,
+                SetItems.Item8 => SetItems.Item8,
+                _ => throw new ArgumentOutOfRangeException(nameof(setItem), setItem, null)
+            };
+            item = new VariantValue<TItem>(v);
+            return true;
+        }
+
+        return false;
+    }
 
     protected enum SetItems : byte
     {

@@ -6,13 +6,10 @@ namespace Zorya.Variants;
 public sealed class Variant<T1, T2, T3, T4> : Variant, IVariant,
     IEquatable<Variant<T1, T2, T3, T4>>
 {
-    private T1? _item1;
-    private T2? _item2;
-    private T3? _item3;
-    private T4? _item4;
-    
+    private IVariantValue _value;
+
     private SetItems _setItem;
-    
+
     protected override SetItems SetItem
     {
         get => _setItem;
@@ -21,25 +18,25 @@ public sealed class Variant<T1, T2, T3, T4> : Variant, IVariant,
 
     public Variant(T1 item1)
     {
-        _item1 = item1;
+        _value = new VariantValue<T1>(item1);
         _setItem = SetItems.Item1;
     }
 
     public Variant(T2 item2)
     {
-        _item2 = item2;
+        _value = new VariantValue<T2>(item2);
         _setItem = SetItems.Item2;
     }
 
     public Variant(T3 item3)
     {
-        _item3 = item3;
+        _value = new VariantValue<T3>(item3);
         _setItem = SetItems.Item3;
     }
 
     public Variant(T4 item4)
     {
-        _item4 = item4;
+        _value = new VariantValue<T4>(item4);
         _setItem = SetItems.Item4;
     }
 
@@ -47,48 +44,36 @@ public sealed class Variant<T1, T2, T3, T4> : Variant, IVariant,
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public override T Get<T>()
     {
-        return _setItem switch
-        {
-            SetItems.None => throw new BadVariantAccessException(typeof(T), this),
-            SetItems.Item1 when typeof(T) == typeof(T1) && _item1 is T t1 => t1,
-            SetItems.Item2 when typeof(T) == typeof(T2) && _item2 is T t2 => t2,
-            SetItems.Item3 when typeof(T) == typeof(T3) && _item3 is T t3 => t3,
-            SetItems.Item4 when typeof(T) == typeof(T4) && _item4 is T t4 => t4,
-            _ => throw new BadVariantAccessException(typeof(T), this)
-        };
+        if (_value is VariantValue<T> {Item: { } item})
+            return item;
+        throw new BadVariantAccessException(typeof(T), this);
     }
 
     ///<inheritdoc />
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public override bool TryGet<T>([MaybeNull] out T value)
     {
-        if (TestItem(_item1, SetItems.Item1, out value)) return true;
-        if (TestItem(_item2, SetItems.Item2, out value)) return true;
-        if (TestItem(_item3, SetItems.Item3, out value)) return true;
-        return TestItem(_item4, SetItems.Item4, out value);
+        if (_value is VariantValue<T> {Item: { } item})
+        {
+            value = item;
+            return true;
+        }
+
+        value = default;
+        return false;
     }
 
     ///<inheritdoc />
-    public override Type? GetSetType()
-    {
-        return _setItem switch
-        {
-            SetItems.None => null,
-            SetItems.Item1 when _item1 is not null => typeof(T1),
-            SetItems.Item2 when _item2 is not null => typeof(T2),
-            SetItems.Item3 when _item3 is not null => typeof(T3),
-            SetItems.Item4 when _item4 is not null => typeof(T4),
-            _ => null
-        };
-    }
+    public override Type? GetSetType() => _value.IsValid() ? _value.GetSetType() : null;
+
 
     ///<inheritdoc />
     public override bool Set<T>(T value)
     {
-        return SetItemInternal(ref _item1, SetItems.Item1, value)
-               || SetItemInternal(ref _item2, SetItems.Item2, value)
-               || SetItemInternal(ref _item3, SetItems.Item3, value)
-               || SetItemInternal(ref _item4, SetItems.Item4, value);
+        return SetItemInternalValue<T1, T>(ref _value, SetItems.Item1, value)
+               || SetItemInternalValue<T2, T>(ref _value, SetItems.Item2, value)
+               || SetItemInternalValue<T3, T>(ref _value, SetItems.Item3, value)
+               || SetItemInternalValue<T4, T>(ref _value, SetItems.Item4, value);
     }
 
     public static implicit operator Variant<T1, T2, T3, T4>(T1 value)
@@ -139,10 +124,10 @@ public sealed class Variant<T1, T2, T3, T4> : Variant, IVariant,
     /// </summary>
     public void Visit(Action<T1> action1, Action<T2> action2, Action<T3> action3, Action<T4> action4)
     {
-        if (_setItem == SetItems.Item1 && _item1 is not null) action1(_item1);
-        if (_setItem == SetItems.Item2 && _item2 is not null) action2(_item2);
-        if (_setItem == SetItems.Item3 && _item3 is not null) action3(_item3);
-        if (_setItem == SetItems.Item4 && _item4 is not null) action4(_item4);
+        if (_setItem == SetItems.Item1 && _value is VariantValue<T1> {Item : { } value1}) action1(value1);
+        if (_setItem == SetItems.Item2 && _value is VariantValue<T2> {Item : { } value2}) action2(value2);
+        if (_setItem == SetItems.Item3 && _value is VariantValue<T3> {Item : { } value3}) action3(value3);
+        if (_setItem == SetItems.Item4 && _value is VariantValue<T4> {Item : { } value4}) action4(value4);
     }
 
     /// <summary>
@@ -155,40 +140,25 @@ public sealed class Variant<T1, T2, T3, T4> : Variant, IVariant,
     {
         return _setItem switch
         {
-            SetItems.Item1 when _item1 is not null => func1(_item1),
-            SetItems.Item2 when _item2 is not null  => func2(_item2),
-            SetItems.Item3 when _item3 is not null  => func3(_item3),
-            SetItems.Item4 when _item4 is not null  => func4(_item4),
+            SetItems.Item1 when _value is VariantValue<T1> {Item : { } value1} => func1(value1),
+            SetItems.Item2 when _value is VariantValue<T2> {Item : { } value2} => func2(value2),
+            SetItems.Item3 when _value is VariantValue<T3> {Item : { } value3} => func3(value3),
+            SetItems.Item4 when _value is VariantValue<T4> {Item : { } value4} => func4(value4),
             _ => default
         };
     }
 
     public override string ToString()
     {
-        return _setItem switch
-        {
-            SetItems.Item1 => _item1?.ToString(),
-            SetItems.Item2 => _item2?.ToString(),
-            SetItems.Item3 => _item3?.ToString(),
-            SetItems.Item4 => _item4?.ToString(),
-            _ => string.Empty
-        } ?? string.Empty;
+        return _value.ToString() ?? string.Empty;
     }
 
     public bool Equals(Variant<T1, T2, T3, T4>? other)
     {
         if (ReferenceEquals(null, other)) return false;
         if (ReferenceEquals(this, other)) return true;
-        if (_setItem != other._setItem) return false;
-        return _setItem switch
-        {
-            SetItems.None => true,
-            SetItems.Item1 => EqualityComparer<T1?>.Default.Equals(_item1, other._item1),
-            SetItems.Item2 => EqualityComparer<T2?>.Default.Equals(_item2, other._item2),
-            SetItems.Item3 => EqualityComparer<T3?>.Default.Equals(_item3, other._item3),
-            SetItems.Item4 => EqualityComparer<T4?>.Default.Equals(_item4, other._item4),
-            _ => false
-        };
+        return _setItem == other._setItem && _value.GetSetType() == other._value.GetSetType() &&
+               _value.Equals(other._value);
     }
 
     public override bool Equals(object? obj)
@@ -201,7 +171,7 @@ public sealed class Variant<T1, T2, T3, T4> : Variant, IVariant,
 
     public override int GetHashCode()
     {
-        return HashCode.Combine(_item1, _item2, _item3, _item4);
+        return HashCode.Combine(_value, (int) _setItem);
     }
 
     public static bool operator ==(Variant<T1, T2, T3, T4>? left, Variant<T1, T2, T3, T4>? right)
