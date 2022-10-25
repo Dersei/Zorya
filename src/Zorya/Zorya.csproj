@@ -13,8 +13,8 @@
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
         <PackageIcon>zorya_icon_128.png</PackageIcon>
         <PackageTags>variant, types, multiple values</PackageTags>
-        <AssemblyVersion>1.0.1</AssemblyVersion>
-        <FileVersion>1.0.1</FileVersion>
+        <AssemblyVersion>1.1.0</AssemblyVersion>
+        <FileVersion>1.1.0</FileVersion>
         <RepositoryUrl>https://github.com/Dersei/Zorya</RepositoryUrl>
         <RepositoryType>git</RepositoryType>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
@@ -47,7 +47,7 @@
     </PropertyGroup>
 
     <PropertyGroup>
-        <VersionPrefix>1.0.1</VersionPrefix>
+        <VersionPrefix>1.1.0</VersionPrefix>
     </PropertyGroup>
     
 </Project>
