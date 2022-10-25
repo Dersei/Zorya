@@ -134,11 +134,11 @@ public readonly struct ValueVariant<T1, T2, T3> : IValueVariant,
     /// <summary>
     ///     Allows to use a delegate on set item.
     /// </summary>
-    public void Visit(Action<T1> action1, Action<T2> action2, Action<T3> action3)
+    public void Visit(Action<T1>? action1, Action<T2>? action2, Action<T3>? action3)
     {
-        if (_setItem == SetItems.Item1 && _item1 is not null) action1(_item1);
-        if (_setItem == SetItems.Item2 && _item2 is not null) action2(_item2);
-        if (_setItem == SetItems.Item3 && _item3 is not null) action3(_item3);
+        if (_setItem == SetItems.Item1 && _item1 is not null) action1?.Invoke(_item1);
+        if (_setItem == SetItems.Item2 && _item2 is not null) action2?.Invoke(_item2);
+        if (_setItem == SetItems.Item3 && _item3 is not null) action3?.Invoke(_item3);
     }
 
     /// <summary>
@@ -146,13 +146,13 @@ public readonly struct ValueVariant<T1, T2, T3> : IValueVariant,
     /// </summary>
     /// <typeparam name="TResult">Type of the returned value.</typeparam>
     /// <returns>Value returned from the delegate, default if there was no correct set item.</returns>
-    public TResult? Visit<TResult>(Func<T1, TResult> func1, Func<T2, TResult> func2, Func<T3, TResult> func3)
+    public TResult? Visit<TResult>(Func<T1, TResult>? func1, Func<T2, TResult>? func2, Func<T3, TResult>? func3)
     {
         return _setItem switch
         {
-            SetItems.Item1 when _item1 is not null => func1(_item1),
-            SetItems.Item2 when _item2 is not null => func2(_item2),
-            SetItems.Item3 when _item3 is not null => func3(_item3),
+            SetItems.Item1 when _item1 is not null && func1 is not null => func1(_item1),
+            SetItems.Item2 when _item2 is not null && func2 is not null => func2(_item2),
+            SetItems.Item3 when _item3 is not null && func3 is not null => func3(_item3),
             _ => default
         };
     }
@@ -165,6 +165,7 @@ public readonly struct ValueVariant<T1, T2, T3> : IValueVariant,
     /// <exception cref="BadValueVariantAccessException"></exception>
     public void Match<T>(Action<T> action)
     {
+        if (action is null) throw new ArgumentNullException(nameof(action));
         if (TryGet(out T? value))
             action(value!);
         else
@@ -179,6 +180,8 @@ public readonly struct ValueVariant<T1, T2, T3> : IValueVariant,
     /// <typeparam name="T"></typeparam>
     public void MatchOrDefault<T>(Action<T> action, Action fallback)
     {
+        if (action is null) throw new ArgumentNullException(nameof(action));
+        if (fallback is null) throw new ArgumentNullException(nameof(fallback));
         if (TryGet(out T? value))
             action(value!);
         else
@@ -193,6 +196,7 @@ public readonly struct ValueVariant<T1, T2, T3> : IValueVariant,
     /// <returns></returns>
     public bool TryMatch<T>(Action<T> action)
     {
+        if (action is null) throw new ArgumentNullException(nameof(action));
         if (TryGet(out T? value))
         {
             action(value!);
@@ -211,6 +215,7 @@ public readonly struct ValueVariant<T1, T2, T3> : IValueVariant,
     /// <exception cref="BadValueVariantAccessException"></exception>
     public TResult Match<T, TResult>(Func<T, TResult> func)
     {
+        if (func is null) throw new ArgumentNullException(nameof(func));
         if (TryGet(out T? value)) return func(value!);
 
         throw new BadValueVariantAccessException(typeof(T), this);
@@ -225,6 +230,7 @@ public readonly struct ValueVariant<T1, T2, T3> : IValueVariant,
     /// <typeparam name="TResult"></typeparam>
     public TResult MatchOrDefault<T, TResult>(Func<T, TResult> func, TResult @default)
     {
+        if (func is null) throw new ArgumentNullException(nameof(func));
         if (TryGet(out T? value)) return func(value!);
 
         return @default;
@@ -240,6 +246,7 @@ public readonly struct ValueVariant<T1, T2, T3> : IValueVariant,
     /// <returns></returns>
     public bool TryMatch<T, TResult>(Func<T, TResult> func, out TResult? result)
     {
+        if (func is null) throw new ArgumentNullException(nameof(func));
         if (TryGet(out T? value))
         {
             result = func(value!);

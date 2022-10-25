@@ -91,7 +91,7 @@ public sealed class Variant<T1> : Variant, IVariant, IEquatable<Variant<T1>>
     /// </summary>
     public void Visit(Action<T1> action)
     {
-        if (_setItem == SetItems.Item1 && _item is not null) action(_item);
+        if (_setItem == SetItems.Item1 && _item is not null) action?.Invoke(_item);
     }
 
     /// <summary>
@@ -101,7 +101,7 @@ public sealed class Variant<T1> : Variant, IVariant, IEquatable<Variant<T1>>
     /// <returns>Value returned from the delegate, default if there was no correct set item.</returns>
     public TResult? Visit<TResult>(Func<T1, TResult> func)
     {
-        if (_setItem == SetItems.Item1 && _item is not null)
+        if (_setItem == SetItems.Item1 && _item is not null && func is not null)
             return func(_item);
         return default;
     }

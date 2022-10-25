@@ -98,7 +98,7 @@ public readonly struct ValueVariant<T1> : IValueVariant,
     /// <param name="action"></param>
     public void Visit(Action<T1> action)
     {
-        if (_setItem == SetItems.Item1 && _item is not null) action(_item);
+        if (_setItem == SetItems.Item1 && _item is not null && action is not null) action(_item);
     }
 
     /// <summary>
@@ -109,7 +109,7 @@ public readonly struct ValueVariant<T1> : IValueVariant,
     /// <returns>Value returned from the delegate, default if there was no correct set item.</returns>
     public TResult? Visit<TResult>(Func<T1, TResult> func)
     {
-        if (_setItem == SetItems.Item1 && _item is not null) return func(_item!);
+        if (_setItem == SetItems.Item1 && _item is not null && func is not null) return func(_item!);
         return default;
     }
 
@@ -121,6 +121,7 @@ public readonly struct ValueVariant<T1> : IValueVariant,
     /// <exception cref="BadValueVariantAccessException"></exception>
     public void Match<T>(Action<T> action)
     {
+        if (action is null) throw new ArgumentNullException(nameof(action));
         if (TryGet(out T? value))
             action(value!);
         else
@@ -135,6 +136,8 @@ public readonly struct ValueVariant<T1> : IValueVariant,
     /// <typeparam name="T"></typeparam>
     public void MatchOrDefault<T>(Action<T> action, Action fallback)
     {
+        if (action is null) throw new ArgumentNullException(nameof(action));
+        if (fallback is null) throw new ArgumentNullException(nameof(fallback));
         if (TryGet(out T? value))
             action(value!);
         else
@@ -149,6 +152,7 @@ public readonly struct ValueVariant<T1> : IValueVariant,
     /// <returns></returns>
     public bool TryMatch<T>(Action<T> action)
     {
+        if (action is null) throw new ArgumentNullException(nameof(action));
         if (TryGet(out T? value))
         {
             action(value!);
@@ -167,6 +171,7 @@ public readonly struct ValueVariant<T1> : IValueVariant,
     /// <exception cref="BadValueVariantAccessException"></exception>
     public TResult Match<T, TResult>(Func<T, TResult> func)
     {
+        if (func is null) throw new ArgumentNullException(nameof(func));
         if (TryGet(out T? value)) return func(value!);
 
         throw new BadValueVariantAccessException(typeof(T), this);
@@ -181,6 +186,7 @@ public readonly struct ValueVariant<T1> : IValueVariant,
     /// <typeparam name="TResult"></typeparam>
     public TResult MatchOrDefault<T, TResult>(Func<T, TResult> func, TResult @default)
     {
+        if (func is null) throw new ArgumentNullException(nameof(func));
         if (TryGet(out T? value)) return func(value!);
 
         return @default;
@@ -196,6 +202,7 @@ public readonly struct ValueVariant<T1> : IValueVariant,
     /// <returns></returns>
     public bool TryMatch<T, TResult>(Func<T, TResult> func, out TResult? result)
     {
+        if (func is null) throw new ArgumentNullException(nameof(func));
         if (TryGet(out T? value))
         {
             result = func(value!);

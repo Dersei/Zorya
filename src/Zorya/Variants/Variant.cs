@@ -42,6 +42,7 @@ public abstract class Variant : IVariant
     /// <exception cref="BadVariantAccessException"></exception>
     public void Match<T>(Action<T> action)
     {
+        if (action is null) throw new ArgumentNullException(nameof(action));
         if (TryGet(out T? value))
             action(value!);
         else
@@ -56,6 +57,8 @@ public abstract class Variant : IVariant
     /// <typeparam name="T"></typeparam>
     public void MatchOrDefault<T>(Action<T> action, Action fallback)
     {
+        if (action is null) throw new ArgumentNullException(nameof(action));
+        if (fallback is null) throw new ArgumentNullException(nameof(fallback));
         if (TryGet(out T? value))
             action(value!);
         else
@@ -70,6 +73,7 @@ public abstract class Variant : IVariant
     /// <returns></returns>
     public bool TryMatch<T>(Action<T> action)
     {
+        if (action is null) throw new ArgumentNullException(nameof(action));
         if (TryGet(out T? value))
         {
             action(value!);
@@ -88,6 +92,7 @@ public abstract class Variant : IVariant
     /// <exception cref="BadVariantAccessException"></exception>
     public TResult Match<T, TResult>(Func<T, TResult> func)
     {
+        if (func is null) throw new ArgumentNullException(nameof(func));
         if (TryGet(out T? value)) return func(value!);
 
         throw new BadVariantAccessException(typeof(T), this);
@@ -102,6 +107,7 @@ public abstract class Variant : IVariant
     /// <typeparam name="TResult"></typeparam>
     public TResult MatchOrDefault<T, TResult>(Func<T, TResult> func, TResult @default)
     {
+        if (func is null) throw new ArgumentNullException(nameof(func));
         if (TryGet(out T? value)) return func(value!);
 
         return @default;
@@ -117,6 +123,7 @@ public abstract class Variant : IVariant
     /// <returns></returns>
     public bool TryMatch<T, TResult>(Func<T, TResult> func, out TResult? result)
     {
+        if (func is null) throw new ArgumentNullException(nameof(func));
         if (TryGet(out T? value))
         {
             result = func(value!);
@@ -159,10 +166,7 @@ public abstract class Variant : IVariant
     /// <exception cref="BadVariantAccessException"></exception>
     public static void Match<T>(IVariant variant, Action<T> action)
     {
-        if (variant.TryGet(out T? value))
-            action(value!);
-        else
-            throw new BadVariantAccessException(typeof(T), variant);
+        variant.Match(action);
     }
 
     /// <summary>
@@ -174,10 +178,7 @@ public abstract class Variant : IVariant
     /// <typeparam name="T"></typeparam>
     public static void MatchOrDefault<T>(IVariant variant, Action<T> action, Action fallback)
     {
-        if (variant.TryGet(out T? value))
-            action(value!);
-        else
-            fallback();
+        variant.MatchOrDefault(action, fallback);
     }
 
     /// <summary>
@@ -189,13 +190,7 @@ public abstract class Variant : IVariant
     /// <returns></returns>
     public static bool TryMatch<T>(IVariant variant, Action<T> action)
     {
-        if (variant.TryGet(out T? value))
-        {
-            action(value!);
-            return true;
-        }
-
-        return false;
+        return variant.TryMatch(action);
     }
 
     /// <summary>
@@ -208,9 +203,7 @@ public abstract class Variant : IVariant
     /// <exception cref="BadVariantAccessException"></exception>
     public static TResult Match<T, TResult>(IVariant variant, Func<T, TResult> func)
     {
-        if (variant.TryGet(out T? value)) return func(value!);
-
-        throw new BadVariantAccessException(typeof(T), variant);
+        return variant.Match(func);
     }
 
     /// <summary>
@@ -223,9 +216,7 @@ public abstract class Variant : IVariant
     /// <typeparam name="TResult"></typeparam>
     public static TResult MatchOrDefault<T, TResult>(IVariant variant, Func<T, TResult> func, TResult @default)
     {
-        if (variant.TryGet(out T? value)) return func(value!);
-
-        return @default;
+        return variant.MatchOrDefault(func, @default);
     }
 
     /// <summary>
@@ -239,14 +230,7 @@ public abstract class Variant : IVariant
     /// <returns></returns>
     public static bool TryMatch<T, TResult>(IVariant variant, Func<T, TResult> func, out TResult? result)
     {
-        if (variant.TryGet(out T? value))
-        {
-            result = func(value!);
-            return true;
-        }
-
-        result = default;
-        return false;
+        return variant.TryMatch(func, out result);
     }
 
     protected bool TestItem<TItem, TValue>(TItem item, SetItems setItem, out TValue? value)

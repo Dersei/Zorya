@@ -59,10 +59,7 @@ public static class ValueVariant
     /// <exception cref="BadValueVariantAccessException"></exception>
     public static void Match<T>(IValueVariant variant, Action<T> action)
     {
-        if (variant.TryGet(out T? value))
-            action(value!);
-        else
-            throw new BadValueVariantAccessException(typeof(T), variant);
+        variant.Match(action);
     }
 
     /// <summary>
@@ -74,10 +71,7 @@ public static class ValueVariant
     /// <typeparam name="T"></typeparam>
     public static void MatchOrDefault<T>(IValueVariant variant, Action<T> action, Action fallback)
     {
-        if (variant.TryGet(out T? value))
-            action(value!);
-        else
-            fallback();
+        variant.MatchOrDefault(action, fallback);
     }
 
     /// <summary>
@@ -89,13 +83,7 @@ public static class ValueVariant
     /// <returns></returns>
     public static bool TryMatch<T>(IValueVariant variant, Action<T> action)
     {
-        if (variant.TryGet(out T? value))
-        {
-            action(value!);
-            return true;
-        }
-
-        return false;
+        return variant.TryMatch(action);
     }
 
     /// <summary>
@@ -108,9 +96,7 @@ public static class ValueVariant
     /// <exception cref="BadValueVariantAccessException"></exception>
     public static TResult Match<T, TResult>(IValueVariant variant, Func<T, TResult> func)
     {
-        if (variant.TryGet(out T? value)) return func(value!);
-
-        throw new BadValueVariantAccessException(typeof(T), variant);
+        return variant.Match(func);
     }
 
     /// <summary>
@@ -123,9 +109,7 @@ public static class ValueVariant
     /// <typeparam name="TResult"></typeparam>
     public static TResult MatchOrDefault<T, TResult>(IValueVariant variant, Func<T, TResult> func, TResult @default)
     {
-        if (variant.TryGet(out T? value)) return func(value!);
-
-        return @default;
+        return variant.MatchOrDefault(func, @default);
     }
 
     /// <summary>
@@ -139,13 +123,6 @@ public static class ValueVariant
     /// <returns></returns>
     public static bool TryMatch<T, TResult>(IValueVariant variant, Func<T, TResult> func, out TResult? result)
     {
-        if (variant.TryGet(out T? value))
-        {
-            result = func(value!);
-            return true;
-        }
-
-        result = default;
-        return false;
+        return variant.TryMatch(func, out result);
     }
 }

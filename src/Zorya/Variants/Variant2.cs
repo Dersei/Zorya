@@ -97,10 +97,10 @@ public sealed class Variant<T1, T2> : Variant, IVariant, IEquatable<Variant<T1, 
     /// <summary>
     ///     Allows to use a delegate on set item.
     /// </summary>
-    public void Visit(Action<T1> action1, Action<T2> action2)
+    public void Visit(Action<T1>? action1, Action<T2>? action2)
     {
-        if (_setItem == SetItems.Item1 && _value is VariantValue<T1> {Item : { } value1}) action1(value1);
-        if (_setItem == SetItems.Item2 && _value is VariantValue<T2> {Item : { } value2}) action2(value2);
+        if (_setItem == SetItems.Item1 && _value is VariantValue<T1> {Item : { } value1}) action1?.Invoke(value1);
+        if (_setItem == SetItems.Item2 && _value is VariantValue<T2> {Item : { } value2}) action2?.Invoke(value2);
     }
 
     /// <summary>
@@ -108,12 +108,12 @@ public sealed class Variant<T1, T2> : Variant, IVariant, IEquatable<Variant<T1, 
     /// </summary>
     /// <typeparam name="TResult">Type of the returned value.</typeparam>
     /// <returns>Value returned from the delegate, default if there was no correct set item.</returns>
-    public TResult? Visit<TResult>(Func<T1, TResult> func1, Func<T2, TResult> func2)
+    public TResult? Visit<TResult>(Func<T1, TResult>? func1, Func<T2, TResult>? func2)
     {
         return _setItem switch
         {
-            SetItems.Item1 when _value is VariantValue<T1> {Item : { } value1} => func1(value1),
-            SetItems.Item2 when _value is VariantValue<T2> {Item : { } value2} => func2(value2),
+            SetItems.Item1 when _value is VariantValue<T1> {Item : { } value1} && func1 is not null => func1(value1),
+            SetItems.Item2 when _value is VariantValue<T2> {Item : { } value2} && func2 is not null => func2(value2),
             _ => default
         };
     }
