@@ -21,7 +21,7 @@ public readonly struct Option<T> where T : notnull
 
     public static Option<T> None => default;
 
-    public static Option<T> Some(T value)
+    public static Option<T> Some(T? value)
     {
         if (value is null) return None;
         return new(value);
