@@ -1,6 +1,6 @@
 # Zorya
 
-<img src="https://github.com/Dersei/Zorya/blob/a5781ba2c458a76fbcfb3d68a7f00c7425829c14/build/assets/zorya_icon.png" width="200">
+<img src="images/zorya_icon.png" width="200">
 
 C# implementation of the variant type.
 Implementation of the variant type both as a class (`Variant`) and a structure (`ValueVariant`). Both types support up to eight elements and implement implicit cast operators.
