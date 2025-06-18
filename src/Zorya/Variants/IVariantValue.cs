@@ -40,6 +40,6 @@ public sealed class VariantValue<T> : IVariantValue, IEquatable<VariantValue<T>>
 
     public override int GetHashCode()
     {
-        return EqualityComparer<T>.Default.GetHashCode(Item);
+        return HashCode.Combine(Item);
     }
 }
