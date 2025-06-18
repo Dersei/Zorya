@@ -71,4 +71,23 @@ public class Variant7Test
         Assert.AreEqual(true, v.IsSet<byte>());
         Assert.AreEqual(false, v.IsSet<int>());
     }
+
+    [Test]
+    public void GetUnsafe()
+    {
+        Variant<int, string, double, long, float, Point, byte> v = (byte)10;
+        Assert.AreEqual((byte)10, VariantMarshall.GetValueUnsafe(v));
+        v = "test";
+        Assert.AreEqual("test", VariantMarshall.GetValueUnsafe(v));
+        v = 5;
+        Assert.AreEqual(5, VariantMarshall.GetValueUnsafe(v));
+        v = 1.5;
+        Assert.AreEqual(1.5, VariantMarshall.GetValueUnsafe(v));
+        v = 10L;
+        Assert.AreEqual(10L, VariantMarshall.GetValueUnsafe(v));
+        v = 10f;
+        Assert.AreEqual(10f, VariantMarshall.GetValueUnsafe(v));
+        v = new System.Drawing.Point(1, 1);
+        Assert.AreEqual(new System.Drawing.Point(1, 1), VariantMarshall.GetValueUnsafe(v));
+    }
 }

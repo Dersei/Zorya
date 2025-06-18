@@ -71,7 +71,7 @@ public class VariantInheritanceTest
     [Test]
     public void GetObject()
     {
-        var v =  new Variant<int, decimal, char, byte, object, long, string, bool>("true");;
+        var v =  new Variant<int, decimal, char, byte, object, long, string, bool>("true");
         Assert.Throws<BadVariantAccessException>(() => v.Get<object>());
     }
     

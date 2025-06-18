@@ -71,4 +71,10 @@ public class ValueVariant1Test
         Assert.AreEqual(false, v.IsSet<string>());
     }
 
+    [Test]
+    public void GetUnsafe()
+    {
+        ValueVariant<int> v = 10;
+        Assert.AreEqual(10, ValueVariantMarshall.GetValueUnsafe(v));
+    }
 }

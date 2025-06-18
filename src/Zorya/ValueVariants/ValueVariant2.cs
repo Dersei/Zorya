@@ -275,4 +275,12 @@ public readonly struct ValueVariant<T1, T2> : IValueVariant,
     {
         return !left.Equals(right);
     }
+    
+    internal object? GetUnsafe() =>
+        _setItem switch
+        {
+            SetItems.Item1 => _item1,
+            SetItems.Item2 => _item2,
+            _ => null
+        };
 }

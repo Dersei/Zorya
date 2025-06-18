@@ -71,7 +71,7 @@ public class ValueVariantInheritanceTest
     [Test]
     public void GetObject()
     {
-        var v =  new ValueVariant<int, decimal, char, byte, object, long, string, bool>("true");;
+        var v =  new ValueVariant<int, decimal, char, byte, object, long, string, bool>("true");
         Assert.Throws<BadValueVariantAccessException>(() => v.Get<object>());
     }
     

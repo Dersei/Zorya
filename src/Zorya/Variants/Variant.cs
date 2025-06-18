@@ -303,4 +303,6 @@ public abstract class Variant : IVariant
         Item7,
         Item8
     }
+
+    internal abstract object? GetUnsafe();
 }

@@ -67,7 +67,7 @@ public class VariantGeneralTest
     {
         Variant<int, string, double> v;
         v = "10";
-        var test = v.TryMatch((int i) => i * 10, out var result);
+        var test = v.TryMatch((int i) => i * 10, out _);
         Assert.AreEqual(false, test);
     }
 
@@ -101,7 +101,7 @@ public class VariantGeneralTest
     [Test]
     public void CheckIfValid()
     {
-        var v = new Variant<object, string>(null);
+        var v = new Variant<object, string>(null!);
         Assert.False(v.IsValid());
         
         v = "test";
@@ -120,13 +120,13 @@ public class VariantGeneralTest
     [Test]
     public void TestNullCases()
     {
-        Variant<int, string, double, long, float, byte, char> v = new(null);
+        Variant<int, string, double, long, float, byte, char> v = new(null!);
         Assert.Throws<BadVariantAccessException>(() => v.Get<string>());
         Assert.AreEqual(null, v.GetSetType());
         Assert.False(v.TryGet(out string? _));
         Assert.AreEqual(0, v.Visit(_ => 1, _ => 2, _ => 3, _ => 4, _ => 5, _ => 6, _ => 7));
-        Variant<int, string> v1 = new(null);
-        Variant<int, string> v2 = new(null);
+        Variant<int, string> v1 = new(null!);
+        Variant<int, string> v2 = new(null!);
         Assert.AreEqual(v1, v2);
         Assert.False(v.IsSet<string>());
 

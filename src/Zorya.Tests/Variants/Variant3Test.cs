@@ -70,4 +70,15 @@ public class Variant3Test
         Assert.AreEqual(true, v.IsSet<double>());
         Assert.AreEqual(false, v.IsSet<int>());
     }
+
+    [Test]
+    public void GetUnsafe()
+    {
+        Variant<int, string, double> v = 10.0;
+        Assert.AreEqual(10.0, VariantMarshall.GetValueUnsafe(v));
+        v = "test";
+        Assert.AreEqual("test", VariantMarshall.GetValueUnsafe(v));
+        v = 5;
+        Assert.AreEqual(5, VariantMarshall.GetValueUnsafe(v));
+    }
 }
