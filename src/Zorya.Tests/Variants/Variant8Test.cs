@@ -11,7 +11,7 @@ public class Variant8Test
     {
         Variant<int, string, double, long, float, Point, byte, char> v;
         v = 'c';
-        Assert.AreEqual('c', v.Get<char>());
+        ClassicAssert.AreEqual('c', v.Get<char>());
     }
 
     [Test]
@@ -20,8 +20,8 @@ public class Variant8Test
         Variant<int, string, double, long, float, Point, byte, char> v = new(10);
         var test = v.Set('c');
         Assert.Throws<BadVariantAccessException>(() => v.Get<int>());
-        Assert.AreEqual('c', v.Get<char>());
-        Assert.IsTrue(test);
+        ClassicAssert.AreEqual('c', v.Get<char>());
+        ClassicAssert.IsTrue(test);
     }
 
     [Test]
@@ -29,11 +29,11 @@ public class Variant8Test
     {
         Variant<int, string, double, long, float, Point, byte, char> v = new((byte)'c');
         var test = v.Set(20u);
-        Assert.AreEqual((byte)'c', v.Get<byte>());
+        ClassicAssert.AreEqual((byte)'c', v.Get<byte>());
         Assert.Throws<BadVariantAccessException>(() => v.Get<double>());
         Assert.Throws<BadVariantAccessException>(() => v.Get<string>());
         Assert.Throws<BadVariantAccessException>(() => v.Get<uint>());
-        Assert.IsFalse(test);
+        ClassicAssert.IsFalse(test);
     }
 
     [Test]
@@ -41,7 +41,7 @@ public class Variant8Test
     {
         Variant<int, string, double, long, float, Point, byte, char> v;
         v = 'c';
-        Assert.AreEqual(typeof(char), v.GetSetType());
+        ClassicAssert.AreEqual(typeof(char), v.GetSetType());
     }
 
     [Test]
@@ -49,8 +49,8 @@ public class Variant8Test
     {
         Variant<int, string, double, long, float, Point, byte, char> v;
         v = 'c';
-        Assert.AreEqual(true, v.TryGet(out char _));
-        Assert.AreEqual(false, v.TryGet(out string? _));
+        ClassicAssert.AreEqual(true, v.TryGet(out char _));
+        ClassicAssert.AreEqual(false, v.TryGet(out string? _));
     }
 
     [Test]
@@ -58,7 +58,7 @@ public class Variant8Test
     {
         Variant<int, string, double, long, float, Point, byte, char> v;
         v = 10;
-        Assert.Throws(typeof(BadVariantAccessException), () => v.Get<string>());
+        Assert.Throws<BadVariantAccessException>(() => v.Get<string>());
     }
 
     [Test]
@@ -66,7 +66,7 @@ public class Variant8Test
     {
         Variant<int, string, double, long, float, Point, byte, char> v;
         v = 'c';
-        Assert.AreEqual(8, v.Visit(_ => 1, _ => 2, _ => 3, _ => 4, _ => 5, _ => 6, _ => 7, _ => 8));
+        ClassicAssert.AreEqual(8, v.Visit(_ => 1, _ => 2, _ => 3, _ => 4, _ => 5, _ => 6, _ => 7, _ => 8));
     }
     
     [Test]
@@ -74,7 +74,7 @@ public class Variant8Test
     {
         Variant<int, string, double, long, float, Point, byte, char> v1 = 'c';
         Variant<int, string, double, long, float, Point, byte, char> v2 = 'c';
-        Assert.AreEqual(v1, v2);
+        ClassicAssert.AreEqual(v1, v2);
     }
 
     [Test]
@@ -82,7 +82,7 @@ public class Variant8Test
     {
         Variant<int, string, double, long, float, Point, byte, char> v1 = 10;
         Variant<int, string, double, long, float, Point, byte, char> v2 = 'c';
-        Assert.AreNotEqual(v1, v2);
+        ClassicAssert.AreNotEqual(v1, v2);
     }
     
     [Test]
@@ -90,28 +90,28 @@ public class Variant8Test
     {
         Variant<int, string, double, long, float, Point, byte, char> v;
         v = 'c';
-        Assert.AreEqual(true, v.IsSet<char>());
-        Assert.AreEqual(false, v.IsSet<int>());
+        ClassicAssert.AreEqual(true, v.IsSet<char>());
+        ClassicAssert.AreEqual(false, v.IsSet<int>());
     }
 
     [Test]
     public void GetUnsafe()
     {
         Variant<int, string, double, long, float, Point, byte, char> v = 'c';
-        Assert.AreEqual('c', VariantMarshall.GetValueUnsafe(v));
+        ClassicAssert.AreEqual('c', VariantMarshall.GetValueUnsafe(v));
         v = "test";
-        Assert.AreEqual("test", VariantMarshall.GetValueUnsafe(v));
+        ClassicAssert.AreEqual("test", VariantMarshall.GetValueUnsafe(v));
         v = 5;
-        Assert.AreEqual(5, VariantMarshall.GetValueUnsafe(v));
+        ClassicAssert.AreEqual(5, VariantMarshall.GetValueUnsafe(v));
         v = 1.5;
-        Assert.AreEqual(1.5, VariantMarshall.GetValueUnsafe(v));
+        ClassicAssert.AreEqual(1.5, VariantMarshall.GetValueUnsafe(v));
         v = 10L;
-        Assert.AreEqual(10L, VariantMarshall.GetValueUnsafe(v));
+        ClassicAssert.AreEqual(10L, VariantMarshall.GetValueUnsafe(v));
         v = 10f;
-        Assert.AreEqual(10f, VariantMarshall.GetValueUnsafe(v));
+        ClassicAssert.AreEqual(10f, VariantMarshall.GetValueUnsafe(v));
         v = new Point(1, 1);
-        Assert.AreEqual(new Point(1, 1), VariantMarshall.GetValueUnsafe(v));
+        ClassicAssert.AreEqual(new Point(1, 1), VariantMarshall.GetValueUnsafe(v));
         v = (byte)10;
-        Assert.AreEqual((byte)10, VariantMarshall.GetValueUnsafe(v));
+        ClassicAssert.AreEqual((byte)10, VariantMarshall.GetValueUnsafe(v));
     }
 }

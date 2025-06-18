@@ -11,7 +11,7 @@ public class ValueVariant7Test
     {
         ValueVariant<int, string, double, long, float, Point, byte> v;
         v = (byte)10;
-        Assert.AreEqual((byte)10, v.Get<byte>());
+        ClassicAssert.AreEqual((byte)10, v.Get<byte>());
     }
 
     [Test]
@@ -19,7 +19,7 @@ public class ValueVariant7Test
     {
         ValueVariant<int, string, double, long, float, Point, byte> v;
         v = (byte)10;
-        Assert.AreEqual(typeof(byte), v.GetSetType());
+        ClassicAssert.AreEqual(typeof(byte), v.GetSetType());
     }
 
     [Test]
@@ -27,8 +27,8 @@ public class ValueVariant7Test
     {
         ValueVariant<int, string, double, long, float, Point, byte> v;
         v = (byte)10;
-        Assert.AreEqual(true, v.TryGet(out byte _));
-        Assert.AreEqual(false, v.TryGet(out string? _));
+        ClassicAssert.AreEqual(true, v.TryGet(out byte _));
+        ClassicAssert.AreEqual(false, v.TryGet(out string? _));
     }
 
     [Test]
@@ -36,7 +36,7 @@ public class ValueVariant7Test
     {
         ValueVariant<int, string, double, long, float, Point, byte> v;
         v = 10;
-        Assert.Throws(typeof(BadValueVariantAccessException), () => v.Get<string>());
+        ClassicAssert.Throws(typeof(BadValueVariantAccessException), () => v.Get<string>());
     }
 
     [Test]
@@ -44,7 +44,7 @@ public class ValueVariant7Test
     {
         ValueVariant<int, string, double, long, float, Point, byte> v;
         v = (byte)10;
-        Assert.AreEqual(7, v.Visit(_ => 1, _ => 2, _ => 3, _ => 4, _ => 5, _ => 6, _ => 7));
+        ClassicAssert.AreEqual(7, v.Visit(_ => 1, _ => 2, _ => 3, _ => 4, _ => 5, _ => 6, _ => 7));
     }
     
     [Test]
@@ -52,7 +52,7 @@ public class ValueVariant7Test
     {
         ValueVariant<int, string, double, long, float, Point, byte> v1 = (byte)10;
         ValueVariant<int, string, double, long, float, Point, byte> v2 = (byte)10;
-        Assert.AreEqual(v1, v2);
+        ClassicAssert.AreEqual(v1, v2);
     }
 
     [Test]
@@ -60,7 +60,7 @@ public class ValueVariant7Test
     {
         ValueVariant<int, string, double, long, float, Point, byte> v1 = 10;
         ValueVariant<int, string, double, long, float, Point, byte> v2 = (byte)10;
-        Assert.AreNotEqual(v1, v2);
+        ClassicAssert.AreNotEqual(v1, v2);
     }
     
     [Test]
@@ -68,26 +68,26 @@ public class ValueVariant7Test
     {
         ValueVariant<int, string, double, long, float, Point, byte> v;
         v = (byte)10;
-        Assert.AreEqual(true, v.IsSet<byte>());
-        Assert.AreEqual(false, v.IsSet<int>());
+        ClassicAssert.AreEqual(true, v.IsSet<byte>());
+        ClassicAssert.AreEqual(false, v.IsSet<int>());
     }
 
     [Test]
     public void GetUnsafe()
     {
         ValueVariant<int, string, double, long, float, Point, byte> v = (byte)10;
-        Assert.AreEqual((byte)10, ValueVariantMarshall.GetValueUnsafe(v));
+        ClassicAssert.AreEqual((byte)10, ValueVariantMarshall.GetValueUnsafe(v));
         v = "test";
-        Assert.AreEqual("test", ValueVariantMarshall.GetValueUnsafe(v));
+        ClassicAssert.AreEqual("test", ValueVariantMarshall.GetValueUnsafe(v));
         v = 5;
-        Assert.AreEqual(5, ValueVariantMarshall.GetValueUnsafe(v));
+        ClassicAssert.AreEqual(5, ValueVariantMarshall.GetValueUnsafe(v));
         v = 1.5;
-        Assert.AreEqual(1.5, ValueVariantMarshall.GetValueUnsafe(v));
+        ClassicAssert.AreEqual(1.5, ValueVariantMarshall.GetValueUnsafe(v));
         v = 10L;
-        Assert.AreEqual(10L, ValueVariantMarshall.GetValueUnsafe(v));
+        ClassicAssert.AreEqual(10L, ValueVariantMarshall.GetValueUnsafe(v));
         v = 10f;
-        Assert.AreEqual(10f, ValueVariantMarshall.GetValueUnsafe(v));
+        ClassicAssert.AreEqual(10f, ValueVariantMarshall.GetValueUnsafe(v));
         v = new Point(1, 1);
-        Assert.AreEqual(new Point(1, 1), ValueVariantMarshall.GetValueUnsafe(v));
+        ClassicAssert.AreEqual(new Point(1, 1), ValueVariantMarshall.GetValueUnsafe(v));
     }
 }
