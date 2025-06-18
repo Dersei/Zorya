@@ -248,4 +248,6 @@ public readonly struct ValueVariant<T1> : IValueVariant,
     {
         return !left.Equals(right);
     }
+
+    internal T1? GetUnsafe() => _item;
 }

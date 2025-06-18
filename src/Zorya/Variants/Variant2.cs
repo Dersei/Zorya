@@ -153,4 +153,9 @@ public sealed class Variant<T1, T2> : Variant, IVariant, IEquatable<Variant<T1, 
     {
         return !Equals(left, right);
     }
+
+    internal override object GetUnsafe()
+    {
+        return _value.Get();
+    }
 }

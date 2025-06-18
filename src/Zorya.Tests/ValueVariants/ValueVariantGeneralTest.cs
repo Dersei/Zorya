@@ -59,7 +59,7 @@ public class ValueVariantGeneralTest
     {
         ValueVariant<int, string, double> v;
         v = "10";
-        var test = v.TryMatch((int i) => i * 10, out var result);
+        var test = v.TryMatch((int i) => i * 10, out _);
         Assert.AreEqual(false, test);
     }
 
@@ -97,7 +97,7 @@ public class ValueVariantGeneralTest
         v = "test";
         Assert.True(v.IsValid());
         
-        var v1 = new ValueVariant<object, string>(null);
+        var v1 = new ValueVariant<object, string>(null!);
         Assert.False(v1.IsValid());
         
         ValueVariant<int, TestExampleEqual> v2 = null!;
@@ -113,13 +113,13 @@ public class ValueVariantGeneralTest
     [Test]
     public void TestInvalidCases()
     {
-        ValueVariant<int, string, double, long, float, byte, char> v = new(null);
+        ValueVariant<int, string, double, long, float, byte, char> v = new(null!);
         Assert.Throws<BadValueVariantAccessException>(() => v.Get<string>());
         Assert.AreEqual(null, v.GetSetType());
         Assert.False(v.TryGet(out string? _));
         Assert.AreEqual(0, v.Visit(_ => 1, _ => 2, _ => 3, _ => 4, _ => 5, _ => 6, _ => 7));
-        ValueVariant<int, string> v1 = new(null);
-        ValueVariant<int, string> v2 = new(null);
+        ValueVariant<int, string> v1 = new(null!);
+        ValueVariant<int, string> v2 = new(null!);
         Assert.AreEqual(v1, v2);
         Assert.False(v.IsSet<string>());
     }

@@ -71,4 +71,25 @@ public class ValueVariant8Test
         Assert.AreEqual(true, v.IsSet<char>());
         Assert.AreEqual(false, v.IsSet<int>());
     }
+
+    [Test]
+    public void GetUnsafe()
+    {
+        ValueVariant<int, string, double, long, float, Point, byte, char> v = 'c';
+        Assert.AreEqual('c', ValueVariantMarshall.GetValueUnsafe(v));
+        v = "test";
+        Assert.AreEqual("test", ValueVariantMarshall.GetValueUnsafe(v));
+        v = 5;
+        Assert.AreEqual(5, ValueVariantMarshall.GetValueUnsafe(v));
+        v = 1.5;
+        Assert.AreEqual(1.5, ValueVariantMarshall.GetValueUnsafe(v));
+        v = 10L;
+        Assert.AreEqual(10L, ValueVariantMarshall.GetValueUnsafe(v));
+        v = 10f;
+        Assert.AreEqual(10f, ValueVariantMarshall.GetValueUnsafe(v));
+        v = new Point(1, 1);
+        Assert.AreEqual(new Point(1, 1), ValueVariantMarshall.GetValueUnsafe(v));
+        v = (byte)10;
+        Assert.AreEqual((byte)10, ValueVariantMarshall.GetValueUnsafe(v));
+    }
 }
