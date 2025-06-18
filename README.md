@@ -1,6 +1,6 @@
 # Zorya
 
-<img src="https://user-images.githubusercontent.com/26044987/196815159-5821225b-b35a-4dc0-b593-632874bdd4f2.png" width="200">
+<img src="build/assets/zorya_icon.png" width="200">
 
 C# implementation of the variant type.
 Implementation of the variant type both as a class (`Variant`) and a structure (`ValueVariant`). Both types support up to eight elements and implement implicit cast operators.
@@ -160,6 +160,7 @@ In case of the `Variant` type two objects `v1` and `v2` are equal if:
 In case of the `ValueVariant` type two objects `v1` and `v2` are equal if:
 1. they have the same type, including the order of types,
 2. they both have the same items set and values of those items are the same.
+   
 ## Name
 
 > Zorya (lit. "Dawn"; also many variants: Zarya, Zara, Zaranitsa, Zoryushka, etc.) is a figure in Slavic folklore, a feminine personification of dawn, possibly goddess. Depending on tradition, she may appear as a singular entity, often called "The Red Maiden", or two or three sisters at once.[^link]
