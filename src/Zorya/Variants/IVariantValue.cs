@@ -5,19 +5,19 @@ namespace Zorya.Variants;
 public interface IVariantValue
 {
     bool Is<T>();
-    object Get();
+    object? Get();
     Type GetSetType();
     bool IsValid();
 }
 
 public sealed class VariantValue<T> : IVariantValue, IEquatable<VariantValue<T>>
 {
-    public readonly T Item;
+    public readonly T? Item;
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public bool Is<TValue>() => typeof(TValue) == typeof(T);
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public object Get() => Item;
+    public object? Get() => Item;
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public Type GetSetType() => typeof(T);
     [MethodImpl(MethodImplOptions.AggressiveInlining)]

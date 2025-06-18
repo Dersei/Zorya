@@ -10,7 +10,7 @@ public class ValueVariant1Test
     {
         ValueVariant<int> v;
         v = 10;
-        Assert.AreEqual(10, v.Get<int>());
+        ClassicAssert.AreEqual(10, v.Get<int>());
     }
 
     [Test]
@@ -18,7 +18,7 @@ public class ValueVariant1Test
     {
         ValueVariant<int> v;
         v = 10;
-        Assert.AreEqual(typeof(int), v.GetSetType());
+        ClassicAssert.AreEqual(typeof(int), v.GetSetType());
     }
 
     [Test]
@@ -26,8 +26,8 @@ public class ValueVariant1Test
     {
         ValueVariant<int> v;
         v = 10;
-        Assert.AreEqual(true, v.TryGet(out int _));
-        Assert.AreEqual(false, v.TryGet(out string? _));
+        ClassicAssert.AreEqual(true, v.TryGet(out int _));
+        ClassicAssert.AreEqual(false, v.TryGet(out string? _));
     }
 
     [Test]
@@ -35,7 +35,7 @@ public class ValueVariant1Test
     {
         ValueVariant<int> v;
         v = 10;
-        Assert.Throws(typeof(BadValueVariantAccessException), () => v.Get<string>());
+        ClassicAssert.Throws(typeof(BadValueVariantAccessException), () => v.Get<string>());
     }
 
     [Test]
@@ -43,7 +43,7 @@ public class ValueVariant1Test
     {
         ValueVariant<int> v;
         v = 10;
-        Assert.AreEqual(1, v.Visit(_ => 1));
+        ClassicAssert.AreEqual(1, v.Visit(_ => 1));
     }
 
     [Test]
@@ -51,7 +51,7 @@ public class ValueVariant1Test
     {
         ValueVariant<string> v1 = "test";
         ValueVariant<string> v2 = "test";
-        Assert.AreEqual(v1, v2);
+        ClassicAssert.AreEqual(v1, v2);
     }
     
     [Test]
@@ -59,7 +59,7 @@ public class ValueVariant1Test
     {
         ValueVariant<int> v1 = 11;
         ValueVariant<int> v2 = 10;
-        Assert.AreNotEqual(v1, v2);
+        ClassicAssert.AreNotEqual(v1, v2);
     }
     
     [Test]
@@ -67,14 +67,14 @@ public class ValueVariant1Test
     {
         ValueVariant<int> v;
         v = 10;
-        Assert.AreEqual(true, v.IsSet<int>());
-        Assert.AreEqual(false, v.IsSet<string>());
+        ClassicAssert.AreEqual(true, v.IsSet<int>());
+        ClassicAssert.AreEqual(false, v.IsSet<string>());
     }
 
     [Test]
     public void GetUnsafe()
     {
         ValueVariant<int> v = 10;
-        Assert.AreEqual(10, ValueVariantMarshall.GetValueUnsafe(v));
+        ClassicAssert.AreEqual(10, ValueVariantMarshall.GetValueUnsafe(v));
     }
 }

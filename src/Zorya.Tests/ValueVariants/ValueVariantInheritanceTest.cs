@@ -11,7 +11,7 @@ public class ValueVariantInheritanceTest
         ValueVariant<object, string, TestExampleParent> v;
         var refT = new TestExampleParent();
         v = refT;
-        Assert.AreEqual(refT, v.Get<TestExampleParent>());
+        ClassicAssert.AreEqual(refT, v.Get<TestExampleParent>());
     }
 
     [Test]
@@ -20,7 +20,7 @@ public class ValueVariantInheritanceTest
         ValueVariant<int, string, TestExampleParent> v;
         var refT = new TestExampleChild();
         v = refT;
-        Assert.AreEqual(refT, v.Get<TestExampleParent>());
+        ClassicAssert.AreEqual(refT, v.Get<TestExampleParent>());
     }
     
     [Test] //?
@@ -29,7 +29,7 @@ public class ValueVariantInheritanceTest
         ValueVariant<int, string, TestExampleParent> v;
         var refT = new TestExampleChild();
         v = refT;
-        Assert.Throws<BadValueVariantAccessException>(() => v.Get<TestExampleChild>());
+        ClassicAssert.Throws<BadValueVariantAccessException>(() => v.Get<TestExampleChild>());
     }
     
     [Test] //?
@@ -38,7 +38,7 @@ public class ValueVariantInheritanceTest
         ValueVariant<int, string, TestExampleParent> v;
         var refT = new TestExampleChild();
         v = refT;
-        Assert.AreEqual(typeof(TestExampleParent), v.GetSetType());
+        ClassicAssert.AreEqual(typeof(TestExampleParent), v.GetSetType());
     }
 
     [Test] //?
@@ -47,7 +47,7 @@ public class ValueVariantInheritanceTest
         ValueVariant<int, string, TestExampleChild> v;
         var refT = new TestExampleChild();
         v = refT;
-        Assert.Throws<BadValueVariantAccessException>(() => v.Get<TestExampleParent>());
+        ClassicAssert.Throws<BadValueVariantAccessException>(() => v.Get<TestExampleParent>());
     }
 
     [Test]
@@ -56,7 +56,7 @@ public class ValueVariantInheritanceTest
         ValueVariant<int, TestExampleParent, TestExampleChild> v;
         var refT = new TestExampleChild { Id = 10 };
         v = refT;
-        Assert.AreEqual(10, v.Get<TestExampleChild>().Id);
+        ClassicAssert.AreEqual(10, v.Get<TestExampleChild>().Id);
     }
 
     [Test]
@@ -65,14 +65,14 @@ public class ValueVariantInheritanceTest
         ValueVariant<int, TestExampleChild, TestExampleParent> v;
         var refT = new TestExampleChild { Id = 10 };
         v = refT;
-        Assert.AreEqual(10, v.Get<TestExampleChild>().Id);
+        ClassicAssert.AreEqual(10, v.Get<TestExampleChild>().Id);
     }
     
     [Test]
     public void GetObject()
     {
         var v =  new ValueVariant<int, decimal, char, byte, object, long, string, bool>("true");
-        Assert.Throws<BadValueVariantAccessException>(() => v.Get<object>());
+        ClassicAssert.Throws<BadValueVariantAccessException>(() => v.Get<object>());
     }
     
     [Test]
@@ -81,7 +81,7 @@ public class ValueVariantInheritanceTest
         ValueVariant<int, TestExampleParent, TestExampleChild> v;
         var refT = new TestExampleParent { Id = 10 };
         v = refT;
-        Assert.Throws<BadValueVariantAccessException>(() => v.Get<TestExampleChild>());
+        ClassicAssert.Throws<BadValueVariantAccessException>(() => v.Get<TestExampleChild>());
     }
 
     [Test]
@@ -90,7 +90,7 @@ public class ValueVariantInheritanceTest
         ValueVariant<int, TestExampleChild, TestExampleParent> v;
         var refT = new TestExampleParent { Id = 10 };
         v = refT;
-        Assert.Throws<BadValueVariantAccessException>(() => v.Get<TestExampleChild>());
+        ClassicAssert.Throws<BadValueVariantAccessException>(() => v.Get<TestExampleChild>());
     }
     
     [Test] //?
@@ -99,7 +99,7 @@ public class ValueVariantInheritanceTest
         ValueVariant<int, TestExampleParent, TestExampleChild> v;
         var refT = new TestExampleChild { Id = 10 };
         v = refT;
-        Assert.Throws<BadValueVariantAccessException>(() => v.Get<TestExampleParent>());
+        ClassicAssert.Throws<BadValueVariantAccessException>(() => v.Get<TestExampleParent>());
     }
 
     [Test] //?
@@ -108,7 +108,7 @@ public class ValueVariantInheritanceTest
         ValueVariant<int, TestExampleChild, TestExampleParent> v;
         var refT = new TestExampleChild { Id = 10 };
         v = refT;
-        Assert.Throws<BadValueVariantAccessException>(() => v.Get<TestExampleParent>());
+        ClassicAssert.Throws<BadValueVariantAccessException>(() => v.Get<TestExampleParent>());
     }
     
     [Test]
@@ -117,8 +117,8 @@ public class ValueVariantInheritanceTest
         ValueVariant<int, TestExampleChild, TestExampleParent> v;
         var refT = new TestExampleChild { Id = 10 };
         v = refT;
-        Assert.AreEqual(true, v.IsSet<TestExampleChild>());
-        Assert.AreEqual(false, v.IsSet<TestExampleParent>());
+        ClassicAssert.AreEqual(true, v.IsSet<TestExampleChild>());
+        ClassicAssert.AreEqual(false, v.IsSet<TestExampleParent>());
     }
     
     [Test]
@@ -127,8 +127,8 @@ public class ValueVariantInheritanceTest
         ValueVariant<int, TestExampleParent> v;
         var refT = new TestExampleChild { Id = 10 };
         v = refT;
-        Assert.AreEqual(false, v.IsSet<TestExampleChild>());
-        Assert.AreEqual(true, v.IsSet<TestExampleParent>());
+        ClassicAssert.AreEqual(false, v.IsSet<TestExampleChild>());
+        ClassicAssert.AreEqual(true, v.IsSet<TestExampleParent>());
     }
 
     [Test]
@@ -137,8 +137,8 @@ public class ValueVariantInheritanceTest
         ValueVariant<int, TestExampleChild, TestExampleParent> v;
         var refT = new TestExampleChild { Id = 10 };
         v = refT;
-        Assert.AreEqual(true, v.TryGet<TestExampleChild>(out _));
-        Assert.AreEqual(false, v.TryGet<TestExampleParent>(out _));
+        ClassicAssert.AreEqual(true, v.TryGet<TestExampleChild>(out _));
+        ClassicAssert.AreEqual(false, v.TryGet<TestExampleParent>(out _));
     }
     
     [Test]
@@ -147,8 +147,8 @@ public class ValueVariantInheritanceTest
         ValueVariant<int, TestExampleParent> v;
         var refT = new TestExampleChild { Id = 10 };
         v = refT;
-        Assert.AreEqual(true, v.TryGet<TestExampleParent>(out _));
-        Assert.AreEqual(false, v.TryGet<TestExampleChild>(out _));
+        ClassicAssert.AreEqual(true, v.TryGet<TestExampleParent>(out _));
+        ClassicAssert.AreEqual(false, v.TryGet<TestExampleChild>(out _));
     }
 
     private class TestExampleParent

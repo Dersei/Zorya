@@ -214,7 +214,7 @@ public sealed class Variant<T1, T2, T3, T4, T5, T6> : Variant, IVariant,
         return !Equals(left, right);
     }
     
-    internal override object GetUnsafe()
+    internal override object? GetUnsafe()
     {
         return _value.Get();
     }

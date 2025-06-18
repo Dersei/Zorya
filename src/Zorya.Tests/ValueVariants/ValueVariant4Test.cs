@@ -10,7 +10,7 @@ public class ValueVariant4Test
     {
         ValueVariant<int, string, double, long> v;
         v = 10L;
-        Assert.AreEqual(10L, v.Get<long>());
+        ClassicAssert.AreEqual(10L, v.Get<long>());
     }
 
     [Test]
@@ -18,7 +18,7 @@ public class ValueVariant4Test
     {
         ValueVariant<int, string, double, long> v;
         v = 10L;
-        Assert.AreEqual(typeof(long), v.GetSetType());
+        ClassicAssert.AreEqual(typeof(long), v.GetSetType());
     }
 
     [Test]
@@ -26,8 +26,8 @@ public class ValueVariant4Test
     {
         ValueVariant<int, string, double, long> v;
         v = 10L;
-        Assert.AreEqual(true, v.TryGet(out long _));
-        Assert.AreEqual(false, v.TryGet(out string? _));
+        ClassicAssert.AreEqual(true, v.TryGet(out long _));
+        ClassicAssert.AreEqual(false, v.TryGet(out string? _));
     }
 
     [Test]
@@ -35,7 +35,7 @@ public class ValueVariant4Test
     {
         ValueVariant<int, string, double, long> v;
         v = 10;
-        Assert.Throws(typeof(BadValueVariantAccessException), () => v.Get<string>());
+        ClassicAssert.Throws(typeof(BadValueVariantAccessException), () => v.Get<string>());
     }
 
     [Test]
@@ -43,7 +43,7 @@ public class ValueVariant4Test
     {
         ValueVariant<int, string, double, long> v;
         v = 10L;
-        Assert.AreEqual(4, v.Visit(_ => 1, _ => 2, _ => 3, _ => 4));
+        ClassicAssert.AreEqual(4, v.Visit(_ => 1, _ => 2, _ => 3, _ => 4));
     }
     
     [Test]
@@ -51,7 +51,7 @@ public class ValueVariant4Test
     {
         ValueVariant<int, string, double, long> v1 = 10L;
         ValueVariant<int, string, double, long> v2 = 10L;
-        Assert.AreEqual(v1, v2);
+        ClassicAssert.AreEqual(v1, v2);
     }
     
     [Test]
@@ -59,7 +59,7 @@ public class ValueVariant4Test
     {
         ValueVariant<int, string, double, long> v1 = 10;
         ValueVariant<int, string, double, long> v2 = 10L;
-        Assert.AreNotEqual(v1, v2);
+        ClassicAssert.AreNotEqual(v1, v2);
     }
     
     [Test]
@@ -67,20 +67,20 @@ public class ValueVariant4Test
     {
         ValueVariant<int, string, double, long> v;
         v = 10L;
-        Assert.AreEqual(true, v.IsSet<long>());
-        Assert.AreEqual(false, v.IsSet<int>());
+        ClassicAssert.AreEqual(true, v.IsSet<long>());
+        ClassicAssert.AreEqual(false, v.IsSet<int>());
     }
 
     [Test]
     public void GetUnsafe()
     {
         ValueVariant<int, string, double, long> v = 10L;
-        Assert.AreEqual(10L, ValueVariantMarshall.GetValueUnsafe(v));
+        ClassicAssert.AreEqual(10L, ValueVariantMarshall.GetValueUnsafe(v));
         v = "test";
-        Assert.AreEqual("test", ValueVariantMarshall.GetValueUnsafe(v));
+        ClassicAssert.AreEqual("test", ValueVariantMarshall.GetValueUnsafe(v));
         v = 5;
-        Assert.AreEqual(5, ValueVariantMarshall.GetValueUnsafe(v));
+        ClassicAssert.AreEqual(5, ValueVariantMarshall.GetValueUnsafe(v));
         v = 1.5;
-        Assert.AreEqual(1.5, ValueVariantMarshall.GetValueUnsafe(v));
+        ClassicAssert.AreEqual(1.5, ValueVariantMarshall.GetValueUnsafe(v));
     }
 }
