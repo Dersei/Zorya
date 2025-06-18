@@ -160,6 +160,7 @@ In case of the `Variant` type two objects `v1` and `v2` are equal if:
 In case of the `ValueVariant` type two objects `v1` and `v2` are equal if:
 1. they have the same type, including the order of types,
 2. they both have the same items set and values of those items are the same.
+
 ## Name
 
 > Zorya (lit. "Dawn"; also many variants: Zarya, Zara, Zaranitsa, Zoryushka, etc.) is a figure in Slavic folklore, a feminine personification of dawn, possibly goddess. Depending on tradition, she may appear as a singular entity, often called "The Red Maiden", or two or three sisters at once.[^link]
